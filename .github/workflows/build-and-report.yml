@@ -75,7 +75,7 @@ jobs:
           curl -fLSs -o summary-old.json $RELEASE_URL/summary.json || echo "" >summary-old.json
 
           # Compare with current main
-          reccmp-reccmp --target CONFIG --diff CMR2PROGRESS-old.json || echo "Current master not found"
+          reccmp-reccmp --target CONFIG --diff summary-old.json || echo "Current master not found"
 
       - name: Test Exports
         shell: bash
