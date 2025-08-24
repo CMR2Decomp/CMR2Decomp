@@ -69,7 +69,7 @@ jobs:
       - name: Compare Accuracy With Current main
         shell: bash
         env:
-          RELEASE_URL: https://github.com/CMR2Decomp/CMR2Decomp/tree/main/
+          RELEASE_URL: https://raw.githubusercontent.com/CMR2Decomp/CMR2Decomp/refs/heads/main/CMR2PROGRESS/
         run: |
           # Download the current main state
           curl -fLSs -o summary-old.json $RELEASE_URL/sumary.json || echo "" >summary-old.json
