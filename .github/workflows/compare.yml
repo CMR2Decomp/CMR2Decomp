@@ -2,6 +2,9 @@ name: Build
 
 on: [push, pull_request]
 
+permissions:
+  contents: write
+
 jobs:
   fetch-deps:
     name: Download original binary
@@ -90,10 +93,20 @@ jobs:
         run: |
           reccmp-datacmp --target CMR2
 
-      - name: Upload Artifact
-        uses: actions/upload-artifact@main
-        with:
-          name: Accuracy Report
-          path: |
-            index.html
-            CMR2PROGRESS*
+      # - name: Upload Artifact
+      #   uses: actions/upload-artifact@main
+      #   with:
+      #     name: Accuracy Report
+      #     path: |
+      #       index.html
+      #       CMR2PROGRESS*
+
+      - name: Commit Accuracy Reports
+        shell: bash
+        uses: actions/checkout@main
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add index.html CMR2PROGRESS.json
+          git commit -m "chore: update accuracy reports"
+          git push
