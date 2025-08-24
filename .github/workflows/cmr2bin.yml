@@ -1,0 +1,29 @@
+name: Download cmr2bin
+
+on:
+  workflow_call:
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Restore cached original binary
+        id: cache-original-binary
+        uses: actions/cache/restore@v4
+        with:
+          enableCrossOsArchive: true
+          path: cmr2bin
+          key: cmr2bin
+
+      - name: Download original cmr2 binary
+        if: ${{ !steps.cache-original-binary.outputs.cache-hit }}
+        run: |
+          wget https://github.com/CMR2Decomp/SilentPatchCMR2/blob/master/game-bin/CMR2.exe --directory-prefix=cmr2bin
+
+      - name: Cache original binary
+        if: ${{ !steps.cache-original-binary.outputs.cache-hit }}
+        uses: actions/cache/save@v4
+        with:
+          enableCrossOsArchive: true
+          path: cmr2bin
+          key: cmr2bin
