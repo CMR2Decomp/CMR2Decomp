@@ -23,8 +23,8 @@ jobs:
         with:
           name: Win32
           path: |
-            CMR2Decomp/x86/Debug/CMR2.exe
-            CMR2Decomp/x86/Debug/CMR2.pdb
+            CMR2Decomp/Debug/CMR2.exe
+            CMR2Decomp/Debug/CMR2.pdb
 
   verify:
     name: Verify decomp
