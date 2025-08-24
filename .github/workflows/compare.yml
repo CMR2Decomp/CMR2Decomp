@@ -15,7 +15,7 @@ jobs:
       - uses: actions/checkout@main
       - name: Build
         shell: cmd
-        run: ${{ '"C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\Tools\VsDevCmd.bat" && msbuild' }}
+        run: ${{ '"C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\Tools\VsDevCmd.bat" && msbuild /p:OutputPath=build' }}
         working-directory: CMR2Decomp
 
       - name: Upload Artifact
