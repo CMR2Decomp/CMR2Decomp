@@ -8,14 +8,16 @@ jobs:
     uses: ./.github/workflows/cmr2bin.yml
 
   build:
-      name: Compile Visual Studio project with MSBuild
-      runs-on: "windows-latest"
-      steps:
-        -name: Build
-        shell: cmd 
+    name: Compile Visual Studio project with MSBuild
+    needs: [fetch-deps]
+    runs-on: "windows-latest"
+    steps:
+      - uses: actions/checkout@main
+      - name: Build
+        shell: cmd
         run: ${{ '"C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\Tools\VsDevCmd.bat" && msbuild' }}
 
-        -name: Upload Artifact
+      - name: Upload Artifact
         uses: actions/upload-artifact@main
         with:
           name: Win32
