@@ -1,6 +1,12 @@
 name: Build + Update reccmp Report
 
-on: [push, pull_request]
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
 
 permissions:
   contents: write
@@ -67,6 +73,7 @@ jobs:
           reccmp-reccmp --target CMR2 --html index.html --json CMR2PROGRESS/summary.json
 
       - name: Compare Accuracy With Current main
+        if: github.ref != 'refs/heads/main' # Only runs on not the 'main' branch
         shell: bash
         env:
           RELEASE_URL: https://raw.githubusercontent.com/CMR2Decomp/CMR2Decomp/refs/heads/main/CMR2PROGRESS/
@@ -94,6 +101,7 @@ jobs:
           reccmp-datacmp --target CMR2
 
       - name: Commit Accuracy Reports
+        if: github.ref == 'refs/heads/main' # Only runs on the 'main' branch
         shell: bash
         run: |
           git config user.name github-actions
