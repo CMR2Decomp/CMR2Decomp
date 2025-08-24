@@ -39,31 +39,38 @@
         font-family: monospace;
       }
 
-      func-row:hover {
+      tr[data-address]:hover {
         background: #404040 !important;
       }
 
-      func-row:nth-child(odd of :not([hidden])), #listing > thead th {
+      tr[data-address]:nth-child(odd of :not([hidden])), #listing > thead th {
         background: #282828;
       }
 
-      func-row:nth-child(even of :not([hidden])) {
+      tr[data-address]:nth-child(even of :not([hidden])) {
         background: #383838;
       }
 
       table#listing {
         border: 1px #f0f0f0 solid;
+        table-layout: fixed;
       }
 
       #listing > thead th {
         padding: 0.5em;
         user-select: none;
-        width: 10%;
         text-align: left;
       }
 
-      #listing:not([show-recomp]) > thead th[data-col="recomp"] {
-        display: none;
+      #listing > thead th[data-col="address"],
+      #listing > thead th[data-col="recomp"] {
+        /* enough for "0x" and 8 digit address */
+        width: 10ch;
+      }
+
+      #listing > thead th[data-col="diffs"],
+      #listing > thead th[data-col="matching"] {
+        width: 8ch;
       }
 
       #listing > thead th > div {
@@ -81,11 +88,9 @@
       }
 
       #listing > thead th:last-child > div {
+        /* Draw the sort triangle to the left of the last column. */
+        flex-direction: row-reverse;
         justify-content: right;
-      }
-
-      #listing > thead th[data-col="name"] {
-        width: 60%;
       }
 
       .diffneg {
@@ -179,9 +184,85 @@
         font-size: 1.2em;
         margin-bottom: 0;
       }
+
+      tr[data-diff]:not([hidden]) {
+        contain: paint;
+      }
+
+      tr[data-diff] > td {
+        border: 1px #f0f0f0 solid;
+        border-bottom: 0px none;
+        display: table-cell;
+        padding: 0.5em;
+        word-break: break-all !important;
+      }
+
+      tr[data-diff] > td > div.no-diff {
+        font-style: italic;
+        text-align: center;
+      }
+
+      tr[data-address] > td[data-col="name"]:hover {
+        cursor: pointer;
+        text-decoration: underline;
+        text-decoration-style: dotted;
+      }
+
+      tr[data-address] > td:not(data-col="name"]) {
+        white-space: nowrap;
+      }
+
+      tr[data-address] > td {
+        border-top: 1px #f0f0f0 solid;
+        display: table-cell;
+        padding: 0.5em;
+        vertical-align: top;
+        white-space: nowrap;
+      }
+
+      tr[data-address] > td[data-col="name"] {
+        white-space: wrap;
+        word-break: break-all !important;
+      }
+
+      tr[data-address] > td:last-child {
+        text-align: right;
+      }
+
+      can-copy {
+        position: relative;
+        cursor: pointer;
+      }
+      can-copy::after {
+        background-color: #fff;
+        color: #222;
+        display: none;
+        font-size: 12px;
+        padding: 1px 2px;
+        width: fit-content;
+        border-radius: 1px;
+        text-align: center;
+        bottom: 120%;
+        left: 0;
+        box-shadow: 0 4px 14px 0 rgba(0,0,0,.2), 0 0 0 1px rgba(0,0,0,.05);
+        position: absolute;
+        white-space: nowrap;
+        transition: .1s;
+        content: 'Copy to clipboard';
+      }
+      can-copy:hover {
+        text-decoration: underline;
+        text-decoration-style: dotted;
+      }
+      can-copy:hover::after {
+        display: block;
+      }
+      can-copy[copied]:hover::after {
+        content: 'Copied!';
+      }
     </style>
     <script>
-      var report = {"file":"cmr2.exe","format":1,"timestamp":1756005379.0,"data":[{"address":"0x406910","name":"RallyDataCountryIndex","matching":0.13043478260869565,"recomp":"0x411820","diff":[["@@ -0x406910,22 +0x411820,24 @@",[{"orig":[],"recomp":[["0x411820","push ebp \t(RallyData.cpp:7)"],["0x411821","mov ebp, esp"],["0x411823","sub esp, 0xc0"],["0x411829","push ebx"],["0x41182a","push esi"],["0x41182b","push edi"],["0x41182c","mov edi, ebp"],["0x41182e","xor ecx, ecx"],["0x411830","mov eax, 0xcccccccc"],["0x411835","rep stosd dword ptr es:[edi], eax"],["0x411837","mov ecx, <OFFSET1>"],["0x41183c","call <OFFSET2>"],["0x411841","nop "]]},{"both":[["0x406910","mov eax, dword ptr [g_selectedRallyData (DATA)] \t(RallyData.cpp:8)","0x411842"],["0x406915","and eax, 0x1f","0x411847"]]},{"orig":[],"recomp":[["0x41184a","pop edi \t(RallyData.cpp:9)"],["0x41184b","pop esi"],["0x41184c","pop ebx"],["0x41184d","add esp, 0xc0"],["0x411853","cmp ebp, esp"],["0x411855","call <OFFSET4>"],["0x41185a","mov esp, ebp"],["0x41185c","pop ebp"]]},{"both":[["0x406918","ret ","0x41185d"]]},{"orig":[["0x406919","nop "],["0x40691a","nop "],["0x40691b","nop "],["0x40691c","nop "],["0x40691d","nop "],["0x40691e","nop "],["0x40691f","nop "],["0x406920","mov al, byte ptr [<OFFSET2>]"],["0x406925","ret "],["0x406926","nop "],["0x406927","nop "],["0x406928","nop "],["0x406929","nop "],["0x40692a","nop "],["0x40692b","nop "],["0x40692c","nop "],["0x40692d","nop "],["0x40692e","nop "],["0x40692f","nop "]],"recomp":[]}]]]},{"address":"0x406930","name":"RallyDataStageIndex","matching":0.1509433962264151,"recomp":"0x411870","diff":[["@@ -0x406930,28 +0x411870,25 @@",[{"orig":[],"recomp":[["0x411870","push ebp \t(RallyData.cpp:12)"],["0x411871","mov ebp, esp"],["0x411873","sub esp, 0xc0"],["0x411879","push ebx"],["0x41187a","push esi"],["0x41187b","push edi"],["0x41187c","mov edi, ebp"],["0x41187e","xor ecx, ecx"],["0x411880","mov eax, 0xcccccccc"],["0x411885","rep stosd dword ptr es:[edi], eax"],["0x411887","mov ecx, <OFFSET1>"],["0x41188c","call <OFFSET2>"],["0x411891","nop "]]},{"both":[["0x406930","mov eax, dword ptr [g_selectedRallyData (DATA)] \t(RallyData.cpp:13)","0x411892"],["0x406935","shr eax, 5","0x411897"],["0x406938","and eax, 0x1f","0x41189a"]]},{"orig":[],"recomp":[["0x41189d","pop edi \t(RallyData.cpp:14)"],["0x41189e","pop esi"],["0x41189f","pop ebx"],["0x4118a0","add esp, 0xc0"],["0x4118a6","cmp ebp, esp"],["0x4118a8","call <OFFSET4>"],["0x4118ad","mov esp, ebp"],["0x4118af","pop ebp"]]},{"both":[["0x40693b","ret ","0x4118b0"]]},{"orig":[["0x40693c","nop "],["0x40693d","nop "],["0x40693e","nop "],["0x40693f","nop "],["0x406940","mov eax, dword ptr [g_selectedRallyData (DATA)]"],["0x406945","shr eax, 0xa"],["0x406948","and eax, 3"],["0x40694b","ret "],["0x40694c","nop "],["0x40694d","nop "],["0x40694e","nop "],["0x40694f","nop "],["0x406950","mov eax, dword ptr [g_selectedRallyData (DATA)]"],["0x406955","shr eax, 0xc"],["0x406958","and eax, 3"],["0x40695b","ret "],["0x40695c","nop "],["0x40695d","nop "],["0x40695e","nop "],["0x40695f","nop "],["0x406960","mov al, byte ptr [esp + 4]"],["0x406964","mov ecx, dword ptr [g_selectedRallyData (DATA)]"],["0x40696a","and eax, 3"],["0x40696d","and ch, 0xcf"]],"recomp":[]}]]]},{"address":"0x4074f0","name":"RallyDataState","matching":0.16,"recomp":"0x4118d0","diff":[["@@ -0x4074f0,25 +0x4118d0,25 @@",[{"orig":[],"recomp":[["0x4118d0","push ebp \t(RallyData.cpp:17)"],["0x4118d1","mov ebp, esp"],["0x4118d3","sub esp, 0xc0"],["0x4118d9","push ebx"],["0x4118da","push esi"],["0x4118db","push edi"],["0x4118dc","mov edi, ebp"],["0x4118de","xor ecx, ecx"],["0x4118e0","mov eax, 0xcccccccc"],["0x4118e5","rep stosd dword ptr es:[edi], eax"],["0x4118e7","mov ecx, <OFFSET1>"],["0x4118ec","call <OFFSET2>"],["0x4118f1","nop "]]},{"both":[["0x4074f0","mov eax, dword ptr [g_selectedRallyData (DATA)] \t(RallyData.cpp:18)","0x4118f2"],["0x4074f5","shr eax, 0xe","0x4118f7"],["0x4074f8","and eax, 3","0x4118fa"]]},{"orig":[],"recomp":[["0x4118fd","pop edi \t(RallyData.cpp:19)"],["0x4118fe","pop esi"],["0x4118ff","pop ebx"],["0x411900","add esp, 0xc0"],["0x411906","cmp ebp, esp"],["0x411908","call <OFFSET4>"],["0x41190d","mov esp, ebp"],["0x41190f","pop ebp"]]},{"both":[["0x4074fb","ret ","0x411910"]]},{"orig":[["0x4074fc","nop "],["0x4074fd","nop "],["0x4074fe","nop "],["0x4074ff","nop "],["0x407500","mov al, byte ptr [esp + 4]"],["0x407504","mov ecx, dword ptr [g_selectedRallyData (DATA)]"],["0x40750a","and eax, 3"],["0x40750d","and ch, 0x3f"],["0x407510","shl eax, 0xe"],["0x407513","or eax, ecx"],["0x407515","mov dword ptr [g_selectedRallyData (DATA)], eax"],["0x40751a","ret 4"],["0x40751d","nop "],["0x40751e","nop "],["0x40751f","nop "],["0x407520","call <OFFSET2>"],["0x407525","test al, al"],["0x407527","je 0x71"],["0x407529","push esi"],["0x40752a","call <OFFSET3>"],["0x40752f","test al, al"]],"recomp":[]}]]]},{"address":"0x40d390","name":"RallyTiming_GetOverallPositionDriverID","matching":0.11764705882352941,"recomp":"0x411930","diff":[["@@ -0x40d390,10 +0x411930,24 @@",[{"orig":[["0x40d390","mov eax, dword ptr [esp + 4]"]],"recomp":[["0x411930","push ebp \t(RallyTiming.cpp:10)"],["0x411931","mov ebp, esp"],["0x411933","sub esp, 0xc0"],["0x411939","push ebx"],["0x41193a","push esi"],["0x41193b","push edi"],["0x41193c","mov edi, ebp"],["0x41193e","xor ecx, ecx"],["0x411940","mov eax, 0xcccccccc"],["0x411945","rep stosd dword ptr es:[edi], eax"],["0x411947","mov ecx, <OFFSET1>"],["0x41194c","call <OFFSET2>"],["0x411951","nop "],["0x411952","mov eax, dword ptr [ebp + 8] \t(RallyTiming.cpp:11)"]]},{"both":[["0x40d394","movsx eax, byte ptr [eax + g_rallyOverallOrderDriverID[0] (DATA)]","0x411955"]]},{"orig":[],"recomp":[["0x41195c","pop edi \t(RallyTiming.cpp:12)"],["0x41195d","pop esi"],["0x41195e","pop ebx"],["0x41195f","add esp, 0xc0"],["0x411965","cmp ebp, esp"],["0x411967","call <OFFSET4>"],["0x41196c","mov esp, ebp"],["0x41196e","pop ebp"]]},{"both":[["0x40d39b","ret 4","0x41196f"]]},{"orig":[["0x40d39e","nop "],["0x40d39f","nop "],["0x40d3a0","mov eax, dword ptr [esp + 4]"],["0x40d3a4","movsx eax, byte ptr [eax + 0x533648]"],["0x40d3ab","ret 4"],["0x40d3ae","nop "],["0x40d3af","nop "]],"recomp":[]}]]]},{"address":"0x40d3b0","name":"RallyTiming_GetOverallTimeForPosition","matching":0.06557377049180328,"recomp":"0x411990","diff":[["@@ -0x40d3b0,34 +0x411990,27 @@",[{"orig":[["0x40d3b0","mov eax, dword ptr [esp + 4]"],["0x40d3b4","movsx eax, byte ptr [eax + g_rallyOverallOrderDriverID[0] (DATA)]"],["0x40d3bb","mov ecx, dword ptr [eax*4 + g_rallyOverallTimesRaw[0] (DATA)]"],["0x40d3c2","push ecx"],["0x40d3c3","call <OFFSET3>"],["0x40d3c8","ret 4"],["0x40d3cb","nop "],["0x40d3cc","nop "],["0x40d3cd","nop "],["0x40d3ce","nop "],["0x40d3cf","nop "],["0x40d3d0","mov eax, dword ptr [esp + 4]"],["0x40d3d4","mov ecx, dword ptr [eax*4 + g_rallyOverallTimesRaw[0] (DATA)]"],["0x40d3db","push ecx"],["0x40d3dc","call <OFFSET3>"],["0x40d3e1","ret 4"],["0x40d3e4","nop "],["0x40d3e5","nop "],["0x40d3e6","nop "],["0x40d3e7","nop "],["0x40d3e8","nop "],["0x40d3e9","nop "],["0x40d3ea","nop "],["0x40d3eb","nop "],["0x40d3ec","nop "],["0x40d3ed","nop "],["0x40d3ee","nop "],["0x40d3ef","nop "]],"recomp":[]},{"both":[["0x40d3f0","push ebp \t(RallyTiming.cpp:15)","0x411990"],["0x40d3f1","mov ebp, esp","0x411991"]]},{"orig":[["0x40d3f3","mov eax, dword ptr [ebp + 0xc]"],["0x40d3f6","mov edx, 0x28f5c28"],["0x40d3fb","imul edx"],["0x40d3fd","shrd eax, edx, 0x10"]],"recomp":[["0x411993","sub esp, 0xcc"],["0x411999","push ebx"],["0x41199a","push esi"],["0x41199b","push edi"],["0x41199c","lea edi, [ebp - 0xc]"],["0x41199f","mov ecx, 3"],["0x4119a4","mov eax, 0xcccccccc"],["0x4119a9","rep stosd dword ptr es:[edi], eax"],["0x4119ab","mov ecx, <OFFSET1>"],["0x4119b0","call <OFFSET2>"],["0x4119b5","nop "],["0x4119b6","mov eax, dword ptr [ebp + 8] \t(RallyTiming.cpp:16)"],["0x4119b9","movsx ecx, byte ptr [eax + g_rallyOverallOrderDriverID[0] (DATA)]"],["0x4119c0","mov edx, dword ptr [ecx*4 + g_rallyOverallTimesRaw[0] (DATA)]"],["0x4119c7","mov dword ptr [ebp - 8], edx"],["0x4119ca","mov eax, 0x898 \t(RallyTiming.cpp:17)"],["0x4119cf","pop edi \t(RallyTiming.cpp:18)"],["0x4119d0","pop esi"],["0x4119d1","pop ebx"],["0x4119d2","add esp, 0xcc"],["0x4119d8","cmp ebp, esp"],["0x4119da","call <OFFSET5>"],["0x4119df","mov esp, ebp"],["0x4119e1","pop ebp"],["0x4119e2","ret "]]}]]]},{"address":"0x455cf0","name":"StageTiming_GetTimeForPosition","matching":0.09375,"recomp":"0x411a50","diff":[["@@ -0x455cf0,36 +0x411a50,28 @@",[{"orig":[["0x455cf0","call GetStageSplitCount (FUNCTION)"],["0x455cf5","mov ecx, dword ptr [esp + 4]"]],"recomp":[["0x411a50","push ebp \t(StageTiming.cpp:10)"],["0x411a51","mov ebp, esp"],["0x411a53","sub esp, 0xcc"],["0x411a59","push ebx"],["0x411a5a","push esi"],["0x411a5b","push edi"],["0x411a5c","lea edi, [ebp - 0xc]"],["0x411a5f","mov ecx, 3"],["0x411a64","mov eax, 0xcccccccc"],["0x411a69","rep stosd dword ptr es:[edi], eax"],["0x411a6b","mov ecx, <OFFSET1>"],["0x411a70","call <OFFSET2>"],["0x411a75","nop "],["0x411a76","call <OFFSET3> \t(StageTiming.cpp:11)"],["0x411a7b","mov dword ptr [ebp - 8], eax"],["0x411a7e","mov eax, dword ptr [ebp - 8] \t(StageTiming.cpp:15)"]]},{"both":[["0x455cf9","shl eax, 4","0x411a81"]]},{"orig":[],"recomp":[["0x411a84","mov ecx, dword ptr [ebp + 8]"]]},{"both":[["0x455cfc","movsx eax, byte ptr [eax + ecx + g_stageSplitDriverIndices[0].[0] (DATA)]","0x411a87"]]},{"orig":[],"recomp":[["0x411a8f","pop edi \t(StageTiming.cpp:16)"],["0x411a90","pop esi"],["0x411a91","pop ebx"],["0x411a92","add esp, 0xcc"],["0x411a98","cmp ebp, esp"],["0x411a9a","call <OFFSET5>"],["0x411a9f","mov esp, ebp"],["0x411aa1","pop ebp"]]},{"both":[["0x455d04","ret 4","0x411aa2"]]},{"orig":[["0x455d07","nop "],["0x455d08","nop "],["0x455d09","nop "],["0x455d0a","nop "],["0x455d0b","nop "],["0x455d0c","nop "],["0x455d0d","nop "],["0x455d0e","nop "],["0x455d0f","nop "],["0x455d10","call GetStageSplitCount (FUNCTION)"],["0x455d15","mov ecx, eax"],["0x455d17","shl eax, 6"],["0x455d1a","shl ecx, 4"],["0x455d1d","add eax, 0x542198"],["0x455d22","push eax"],["0x455d23","lea eax, [ecx + 0x5420ec]"],["0x455d29","lea ecx, [ecx + g_stageSplitDriverIndices[0].[0] (DATA)]"],["0x455d2f","push eax"],["0x455d30","push ecx"],["0x455d31","call <OFFSET3>"],["0x455d36","ret "],["0x455d37","nop "],["0x455d38","nop "],["0x455d39","nop "],["0x455d3a","nop "],["0x455d3b","nop "],["0x455d3c","nop "],["0x455d3d","nop "],["0x455d3e","nop "],["0x455d3f","nop "],["0x455d40","mov eax, dword ptr [esp + 8]"]],"recomp":[]}]]]},{"address":"0x4583c0","name":"GetStageSplitCount","matching":0.0851063829787234,"recomp":"0x411a00","diff":[["@@ -0x4583c0,24 +0x411a00,23 @@",[{"orig":[],"recomp":[["0x411a00","push ebp \t(Stage.cpp:9)"],["0x411a01","mov ebp, esp"],["0x411a03","sub esp, 0xc0"],["0x411a09","push ebx"],["0x411a0a","push esi"],["0x411a0b","push edi"],["0x411a0c","mov edi, ebp"],["0x411a0e","xor ecx, ecx"],["0x411a10","mov eax, 0xcccccccc"],["0x411a15","rep stosd dword ptr es:[edi], eax"],["0x411a17","mov ecx, <OFFSET1>"],["0x411a1c","call <OFFSET2>"],["0x411a21","nop "]]},{"both":[["0x4583c0","movsx eax, byte ptr [g_stageSplitCount (DATA)] \t(Stage.cpp:10)","0x411a22"]]},{"orig":[],"recomp":[["0x411a29","pop edi \t(Stage.cpp:11)"],["0x411a2a","pop esi"],["0x411a2b","pop ebx"],["0x411a2c","add esp, 0xc0"],["0x411a32","cmp ebp, esp"],["0x411a34","call <OFFSET4>"],["0x411a39","mov esp, ebp"],["0x411a3b","pop ebp"]]},{"both":[["0x4583c7","ret ","0x411a3c"]]},{"orig":[["0x4583c8","nop "],["0x4583c9","nop "],["0x4583ca","nop "],["0x4583cb","nop "],["0x4583cc","nop "],["0x4583cd","nop "],["0x4583ce","nop "],["0x4583cf","nop "],["0x4583d0","call <OFFSET2>"],["0x4583d5","test al, al"],["0x4583d7","jne 0x79"],["0x4583d9","call <OFFSET3>"],["0x4583de","test al, al"],["0x4583e0","jne 0x70"],["0x4583e2","call <OFFSET4>"],["0x4583e7","test al, al"],["0x4583e9","je 0x52"],["0x4583eb","call <OFFSET5>"],["0x4583f0","test al, al"],["0x4583f2","je 0x26"],["0x4583f4","mov eax, dword ptr [esp + 4]"],["0x4583f8","mov edx, dword ptr [esp + 8]"]],"recomp":[]}]]]}]};
+      var report = {"file":"cmr2.exe","format":1,"timestamp":1756061658.0,"data":[{"address":"0x406910","name":"RallyDataCountryIndex","matching":0.13043478260869565,"recomp":"0x411820","diff":[["@@ -0x406910,22 +0x411820,24 @@",[{"orig":[],"recomp":[["0x411820","push ebp \t(RallyData.cpp:7)"],["0x411821","mov ebp, esp"],["0x411823","sub esp, 0xc0"],["0x411829","push ebx"],["0x41182a","push esi"],["0x41182b","push edi"],["0x41182c","mov edi, ebp"],["0x41182e","xor ecx, ecx"],["0x411830","mov eax, 0xcccccccc"],["0x411835","rep stosd dword ptr es:[edi], eax"],["0x411837","mov ecx, <OFFSET1>"],["0x41183c","call <OFFSET2>"],["0x411841","nop "]]},{"both":[["0x406910","mov eax, dword ptr [g_selectedRallyData (DATA)] \t(RallyData.cpp:8)","0x411842"],["0x406915","and eax, 0x1f","0x411847"]]},{"orig":[],"recomp":[["0x41184a","pop edi \t(RallyData.cpp:9)"],["0x41184b","pop esi"],["0x41184c","pop ebx"],["0x41184d","add esp, 0xc0"],["0x411853","cmp ebp, esp"],["0x411855","call <OFFSET4>"],["0x41185a","mov esp, ebp"],["0x41185c","pop ebp"]]},{"both":[["0x406918","ret ","0x41185d"]]},{"orig":[["0x406919","nop "],["0x40691a","nop "],["0x40691b","nop "],["0x40691c","nop "],["0x40691d","nop "],["0x40691e","nop "],["0x40691f","nop "],["0x406920","mov al, byte ptr [<OFFSET2>]"],["0x406925","ret "],["0x406926","nop "],["0x406927","nop "],["0x406928","nop "],["0x406929","nop "],["0x40692a","nop "],["0x40692b","nop "],["0x40692c","nop "],["0x40692d","nop "],["0x40692e","nop "],["0x40692f","nop "]],"recomp":[]}]]]},{"address":"0x406930","name":"RallyDataStageIndex","matching":0.1509433962264151,"recomp":"0x411870","diff":[["@@ -0x406930,28 +0x411870,25 @@",[{"orig":[],"recomp":[["0x411870","push ebp \t(RallyData.cpp:12)"],["0x411871","mov ebp, esp"],["0x411873","sub esp, 0xc0"],["0x411879","push ebx"],["0x41187a","push esi"],["0x41187b","push edi"],["0x41187c","mov edi, ebp"],["0x41187e","xor ecx, ecx"],["0x411880","mov eax, 0xcccccccc"],["0x411885","rep stosd dword ptr es:[edi], eax"],["0x411887","mov ecx, <OFFSET1>"],["0x41188c","call <OFFSET2>"],["0x411891","nop "]]},{"both":[["0x406930","mov eax, dword ptr [g_selectedRallyData (DATA)] \t(RallyData.cpp:13)","0x411892"],["0x406935","shr eax, 5","0x411897"],["0x406938","and eax, 0x1f","0x41189a"]]},{"orig":[],"recomp":[["0x41189d","pop edi \t(RallyData.cpp:14)"],["0x41189e","pop esi"],["0x41189f","pop ebx"],["0x4118a0","add esp, 0xc0"],["0x4118a6","cmp ebp, esp"],["0x4118a8","call <OFFSET4>"],["0x4118ad","mov esp, ebp"],["0x4118af","pop ebp"]]},{"both":[["0x40693b","ret ","0x4118b0"]]},{"orig":[["0x40693c","nop "],["0x40693d","nop "],["0x40693e","nop "],["0x40693f","nop "],["0x406940","mov eax, dword ptr [g_selectedRallyData (DATA)]"],["0x406945","shr eax, 0xa"],["0x406948","and eax, 3"],["0x40694b","ret "],["0x40694c","nop "],["0x40694d","nop "],["0x40694e","nop "],["0x40694f","nop "],["0x406950","mov eax, dword ptr [g_selectedRallyData (DATA)]"],["0x406955","shr eax, 0xc"],["0x406958","and eax, 3"],["0x40695b","ret "],["0x40695c","nop "],["0x40695d","nop "],["0x40695e","nop "],["0x40695f","nop "],["0x406960","mov al, byte ptr [esp + 4]"],["0x406964","mov ecx, dword ptr [g_selectedRallyData (DATA)]"],["0x40696a","and eax, 3"],["0x40696d","and ch, 0xcf"]],"recomp":[]}]]]},{"address":"0x4074f0","name":"RallyDataState","matching":0.16,"recomp":"0x4118d0","diff":[["@@ -0x4074f0,25 +0x4118d0,25 @@",[{"orig":[],"recomp":[["0x4118d0","push ebp \t(RallyData.cpp:17)"],["0x4118d1","mov ebp, esp"],["0x4118d3","sub esp, 0xc0"],["0x4118d9","push ebx"],["0x4118da","push esi"],["0x4118db","push edi"],["0x4118dc","mov edi, ebp"],["0x4118de","xor ecx, ecx"],["0x4118e0","mov eax, 0xcccccccc"],["0x4118e5","rep stosd dword ptr es:[edi], eax"],["0x4118e7","mov ecx, <OFFSET1>"],["0x4118ec","call <OFFSET2>"],["0x4118f1","nop "]]},{"both":[["0x4074f0","mov eax, dword ptr [g_selectedRallyData (DATA)] \t(RallyData.cpp:18)","0x4118f2"],["0x4074f5","shr eax, 0xe","0x4118f7"],["0x4074f8","and eax, 3","0x4118fa"]]},{"orig":[],"recomp":[["0x4118fd","pop edi \t(RallyData.cpp:19)"],["0x4118fe","pop esi"],["0x4118ff","pop ebx"],["0x411900","add esp, 0xc0"],["0x411906","cmp ebp, esp"],["0x411908","call <OFFSET4>"],["0x41190d","mov esp, ebp"],["0x41190f","pop ebp"]]},{"both":[["0x4074fb","ret ","0x411910"]]},{"orig":[["0x4074fc","nop "],["0x4074fd","nop "],["0x4074fe","nop "],["0x4074ff","nop "],["0x407500","mov al, byte ptr [esp + 4]"],["0x407504","mov ecx, dword ptr [g_selectedRallyData (DATA)]"],["0x40750a","and eax, 3"],["0x40750d","and ch, 0x3f"],["0x407510","shl eax, 0xe"],["0x407513","or eax, ecx"],["0x407515","mov dword ptr [g_selectedRallyData (DATA)], eax"],["0x40751a","ret 4"],["0x40751d","nop "],["0x40751e","nop "],["0x40751f","nop "],["0x407520","call <OFFSET2>"],["0x407525","test al, al"],["0x407527","je 0x71"],["0x407529","push esi"],["0x40752a","call <OFFSET3>"],["0x40752f","test al, al"]],"recomp":[]}]]]},{"address":"0x40d390","name":"RallyTiming_GetOverallPositionDriverID","matching":0.11764705882352941,"recomp":"0x411930","diff":[["@@ -0x40d390,10 +0x411930,24 @@",[{"orig":[["0x40d390","mov eax, dword ptr [esp + 4]"]],"recomp":[["0x411930","push ebp \t(RallyTiming.cpp:10)"],["0x411931","mov ebp, esp"],["0x411933","sub esp, 0xc0"],["0x411939","push ebx"],["0x41193a","push esi"],["0x41193b","push edi"],["0x41193c","mov edi, ebp"],["0x41193e","xor ecx, ecx"],["0x411940","mov eax, 0xcccccccc"],["0x411945","rep stosd dword ptr es:[edi], eax"],["0x411947","mov ecx, <OFFSET1>"],["0x41194c","call <OFFSET2>"],["0x411951","nop "],["0x411952","mov eax, dword ptr [ebp + 8] \t(RallyTiming.cpp:11)"]]},{"both":[["0x40d394","movsx eax, byte ptr [eax + g_rallyOverallOrderDriverID[0] (DATA)]","0x411955"]]},{"orig":[],"recomp":[["0x41195c","pop edi \t(RallyTiming.cpp:12)"],["0x41195d","pop esi"],["0x41195e","pop ebx"],["0x41195f","add esp, 0xc0"],["0x411965","cmp ebp, esp"],["0x411967","call <OFFSET4>"],["0x41196c","mov esp, ebp"],["0x41196e","pop ebp"]]},{"both":[["0x40d39b","ret 4","0x41196f"]]},{"orig":[["0x40d39e","nop "],["0x40d39f","nop "],["0x40d3a0","mov eax, dword ptr [esp + 4]"],["0x40d3a4","movsx eax, byte ptr [eax + 0x533648]"],["0x40d3ab","ret 4"],["0x40d3ae","nop "],["0x40d3af","nop "]],"recomp":[]}]]]},{"address":"0x40d3b0","name":"RallyTiming_GetOverallTimeForPosition","matching":0.06557377049180328,"recomp":"0x411990","diff":[["@@ -0x40d3b0,34 +0x411990,27 @@",[{"orig":[["0x40d3b0","mov eax, dword ptr [esp + 4]"],["0x40d3b4","movsx eax, byte ptr [eax + g_rallyOverallOrderDriverID[0] (DATA)]"],["0x40d3bb","mov ecx, dword ptr [eax*4 + g_rallyOverallTimesRaw[0] (DATA)]"],["0x40d3c2","push ecx"],["0x40d3c3","call <OFFSET3>"],["0x40d3c8","ret 4"],["0x40d3cb","nop "],["0x40d3cc","nop "],["0x40d3cd","nop "],["0x40d3ce","nop "],["0x40d3cf","nop "],["0x40d3d0","mov eax, dword ptr [esp + 4]"],["0x40d3d4","mov ecx, dword ptr [eax*4 + g_rallyOverallTimesRaw[0] (DATA)]"],["0x40d3db","push ecx"],["0x40d3dc","call <OFFSET3>"],["0x40d3e1","ret 4"],["0x40d3e4","nop "],["0x40d3e5","nop "],["0x40d3e6","nop "],["0x40d3e7","nop "],["0x40d3e8","nop "],["0x40d3e9","nop "],["0x40d3ea","nop "],["0x40d3eb","nop "],["0x40d3ec","nop "],["0x40d3ed","nop "],["0x40d3ee","nop "],["0x40d3ef","nop "]],"recomp":[]},{"both":[["0x40d3f0","push ebp \t(RallyTiming.cpp:15)","0x411990"],["0x40d3f1","mov ebp, esp","0x411991"]]},{"orig":[["0x40d3f3","mov eax, dword ptr [ebp + 0xc]"],["0x40d3f6","mov edx, 0x28f5c28"],["0x40d3fb","imul edx"],["0x40d3fd","shrd eax, edx, 0x10"]],"recomp":[["0x411993","sub esp, 0xcc"],["0x411999","push ebx"],["0x41199a","push esi"],["0x41199b","push edi"],["0x41199c","lea edi, [ebp - 0xc]"],["0x41199f","mov ecx, 3"],["0x4119a4","mov eax, 0xcccccccc"],["0x4119a9","rep stosd dword ptr es:[edi], eax"],["0x4119ab","mov ecx, <OFFSET1>"],["0x4119b0","call <OFFSET2>"],["0x4119b5","nop "],["0x4119b6","mov eax, dword ptr [ebp + 8] \t(RallyTiming.cpp:16)"],["0x4119b9","movsx ecx, byte ptr [eax + g_rallyOverallOrderDriverID[0] (DATA)]"],["0x4119c0","mov edx, dword ptr [ecx*4 + g_rallyOverallTimesRaw[0] (DATA)]"],["0x4119c7","mov dword ptr [ebp - 8], edx"],["0x4119ca","mov eax, 0x898 \t(RallyTiming.cpp:17)"],["0x4119cf","pop edi \t(RallyTiming.cpp:18)"],["0x4119d0","pop esi"],["0x4119d1","pop ebx"],["0x4119d2","add esp, 0xcc"],["0x4119d8","cmp ebp, esp"],["0x4119da","call <OFFSET5>"],["0x4119df","mov esp, ebp"],["0x4119e1","pop ebp"],["0x4119e2","ret "]]}]]]},{"address":"0x455cf0","name":"StageTiming_GetTimeForPosition","matching":0.09375,"recomp":"0x411a50","diff":[["@@ -0x455cf0,36 +0x411a50,28 @@",[{"orig":[["0x455cf0","call GetStageSplitCount (FUNCTION)"],["0x455cf5","mov ecx, dword ptr [esp + 4]"]],"recomp":[["0x411a50","push ebp \t(StageTiming.cpp:9)"],["0x411a51","mov ebp, esp"],["0x411a53","sub esp, 0xcc"],["0x411a59","push ebx"],["0x411a5a","push esi"],["0x411a5b","push edi"],["0x411a5c","lea edi, [ebp - 0xc]"],["0x411a5f","mov ecx, 3"],["0x411a64","mov eax, 0xcccccccc"],["0x411a69","rep stosd dword ptr es:[edi], eax"],["0x411a6b","mov ecx, <OFFSET1>"],["0x411a70","call <OFFSET2>"],["0x411a75","nop "],["0x411a76","call <OFFSET3> \t(StageTiming.cpp:10)"],["0x411a7b","mov dword ptr [ebp - 8], eax"],["0x411a7e","mov eax, dword ptr [ebp - 8] \t(StageTiming.cpp:14)"]]},{"both":[["0x455cf9","shl eax, 4","0x411a81"]]},{"orig":[],"recomp":[["0x411a84","mov ecx, dword ptr [ebp + 8]"]]},{"both":[["0x455cfc","movsx eax, byte ptr [eax + ecx + g_stageSplitDriverIndices[0].[0] (DATA)]","0x411a87"]]},{"orig":[],"recomp":[["0x411a8f","pop edi \t(StageTiming.cpp:15)"],["0x411a90","pop esi"],["0x411a91","pop ebx"],["0x411a92","add esp, 0xcc"],["0x411a98","cmp ebp, esp"],["0x411a9a","call <OFFSET5>"],["0x411a9f","mov esp, ebp"],["0x411aa1","pop ebp"]]},{"both":[["0x455d04","ret 4","0x411aa2"]]},{"orig":[["0x455d07","nop "],["0x455d08","nop "],["0x455d09","nop "],["0x455d0a","nop "],["0x455d0b","nop "],["0x455d0c","nop "],["0x455d0d","nop "],["0x455d0e","nop "],["0x455d0f","nop "],["0x455d10","call GetStageSplitCount (FUNCTION)"],["0x455d15","mov ecx, eax"],["0x455d17","shl eax, 6"],["0x455d1a","shl ecx, 4"],["0x455d1d","add eax, 0x542198"],["0x455d22","push eax"],["0x455d23","lea eax, [ecx + 0x5420ec]"],["0x455d29","lea ecx, [ecx + g_stageSplitDriverIndices[0].[0] (DATA)]"],["0x455d2f","push eax"],["0x455d30","push ecx"],["0x455d31","call <OFFSET3>"],["0x455d36","ret "],["0x455d37","nop "],["0x455d38","nop "],["0x455d39","nop "],["0x455d3a","nop "],["0x455d3b","nop "],["0x455d3c","nop "],["0x455d3d","nop "],["0x455d3e","nop "],["0x455d3f","nop "],["0x455d40","mov eax, dword ptr [esp + 8]"]],"recomp":[]}]]]},{"address":"0x4583c0","name":"GetStageSplitCount","matching":0.0851063829787234,"recomp":"0x411a00","diff":[["@@ -0x4583c0,24 +0x411a00,23 @@",[{"orig":[],"recomp":[["0x411a00","push ebp \t(Stage.cpp:9)"],["0x411a01","mov ebp, esp"],["0x411a03","sub esp, 0xc0"],["0x411a09","push ebx"],["0x411a0a","push esi"],["0x411a0b","push edi"],["0x411a0c","mov edi, ebp"],["0x411a0e","xor ecx, ecx"],["0x411a10","mov eax, 0xcccccccc"],["0x411a15","rep stosd dword ptr es:[edi], eax"],["0x411a17","mov ecx, <OFFSET1>"],["0x411a1c","call <OFFSET2>"],["0x411a21","nop "]]},{"both":[["0x4583c0","movsx eax, byte ptr [g_stageSplitCount (DATA)] \t(Stage.cpp:10)","0x411a22"]]},{"orig":[],"recomp":[["0x411a29","pop edi \t(Stage.cpp:11)"],["0x411a2a","pop esi"],["0x411a2b","pop ebx"],["0x411a2c","add esp, 0xc0"],["0x411a32","cmp ebp, esp"],["0x411a34","call <OFFSET4>"],["0x411a39","mov esp, ebp"],["0x411a3b","pop ebp"]]},{"both":[["0x4583c7","ret ","0x411a3c"]]},{"orig":[["0x4583c8","nop "],["0x4583c9","nop "],["0x4583ca","nop "],["0x4583cb","nop "],["0x4583cc","nop "],["0x4583cd","nop "],["0x4583ce","nop "],["0x4583cf","nop "],["0x4583d0","call <OFFSET2>"],["0x4583d5","test al, al"],["0x4583d7","jne 0x79"],["0x4583d9","call <OFFSET3>"],["0x4583de","test al, al"],["0x4583e0","jne 0x70"],["0x4583e2","call <OFFSET4>"],["0x4583e7","test al, al"],["0x4583e9","je 0x52"],["0x4583eb","call <OFFSET5>"],["0x4583f0","test al, al"],["0x4583f2","je 0x26"],["0x4583f4","mov eax, dword ptr [esp + 4]"],["0x4583f8","mov edx, dword ptr [esp + 8]"]],"recomp":[]}]]]}]};
       var data = report["data"];
     </script>
     <script>// reccmp.js
@@ -605,52 +686,13 @@ class SortIndicator extends window.HTMLElement {
   }
 }
 
-class FuncRow extends window.HTMLElement {
-  connectedCallback() {
-    if (this.shadowRoot !== null) {
-      return;
-    }
-
-    const template = document.querySelector('template#funcrow-template').content;
-    const shadow = this.attachShadow({ mode: 'open' });
-    shadow.appendChild(template.cloneNode(true));
-    shadow.querySelector(':host > div[data-col="name"]').addEventListener('click', () => {
-      this.dispatchEvent(new Event('name-click'));
-    });
-  }
-
-  get address() {
-    return this.getAttribute('data-address');
-  }
-}
-
-class NoDiffMessage extends window.HTMLElement {
-  connectedCallback() {
-    if (this.shadowRoot !== null) {
-      return;
-    }
-
-    const template = document.querySelector('template#nodiff-template').content;
-    const shadow = this.attachShadow({ mode: 'open' });
-    shadow.appendChild(template.cloneNode(true));
-  }
-}
-
 class CanCopy extends window.HTMLElement {
   connectedCallback() {
-    if (this.shadowRoot !== null) {
-      return;
-    }
-
-    const template = document.querySelector('template#can-copy-template').content;
-    const shadow = this.attachShadow({ mode: 'open' });
-    shadow.appendChild(template.cloneNode(true));
-
-    const el = shadow.querySelector('slot').assignedNodes()[0];
-    el.addEventListener('mouseout', () => {
+    this.addEventListener('mouseout', () => {
       this.copied = false;
     });
-    el.addEventListener('click', (evt) => {
+
+    this.addEventListener('click', (evt) => {
       copyToClipboard(evt.target.textContent);
       this.copied = true;
     });
@@ -667,27 +709,6 @@ class CanCopy extends window.HTMLElement {
       }, 2000);
     }
     setBooleanAttribute(this, 'copied', value);
-  }
-}
-
-// Displays asm diff for the given @data-address value.
-class DiffRow extends window.HTMLElement {
-  connectedCallback() {
-    if (this.shadowRoot !== null) {
-      return;
-    }
-
-    const template = document.querySelector('template#diffrow-template').content;
-    const shadow = this.attachShadow({ mode: 'open' });
-    shadow.appendChild(template.cloneNode(true));
-  }
-
-  get address() {
-    return this.getAttribute('data-address');
-  }
-
-  set address(value) {
-    this.setAttribute('data-address', value);
   }
 }
 
@@ -926,14 +947,117 @@ class ListingTable extends window.HTMLElement {
     appState.addListener(() => this.somethingChanged());
   }
 
+  diffRow(address, showRecomp) {
+    const obj = getDataByAddr(address);
+
+    let contents;
+
+    if ('stub' in obj) {
+      contents = document.createElement('div');
+      contents.setAttribute('class', 'no-diff');
+      contents.textContent = 'Stub. No diff.';
+    } else if (obj.diff.length === 0) {
+      contents = document.createElement('div');
+      contents.setAttribute('class', 'no-diff');
+      contents.textContent = 'Identical function - no diff';
+    } else {
+      contents = document.createElement('diff-display');
+      contents.setAttribute('data-option', '1');
+      contents.setAttribute('data-address', address);
+    }
+
+    const td = document.createElement('td');
+    td.setAttribute('colspan', showRecomp ? 5 : 4);
+    td.append(contents);
+
+    const tr = document.createElement('tr');
+    tr.setAttribute('data-diff', address);
+    tr.append(td);
+    return tr;
+  }
+
+  funcRow(obj, showRecomp) {
+    const createColumn = (dataCol, canCopy, textContent) => {
+      const td = document.createElement('td');
+      td.setAttribute('data-col', dataCol);
+      if (canCopy) {
+        const copy = document.createElement('can-copy');
+        copy.textContent = textContent;
+        td.append(copy);
+      } else {
+        td.append(textContent);
+      }
+
+      return td;
+    };
+
+    const cols = {
+      address: createColumn('address', true, obj.address),
+      recomp: createColumn('recomp', true, obj.recomp),
+      name: createColumn('name', false, obj.name),
+      diffs: createColumn('diffs', false, countDiffs(obj)),
+      matching: createColumn('matching', false, getMatchPercentText(obj)),
+    };
+
+    if (!showRecomp) {
+      delete cols.recomp;
+    }
+
+    const tr = document.createElement('tr');
+    tr.setAttribute('data-address', obj.address);
+    tr.append(...Object.values(cols));
+    return tr;
+  }
+
+  headerRow(showRecomp, sortCol, sortDesc) {
+    const cols = {
+      address: 'Address',
+      recomp: 'Recomp',
+      name: 'Name',
+      diffs: '',
+      matching: 'Matching',
+    };
+
+    if (!showRecomp) {
+      delete cols.recomp;
+    }
+
+    const headers = Object.entries(cols).map(([key, name]) => {
+      if (key === 'diffs') {
+        const th = document.createElement('th');
+        th.setAttribute('data-col', 'diffs');
+        th.setAttribute('data-no-sort', true);
+        return th;
+      }
+
+      const sort_indicator = document.createElement('sort-indicator');
+      if (key === sortCol) {
+        sort_indicator.setAttribute('data-sort', sortDesc ? 'desc' : 'asc');
+      }
+
+      const th = document.createElement('th');
+      th.setAttribute('data-col', key);
+      const div = document.createElement('div');
+      const span = document.createElement('span');
+      span.textContent = name;
+      div.append(span, sort_indicator);
+      th.append(div);
+      return th;
+    });
+
+    const tr = document.createElement('tr');
+    tr.append(...headers);
+    return tr;
+  }
+
   setDiffRow(address, shouldExpand) {
     const tbody = this.querySelector('tbody');
-    const funcrow = tbody.querySelector(`func-row[data-address="${address}"]`);
+    const funcrow = tbody.querySelector(`tr[data-address="${address}"]`);
     if (funcrow === null) {
       return;
     }
 
-    const existing = tbody.querySelector(`diff-row[data-address="${address}"]`);
+    const existing = tbody.querySelector(`tr[data-diff="${address}"]`);
     if (existing !== null) {
       if (!shouldExpand) {
         tbody.removeChild(existing);
@@ -942,39 +1066,38 @@ class ListingTable extends window.HTMLElement {
       return;
     }
 
-    const diffrow = document.createElement('diff-row');
-    diffrow.address = address;
-
-    // Decide what goes inside the diff row.
-    const obj = getDataByAddr(address);
-
-    if ('stub' in obj) {
-      const msg = document.createElement('no-diff');
-      const p = document.createElement('div');
-      p.innerText = 'Stub. No diff.';
-      msg.appendChild(p);
-      diffrow.appendChild(msg);
-    } else if (obj.diff.length === 0) {
-      const msg = document.createElement('no-diff');
-      const p = document.createElement('div');
-      p.innerText = 'Identical function - no diff';
-      msg.appendChild(p);
-      diffrow.appendChild(msg);
-    } else {
-      const dd = new DiffDisplay();
-      dd.option = '1';
-      dd.address = address;
-      diffrow.appendChild(dd);
-    }
-
     // Insert the diff row after the parent func row.
-    tbody.insertBefore(diffrow, funcrow.nextSibling);
+    funcrow.insertAdjacentElement('afterend', this.diffRow(address, appState.showRecomp));
   }
 
   connectedCallback() {
-    const thead = this.querySelector('thead');
-    const headers = thead.querySelectorAll('th:not([data-no-sort])'); // TODO
-    headers.forEach((th) => {
+    this.addEventListener('name-click', (evt) => {
+      appState.toggleExpanded(evt.detail);
+      this.setDiffRow(evt.detail, appState.isExpanded(evt.detail));
+    });
+
+    this.innerHTML = '<table id="listing"><thead></thead><tbody></tbody></table>';
+
+    this.somethingChanged();
+  }
+
+  somethingChanged() {
+    const header_row = this.headerRow(appState.showRecomp, appState.sortCol, appState.sortDesc);
+
+    const rows = [];
+
+    // Create rows for this page.
+    for (const obj of appState.pageSlice()) {
+      rows.push(this.funcRow(obj, appState.showRecomp));
+      if (appState.isExpanded(obj.address)) {
+        rows.push(this.diffRow(obj.address, appState.showRecomp));
+      }
+    }
+
+    this.querySelector('thead').replaceChildren(header_row);
+    this.querySelector('tbody').replaceChildren(...rows);
+
+    this.querySelectorAll('th:not([data-no-sort])').forEach((th) => {
       const col = th.getAttribute('data-col');
       if (col) {
         const span = th.querySelector('span');
@@ -986,69 +1109,13 @@ class ListingTable extends window.HTMLElement {
       }
     });
 
-    this.somethingChanged();
-  }
-
-  somethingChanged() {
-    // Toggle recomp/diffs column
-    setBooleanAttribute(this.querySelector('table'), 'show-recomp', appState.showRecomp);
-    this.querySelectorAll('func-row[data-address]').forEach((row) => {
-      setBooleanAttribute(row, 'show-recomp', appState.showRecomp);
-    });
-
-    const thead = this.querySelector('thead');
-    const headers = thead.querySelectorAll('th');
-
-    // Update sort indicator
-    headers.forEach((th) => {
-      const col = th.getAttribute('data-col');
-      const indicator = th.querySelector('sort-indicator');
-      if (indicator === null) {
-        return;
-      }
-
-      if (appState.sortCol === col) {
-        indicator.setAttribute('data-sort', appState.sortDesc ? 'desc' : 'asc');
-      } else {
-        indicator.removeAttribute('data-sort');
-      }
-    });
-
-    // Add the rows
-    const tbody = this.querySelector('tbody');
-    tbody.innerHTML = ''; // ?
-
-    for (const obj of appState.pageSlice()) {
-      const row = document.createElement('func-row');
-      row.setAttribute('data-address', obj.address); // ?
-      row.addEventListener('name-click', () => {
-        appState.toggleExpanded(obj.address);
-        this.setDiffRow(obj.address, appState.isExpanded(obj.address));
+    this.querySelectorAll('tr[data-address]').forEach((row) => {
+      // Clicking the name column toggles the diff detail row.
+      // This is added or removed without replacing the entire <tbody>.
+      row.querySelector('td[data-col="name"]').addEventListener('click', () => {
+        this.dispatchEvent(new CustomEvent('name-click', { detail: row.getAttribute('data-address') }));
       });
-      setBooleanAttribute(row, 'show-recomp', appState.showRecomp);
-      setBooleanAttribute(row, 'expanded', appState.isExpanded(row));
-
-      const items = [
-        ['address', obj.address],
-        ['recomp', obj.recomp],
-        ['name', obj.name],
-        ['diffs', countDiffs(obj)],
-        ['matching', getMatchPercentText(obj)],
-      ];
-
-      items.forEach(([slotName, content]) => {
-        const div = document.createElement('span');
-        div.setAttribute('slot', slotName);
-        div.innerText = content;
-        row.appendChild(div);
-      });
-
-      tbody.appendChild(row);
-
-      if (appState.isExpanded(obj.address)) {
-        this.setDiffRow(obj.address, true);
-      }
-    }
+    });
   }
 }
 
@@ -1058,9 +1125,6 @@ window.onload = () => {
   window.customElements.define('diff-display', DiffDisplay);
   window.customElements.define('diff-display-options', DiffDisplayOptions);
   window.customElements.define('sort-indicator', SortIndicator);
-  window.customElements.define('func-row', FuncRow);
-  window.customElements.define('diff-row', DiffRow);
-  window.customElements.define('no-diff', NoDiffMessage);
   window.customElements.define('can-copy', CanCopy);
 };
 </script>
@@ -1103,145 +1167,7 @@ window.onload = () => {
         </div>
       </listing-options>
       <listing-table>
-        <table id="listing">
-          <thead>
-            <tr>
-              <th data-col="address">
-                <div>
-                  <span>Address</span>
-                  <sort-indicator/>
-                </div>
-              </th>
-              <th data-col="recomp">
-                <div>
-                  <span>Recomp</span>
-                  <sort-indicator/>
-                </div>
-              </th>
-              <th data-col="name">
-                <div>
-                  <span>Name</span>
-                  <sort-indicator/>
-                </div>
-              </th>
-              <th data-col="diffs" data-no-sort></th>
-              <th data-col="matching">
-                <div>
-                  <sort-indicator></sort-indicator>
-                  <span>Matching</span>
-                </div>
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-          </tbody>
-        </table>
       </listing-table>
     </div>
-    <template id="funcrow-template">
-      <style>
-        :host(:not([hidden])) {
-          display: table-row;
-        }
-
-        :host(:not([show-recomp])) > div[data-col="recomp"] {
-          display: none;
-        }
-
-        div[data-col="name"]:hover {
-          cursor: pointer;
-        }
-
-        div[data-col="name"]:hover > ::slotted(*) {
-          text-decoration: underline;
-          text-decoration-style: dotted;
-        }
-
-        ::slotted(*:not([slot="name"])) {
-          white-space: nowrap;
-        }
-
-        :host > div {
-          border-top: 1px #f0f0f0 solid;
-          display: table-cell;
-          padding: 0.5em;
-          word-break: break-all !important;
-        }
-
-        :host > div:last-child {
-          text-align: right;
-        }
-      </style>
-      <div data-col="address"><can-copy><slot name="address"></slot></can-copy></div>
-      <div data-col="recomp"><can-copy><slot name="recomp"></slot></can-copy></div>
-      <div data-col="name"><slot name="name"></slot></div>
-      <div data-col="diffs"><slot name="diffs"></slot></div>
-      <div data-col="matching"><slot name="matching"></slot></div>
-    </template>
-    <template id="diffrow-template">
-      <style>
-        :host(:not([hidden])) {
-          display: table-row;
-          contain: paint;
-        }
-
-        td.singleCell {
-          border: 1px #f0f0f0 solid;
-          border-bottom: 0px none;
-          display: table-cell;
-          padding: 0.5em;
-          word-break: break-all !important;
-        }
-      </style>
-      <td class="singleCell" colspan="5">
-        <slot></slot>
-      </td>
-    </template>
-    <template id="nodiff-template">
-      <style>
-        ::slotted(*) {
-          font-style: italic;
-          text-align: center;
-        }
-      </style>
-      <slot></slot>
-    </template>
-    <template id="can-copy-template">
-      <style>
-        :host {
-          position: relative;
-        }
-        ::slotted(*) {
-          cursor: pointer;
-        }
-        slot::after {
-          background-color: #fff;
-          color: #222;
-          display: none;
-          font-size: 12px;
-          padding: 1px 2px;
-          width: fit-content;
-          border-radius: 1px;
-          text-align: center;
-          bottom: 120%;
-          box-shadow: 0 4px 14px 0 rgba(0,0,0,.2), 0 0 0 1px rgba(0,0,0,.05);
-          position: absolute;
-          white-space: nowrap;
-          transition: .1s;
-          content: 'Copy to clipboard';
-        }
-        ::slotted(*:hover) {
-          text-decoration: underline;
-          text-decoration-style: dotted;
-        }
-        slot:hover::after {
-          display: block;
-        }
-        :host([copied]) > slot:hover::after {
-          content: 'Copied!';
-        }
-      </style>
-      <slot></slot>
-    </template>
   </body>
 </html>
