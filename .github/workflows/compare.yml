@@ -64,18 +64,18 @@ jobs:
       - name: Summarize Accuracy
         shell: bash
         run: |
-          reccmp-reccmp --target CMR2 --html index.html --json CMR2PROGRESS.json
+          reccmp-reccmp --target CMR2 --html index.html --json CMR2PROGRESS/summary.json
 
-      # - name: Compare Accuracy With Current Master
-      #   shell: bash
-      #   env:
-      #     RELEASE_URL: https://github.com/isledecomp/isle/releases/download/continuous
-      #   run: |
-      #     # Download the current master state
-      #     curl -fLSs -o CMR2PROGRESS-old.json $RELEASE_URL/CMR2PROGRESS.json || echo "" >CMR2PROGRESS-old.json
+      - name: Compare Accuracy With Current main
+        shell: bash
+        env:
+          RELEASE_URL: https://github.com/CMR2Decomp/CMR2Decomp/tree/main/
+        run: |
+          # Download the current main state
+          curl -fLSs -o summary-old.json $RELEASE_URL/sumary.json || echo "" >summary-old.json
 
-      #     # Compare with current master
-      #     reccmp-reccmp --target CONFIG --diff CMR2PROGRESS-old.json || echo "Current master not found"
+          # Compare with current main
+          reccmp-reccmp --target CONFIG --diff CMR2PROGRESS-old.json || echo "Current master not found"
 
       - name: Test Exports
         shell: bash
@@ -93,19 +93,11 @@ jobs:
         run: |
           reccmp-datacmp --target CMR2
 
-      # - name: Upload Artifact
-      #   uses: actions/upload-artifact@main
-      #   with:
-      #     name: Accuracy Report
-      #     path: |
-      #       index.html
-      #       CMR2PROGRESS*
-
       - name: Commit Accuracy Reports
         shell: bash
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
-          git add index.html CMR2PROGRESS.json
+          git add index.html CMR2PROGRESS/summary.json
           git commit -m "chore: update accuracy reports"
           git push
