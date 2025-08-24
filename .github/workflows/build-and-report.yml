@@ -1,4 +1,4 @@
-name: Build
+name: Build + Update reccmp Report
 
 on: [push, pull_request]
 
