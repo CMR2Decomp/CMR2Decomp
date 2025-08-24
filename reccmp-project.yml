@@ -1,0 +1,11 @@
+targets:
+  CMR2:
+    filename: CMR2.exe
+    source_root: C:/Git/CMR2Decomp/CMR2Decomp
+    hash:
+      sha256: 21b2dd13798724bcfe0c64b44216fb3e772c86addd330e821e53d5962fca3817
+    ghidra:
+      ignore_types: []
+      ignore_functions: []
+    report:
+      ignore_functions: []

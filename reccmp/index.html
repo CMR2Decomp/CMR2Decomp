@@ -1,0 +1,1247 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Decompilation Status</title>
+    <style>
+      body {
+        background: #202020;
+        color: #f0f0f0;
+        font-family: sans-serif;
+      }
+
+      h1 {
+        text-align: center;
+      }
+
+      .main {
+        width: 800px;
+        max-width: 100%;
+        margin: auto;
+      }
+
+      #search {
+        width: 100%;
+        box-sizing: border-box;
+        background: #303030;
+        color: #f0f0f0;
+        border: 1px #f0f0f0 solid;
+        padding: 0.5em;
+        border-radius: 0.5em;
+      }
+
+      #search::placeholder {
+        color: #b0b0b0;
+      }
+
+      #listing {
+        width: 100%;
+        border-collapse: collapse;
+        font-family: monospace;
+      }
+
+      func-row:hover {
+        background: #404040 !important;
+      }
+
+      func-row:nth-child(odd of :not([hidden])), #listing > thead th {
+        background: #282828;
+      }
+
+      func-row:nth-child(even of :not([hidden])) {
+        background: #383838;
+      }
+
+      table#listing {
+        border: 1px #f0f0f0 solid;
+      }
+
+      #listing > thead th {
+        padding: 0.5em;
+        user-select: none;
+        width: 10%;
+        text-align: left;
+      }
+
+      #listing:not([show-recomp]) > thead th[data-col="recomp"] {
+        display: none;
+      }
+
+      #listing > thead th > div {
+        display: flex;
+        column-gap: 0.5em;
+      }
+
+      #listing > thead th > div > span {
+        cursor: pointer;
+      }
+
+      #listing > thead th > div > span:hover {
+        text-decoration: underline;
+        text-decoration-style: dotted;
+      }
+
+      #listing > thead th:last-child > div {
+        justify-content: right;
+      }
+
+      #listing > thead th[data-col="name"] {
+        width: 60%;
+      }
+
+      .diffneg {
+        color: #FF8080;
+      }
+
+      .diffpos {
+        color: #80FF80;
+      }
+
+      .diffslug {
+        color: #8080FF;
+      }
+
+      .identical {
+        font-style: italic;
+        text-align: center;
+      }
+
+      sort-indicator {
+        user-select: none;
+      }
+
+      .filters {
+        align-items: top;
+        display: flex;
+        font-size: 10pt;
+        justify-content: space-between;
+        margin: 0.5em 0 1em 0;
+      }
+
+      .filters > fieldset {
+        /* checkbox and radio buttons v-aligned with text */
+        align-items: center;
+        display: flex;
+      }
+
+      .filters > fieldset > input, .filters > fieldset > label {
+        cursor: pointer;
+      }
+
+      .filters > fieldset > label {
+        margin-right: 10px;
+      }
+
+      table.diffTable {
+        border-collapse: collapse;
+      }
+
+      table.diffTable:not(:last-child) {
+        /* visual gap *between* diff context groups */
+        margin-bottom: 40px;
+      }
+
+      table.diffTable td, table.diffTable th {
+        border: 0 none;
+        padding: 0 10px 0 0;
+      }
+
+      table.diffTable th {
+        /* don't break address if asm line is long */
+        word-break: keep-all;
+      }
+
+      diff-display[data-option="0"] th:nth-child(1) {
+        display: none;
+      }
+
+      diff-display[data-option="0"] th:nth-child(2),
+      diff-display[data-option="1"] th:nth-child(2) {
+        display: none;
+      }
+
+      label {
+        user-select: none;
+      }
+
+      #pageDisplay > button {
+        cursor: pointer;
+        padding: 0.25em 0.5em;
+      }
+
+      #pageDisplay select {
+        cursor: pointer;
+        padding: 0.25em;
+        margin: 0 0.5em;
+      }
+
+      p.rowcount {
+        align-self: flex-end;
+        font-size: 1.2em;
+        margin-bottom: 0;
+      }
+    </style>
+    <script>
+      var report = {"file":"cmr2.exe","format":1,"timestamp":1755998747.0,"data":[{"address":"0x406910","name":"RallyDataCountryIndex","matching":0.13043478260869565,"recomp":"0x411800","diff":[["@@ -0x406910,22 +0x411800,24 @@",[{"orig":[],"recomp":[["0x411800","push ebp \t(RallyData.cpp:7)"],["0x411801","mov ebp, esp"],["0x411803","sub esp, 0xc0"],["0x411809","push ebx"],["0x41180a","push esi"],["0x41180b","push edi"],["0x41180c","mov edi, ebp"],["0x41180e","xor ecx, ecx"],["0x411810","mov eax, 0xcccccccc"],["0x411815","rep stosd dword ptr es:[edi], eax"],["0x411817","mov ecx, <OFFSET1>"],["0x41181c","call <OFFSET2>"],["0x411821","nop "]]},{"both":[["0x406910","mov eax, dword ptr [g_selectedRallyData (DATA)] \t(RallyData.cpp:8)","0x411822"],["0x406915","and eax, 0x1f","0x411827"]]},{"orig":[],"recomp":[["0x41182a","pop edi \t(RallyData.cpp:9)"],["0x41182b","pop esi"],["0x41182c","pop ebx"],["0x41182d","add esp, 0xc0"],["0x411833","cmp ebp, esp"],["0x411835","call <OFFSET4>"],["0x41183a","mov esp, ebp"],["0x41183c","pop ebp"]]},{"both":[["0x406918","ret ","0x41183d"]]},{"orig":[["0x406919","nop "],["0x40691a","nop "],["0x40691b","nop "],["0x40691c","nop "],["0x40691d","nop "],["0x40691e","nop "],["0x40691f","nop "],["0x406920","mov al, byte ptr [<OFFSET2>]"],["0x406925","ret "],["0x406926","nop "],["0x406927","nop "],["0x406928","nop "],["0x406929","nop "],["0x40692a","nop "],["0x40692b","nop "],["0x40692c","nop "],["0x40692d","nop "],["0x40692e","nop "],["0x40692f","nop "]],"recomp":[]}]]]},{"address":"0x406930","name":"RallyDataStageIndex","matching":0.1509433962264151,"recomp":"0x411850","diff":[["@@ -0x406930,28 +0x411850,25 @@",[{"orig":[],"recomp":[["0x411850","push ebp \t(RallyData.cpp:12)"],["0x411851","mov ebp, esp"],["0x411853","sub esp, 0xc0"],["0x411859","push ebx"],["0x41185a","push esi"],["0x41185b","push edi"],["0x41185c","mov edi, ebp"],["0x41185e","xor ecx, ecx"],["0x411860","mov eax, 0xcccccccc"],["0x411865","rep stosd dword ptr es:[edi], eax"],["0x411867","mov ecx, <OFFSET1>"],["0x41186c","call <OFFSET2>"],["0x411871","nop "]]},{"both":[["0x406930","mov eax, dword ptr [g_selectedRallyData (DATA)] \t(RallyData.cpp:13)","0x411872"],["0x406935","shr eax, 5","0x411877"],["0x406938","and eax, 0x1f","0x41187a"]]},{"orig":[],"recomp":[["0x41187d","pop edi \t(RallyData.cpp:14)"],["0x41187e","pop esi"],["0x41187f","pop ebx"],["0x411880","add esp, 0xc0"],["0x411886","cmp ebp, esp"],["0x411888","call <OFFSET4>"],["0x41188d","mov esp, ebp"],["0x41188f","pop ebp"]]},{"both":[["0x40693b","ret ","0x411890"]]},{"orig":[["0x40693c","nop "],["0x40693d","nop "],["0x40693e","nop "],["0x40693f","nop "],["0x406940","mov eax, dword ptr [g_selectedRallyData (DATA)]"],["0x406945","shr eax, 0xa"],["0x406948","and eax, 3"],["0x40694b","ret "],["0x40694c","nop "],["0x40694d","nop "],["0x40694e","nop "],["0x40694f","nop "],["0x406950","mov eax, dword ptr [g_selectedRallyData (DATA)]"],["0x406955","shr eax, 0xc"],["0x406958","and eax, 3"],["0x40695b","ret "],["0x40695c","nop "],["0x40695d","nop "],["0x40695e","nop "],["0x40695f","nop "],["0x406960","mov al, byte ptr [esp + 4]"],["0x406964","mov ecx, dword ptr [g_selectedRallyData (DATA)]"],["0x40696a","and eax, 3"],["0x40696d","and ch, 0xcf"]],"recomp":[]}]]]},{"address":"0x4074f0","name":"RallyDataState","matching":0.16,"recomp":"0x4118b0","diff":[["@@ -0x4074f0,25 +0x4118b0,25 @@",[{"orig":[],"recomp":[["0x4118b0","push ebp \t(RallyData.cpp:17)"],["0x4118b1","mov ebp, esp"],["0x4118b3","sub esp, 0xc0"],["0x4118b9","push ebx"],["0x4118ba","push esi"],["0x4118bb","push edi"],["0x4118bc","mov edi, ebp"],["0x4118be","xor ecx, ecx"],["0x4118c0","mov eax, 0xcccccccc"],["0x4118c5","rep stosd dword ptr es:[edi], eax"],["0x4118c7","mov ecx, <OFFSET1>"],["0x4118cc","call <OFFSET2>"],["0x4118d1","nop "]]},{"both":[["0x4074f0","mov eax, dword ptr [g_selectedRallyData (DATA)] \t(RallyData.cpp:18)","0x4118d2"],["0x4074f5","shr eax, 0xe","0x4118d7"],["0x4074f8","and eax, 3","0x4118da"]]},{"orig":[],"recomp":[["0x4118dd","pop edi \t(RallyData.cpp:19)"],["0x4118de","pop esi"],["0x4118df","pop ebx"],["0x4118e0","add esp, 0xc0"],["0x4118e6","cmp ebp, esp"],["0x4118e8","call <OFFSET4>"],["0x4118ed","mov esp, ebp"],["0x4118ef","pop ebp"]]},{"both":[["0x4074fb","ret ","0x4118f0"]]},{"orig":[["0x4074fc","nop "],["0x4074fd","nop "],["0x4074fe","nop "],["0x4074ff","nop "],["0x407500","mov al, byte ptr [esp + 4]"],["0x407504","mov ecx, dword ptr [g_selectedRallyData (DATA)]"],["0x40750a","and eax, 3"],["0x40750d","and ch, 0x3f"],["0x407510","shl eax, 0xe"],["0x407513","or eax, ecx"],["0x407515","mov dword ptr [g_selectedRallyData (DATA)], eax"],["0x40751a","ret 4"],["0x40751d","nop "],["0x40751e","nop "],["0x40751f","nop "],["0x407520","call <OFFSET2>"],["0x407525","test al, al"],["0x407527","je 0x71"],["0x407529","push esi"],["0x40752a","call <OFFSET3>"],["0x40752f","test al, al"]],"recomp":[]}]]]},{"address":"0x4583c0","name":"GetStageSplitCount","matching":0.0851063829787234,"recomp":"0x411910","diff":[["@@ -0x4583c0,24 +0x411910,23 @@",[{"orig":[],"recomp":[["0x411910","push ebp \t(Stage.cpp:9)"],["0x411911","mov ebp, esp"],["0x411913","sub esp, 0xc0"],["0x411919","push ebx"],["0x41191a","push esi"],["0x41191b","push edi"],["0x41191c","mov edi, ebp"],["0x41191e","xor ecx, ecx"],["0x411920","mov eax, 0xcccccccc"],["0x411925","rep stosd dword ptr es:[edi], eax"],["0x411927","mov ecx, <OFFSET1>"],["0x41192c","call <OFFSET2>"],["0x411931","nop "]]},{"both":[["0x4583c0","movsx eax, byte ptr [g_stageSplitCount (DATA)] \t(Stage.cpp:10)","0x411932"]]},{"orig":[],"recomp":[["0x411939","pop edi \t(Stage.cpp:11)"],["0x41193a","pop esi"],["0x41193b","pop ebx"],["0x41193c","add esp, 0xc0"],["0x411942","cmp ebp, esp"],["0x411944","call <OFFSET4>"],["0x411949","mov esp, ebp"],["0x41194b","pop ebp"]]},{"both":[["0x4583c7","ret ","0x41194c"]]},{"orig":[["0x4583c8","nop "],["0x4583c9","nop "],["0x4583ca","nop "],["0x4583cb","nop "],["0x4583cc","nop "],["0x4583cd","nop "],["0x4583ce","nop "],["0x4583cf","nop "],["0x4583d0","call <OFFSET2>"],["0x4583d5","test al, al"],["0x4583d7","jne 0x79"],["0x4583d9","call <OFFSET3>"],["0x4583de","test al, al"],["0x4583e0","jne 0x70"],["0x4583e2","call <OFFSET4>"],["0x4583e7","test al, al"],["0x4583e9","je 0x52"],["0x4583eb","call <OFFSET5>"],["0x4583f0","test al, al"],["0x4583f2","je 0x26"],["0x4583f4","mov eax, dword ptr [esp + 4]"],["0x4583f8","mov edx, dword ptr [esp + 8]"]],"recomp":[]}]]]}]};
+      var data = report["data"];
+    </script>
+    <script>// reccmp.js
+/* global data */
+
+// Unwrap array of functions into a dictionary with address as the key.
+const dataDict = Object.fromEntries(data.map((row) => [row.address, row]));
+
+function getDataByAddr(addr) {
+  return dataDict[addr];
+}
+
+//
+// Pure functions
+//
+
+function formatAsm(entries, _addrOption) {
+  const output = [];
+
+  const createTh = (text) => {
+    const th = document.createElement('th');
+    th.innerText = text;
+    return th;
+  };
+
+  const createTd = (text, className = '') => {
+    const td = document.createElement('td');
+    td.innerText = text;
+    td.className = className;
+    return td;
+  };
+
+  entries.forEach((obj) => {
+    // These won't all be present. You get "both" for an equal node
+    // and orig/recomp for a diff.
+    const { both = [], orig = [], recomp = [] } = obj;
+
+    output.push(
+      ...both.map(([addr, line, recompAddr]) => {
+        const tr = document.createElement('tr');
+        tr.appendChild(createTh(addr));
+        tr.appendChild(createTh(recompAddr));
+        tr.appendChild(createTd(line));
+        return tr;
+      }),
+    );
+
+    output.push(
+      ...orig.map(([addr, line]) => {
+        const tr = document.createElement('tr');
+        tr.appendChild(createTh(addr));
+        tr.appendChild(createTh(''));
+        tr.appendChild(createTd(`-${line}`, 'diffneg'));
+        return tr;
+      }),
+    );
+
+    output.push(
+      ...recomp.map(([addr, line]) => {
+        const tr = document.createElement('tr');
+        tr.appendChild(createTh(''));
+        tr.appendChild(createTh(addr));
+        tr.appendChild(createTd(`+${line}`, 'diffpos'));
+        return tr;
+      }),
+    );
+  });
+
+  return output;
+}
+
+// Special internal values to ensure this sort order for matching column:
+// 1. Stub
+// 2. Any match percentage [0.0, 1.0)
+// 3. Effective match
+// 4. Actual 100% match
+function matchingColAdjustment(row) {
+  if ('stub' in row) {
+    return -1;
+  }
+
+  if ('effective' in row) {
+    return 1.0;
+  }
+
+  if (row.matching === 1.0) {
+    return 1000;
+  }
+
+  return row.matching;
+}
+
+function getCppClass(str) {
+  const idx = str.indexOf('::');
+  if (idx !== -1) {
+    return str.slice(0, idx);
+  }
+
+  return str;
+}
+
+// Clamp string length to specified length and pad with ellipsis
+function stringTruncate(str, maxlen = 20) {
+  str = getCppClass(str);
+  if (str.length > maxlen) {
+    return `${str.slice(0, maxlen)}...`;
+  }
+
+  return str;
+}
+
+function getMatchPercentText(row) {
+  if ('stub' in row) {
+    return 'stub';
+  }
+
+  if ('effective' in row) {
+    return '100.00%*';
+  }
+
+  return `${(row.matching * 100).toFixed(2)}%`;
+}
+
+function countDiffs(row) {
+  const { diff = '' } = row;
+  if (diff === '') {
+    return '';
+  }
+
+  const diffs = diff.flatMap(([_slug, subgroups]) => subgroups);
+  const diffLength = diffs.filter((d) => !('both' in d)).length;
+  const diffWord = diffLength === 1 ? 'diff' : 'diffs';
+  return diffLength === 0 ? '' : `${diffLength} ${diffWord}`;
+}
+
+// Helper for this set/remove attribute block
+function setBooleanAttribute(element, attribute, value) {
+  if (value) {
+    element.setAttribute(attribute, '');
+  } else {
+    element.removeAttribute(attribute);
+  }
+}
+
+function copyToClipboard(value) {
+  navigator.clipboard.writeText(value);
+}
+
+const PAGE_SIZE = 200;
+
+//
+// Global state
+//
+
+class ListingState {
+  constructor() {
+    this._query = '';
+    this._sortCol = 'address';
+    this._filterType = 1;
+    this._sortDesc = false;
+    this._hidePerfect = false;
+    this._hideStub = false;
+    this._showRecomp = false;
+    this._expanded = {};
+    this._page = 0;
+
+    this._listeners = [];
+
+    this._results = [];
+    this.updateResults();
+  }
+
+  addListener(fn) {
+    this._listeners.push(fn);
+  }
+
+  callListeners() {
+    for (const fn of this._listeners) {
+      fn();
+    }
+  }
+
+  isExpanded(addr) {
+    return addr in this._expanded;
+  }
+
+  toggleExpanded(addr) {
+    this.setExpanded(addr, !this.isExpanded(addr));
+  }
+
+  setExpanded(addr, value) {
+    if (value) {
+      this._expanded[addr] = true;
+    } else {
+      delete this._expanded[addr];
+    }
+  }
+
+  updateResults() {
+    const filterFn = this.rowFilterFn.bind(this);
+    const sortFn = this.rowSortFn.bind(this);
+
+    this._results = data.filter(filterFn).sort(sortFn);
+
+    // Set _page directly to avoid double call to listeners.
+    this._page = this.pageClamp(this.page);
+    this.callListeners();
+  }
+
+  pageSlice() {
+    return this._results.slice(this.page * PAGE_SIZE, (this.page + 1) * PAGE_SIZE);
+  }
+
+  resultsCount() {
+    return this._results.length;
+  }
+
+  pageCount() {
+    return Math.ceil(this._results.length / PAGE_SIZE);
+  }
+
+  maxPage() {
+    return Math.max(0, this.pageCount() - 1);
+  }
+
+  // A list showing the range of each page based on the sort column and direction.
+  pageHeadings() {
+    if (this._results.length === 0) {
+      return [];
+    }
+
+    const headings = [];
+
+    for (let i = 0; i < this.pageCount(); i++) {
+      const startIdx = i * PAGE_SIZE;
+      const endIdx = Math.min(this._results.length, (i + 1) * PAGE_SIZE) - 1;
+
+      let start = this._results[startIdx][this.sortCol];
+      let end = this._results[endIdx][this.sortCol];
+
+      if (this.sortCol === 'matching') {
+        start = getMatchPercentText(this._results[startIdx]);
+        end = getMatchPercentText(this._results[endIdx]);
+      }
+
+      headings.push([i, stringTruncate(start), stringTruncate(end)]);
+    }
+
+    return headings;
+  }
+
+  rowFilterFn(row) {
+    // Destructuring sets defaults for optional values from this object.
+    const { effective = false, stub = false, diff = '', name, address, matching } = row;
+
+    if (this.hidePerfect && (effective || matching >= 1)) {
+      return false;
+    }
+
+    if (this.hideStub && stub) {
+      return false;
+    }
+
+    if (this.query === '') {
+      return true;
+    }
+
+    // Name/addr search
+    if (this.filterType === 1) {
+      return address.includes(this.query) || name.toLowerCase().includes(this.query);
+    }
+
+    // no diff for review.
+    if (diff === '') {
+      return false;
+    }
+
+    // special matcher for combined diff
+    const anyLineMatch = ([_addr, line]) => line.toLowerCase().trim().includes(this.query);
+
+    // Flatten all diff groups for the search
+    const diffs = diff.flatMap(([_slug, subgroups]) => subgroups);
+    for (const subgroup of diffs) {
+      const { both = [], orig = [], recomp = [] } = subgroup;
+
+      // If search includes context
+      if (this.filterType === 2 && both.some(anyLineMatch)) {
+        return true;
+      }
+
+      if (orig.some(anyLineMatch) || recomp.some(anyLineMatch)) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  rowSortFn(rowA, rowB) {
+    const valA = this.sortCol === 'matching' ? matchingColAdjustment(rowA) : rowA[this.sortCol];
+
+    const valB = this.sortCol === 'matching' ? matchingColAdjustment(rowB) : rowB[this.sortCol];
+
+    if (valA > valB) {
+      return this.sortDesc ? -1 : 1;
+    } else if (valA < valB) {
+      return this.sortDesc ? 1 : -1;
+    }
+
+    return 0;
+  }
+
+  pageClamp(page) {
+    return Math.max(0, Math.min(page, this.maxPage()));
+  }
+
+  get page() {
+    return this._page;
+  }
+
+  set page(page) {
+    this._page = this.pageClamp(page);
+    this.callListeners();
+  }
+
+  get filterType() {
+    return parseInt(this._filterType);
+  }
+
+  set filterType(value) {
+    value = parseInt(value);
+    if (value >= 1 && value <= 3) {
+      this._filterType = value;
+    }
+    this.updateResults();
+  }
+
+  get query() {
+    return this._query;
+  }
+
+  set query(value) {
+    // Normalize search string
+    this._query = value.toLowerCase().trim();
+    this.updateResults();
+  }
+
+  get showRecomp() {
+    return this._showRecomp;
+  }
+
+  set showRecomp(value) {
+    // Don't sort by the recomp column we are about to hide
+    if (!value && this.sortCol === 'recomp') {
+      this._sortCol = 'address';
+    }
+
+    this._showRecomp = value;
+    this.callListeners();
+  }
+
+  get sortCol() {
+    return this._sortCol;
+  }
+
+  set sortCol(column) {
+    if (column === this._sortCol) {
+      this._sortDesc = !this._sortDesc;
+    } else {
+      this._sortCol = column;
+    }
+
+    this.updateResults();
+  }
+
+  get sortDesc() {
+    return this._sortDesc;
+  }
+
+  set sortDesc(value) {
+    this._sortDesc = value;
+    this.updateResults();
+  }
+
+  get hidePerfect() {
+    return this._hidePerfect;
+  }
+
+  set hidePerfect(value) {
+    this._hidePerfect = value;
+    this.updateResults();
+  }
+
+  get hideStub() {
+    return this._hideStub;
+  }
+
+  set hideStub(value) {
+    this._hideStub = value;
+    this.updateResults();
+  }
+}
+
+const appState = new ListingState();
+
+//
+// Custom elements
+//
+
+// Sets sort indicator arrow based on element attributes.
+class SortIndicator extends window.HTMLElement {
+  static observedAttributes = ['data-sort'];
+
+  attributeChangedCallback(_name, _oldValue, newValue) {
+    if (newValue === null) {
+      // Reserve space for blank indicator so column width stays the same
+      this.innerHTML = '&nbsp;';
+    } else {
+      this.innerHTML = newValue === 'asc' ? '&#9650;' : '&#9660;';
+    }
+  }
+}
+
+class FuncRow extends window.HTMLElement {
+  connectedCallback() {
+    if (this.shadowRoot !== null) {
+      return;
+    }
+
+    const template = document.querySelector('template#funcrow-template').content;
+    const shadow = this.attachShadow({ mode: 'open' });
+    shadow.appendChild(template.cloneNode(true));
+    shadow.querySelector(':host > div[data-col="name"]').addEventListener('click', () => {
+      this.dispatchEvent(new Event('name-click'));
+    });
+  }
+
+  get address() {
+    return this.getAttribute('data-address');
+  }
+}
+
+class NoDiffMessage extends window.HTMLElement {
+  connectedCallback() {
+    if (this.shadowRoot !== null) {
+      return;
+    }
+
+    const template = document.querySelector('template#nodiff-template').content;
+    const shadow = this.attachShadow({ mode: 'open' });
+    shadow.appendChild(template.cloneNode(true));
+  }
+}
+
+class CanCopy extends window.HTMLElement {
+  connectedCallback() {
+    if (this.shadowRoot !== null) {
+      return;
+    }
+
+    const template = document.querySelector('template#can-copy-template').content;
+    const shadow = this.attachShadow({ mode: 'open' });
+    shadow.appendChild(template.cloneNode(true));
+
+    const el = shadow.querySelector('slot').assignedNodes()[0];
+    el.addEventListener('mouseout', () => {
+      this.copied = false;
+    });
+    el.addEventListener('click', (evt) => {
+      copyToClipboard(evt.target.textContent);
+      this.copied = true;
+    });
+  }
+
+  get copied() {
+    return this.getAttribute('copied');
+  }
+
+  set copied(value) {
+    if (value) {
+      setTimeout(() => {
+        this.copied = false;
+      }, 2000);
+    }
+    setBooleanAttribute(this, 'copied', value);
+  }
+}
+
+// Displays asm diff for the given @data-address value.
+class DiffRow extends window.HTMLElement {
+  connectedCallback() {
+    if (this.shadowRoot !== null) {
+      return;
+    }
+
+    const template = document.querySelector('template#diffrow-template').content;
+    const shadow = this.attachShadow({ mode: 'open' });
+    shadow.appendChild(template.cloneNode(true));
+  }
+
+  get address() {
+    return this.getAttribute('data-address');
+  }
+
+  set address(value) {
+    this.setAttribute('data-address', value);
+  }
+}
+
+class DiffDisplayOptions extends window.HTMLElement {
+  static observedAttributes = ['data-option'];
+
+  connectedCallback() {
+    if (this.shadowRoot !== null) {
+      return;
+    }
+
+    const shadow = this.attachShadow({ mode: 'open' });
+    shadow.innerHTML = `
+      <style>
+        fieldset {
+          align-items: center;
+          display: flex;
+          margin-bottom: 20px;
+        }
+
+        label {
+          margin-right: 10px;
+          user-select: none;
+        }
+
+        label, input {
+          cursor: pointer;
+        }
+      </style>
+      <fieldset>
+        <legend>Address display:</legend>
+        <input type="radio" id="showNone" name="addrDisplay" value=0>
+        <label for="showNone">None</label>
+        <input type="radio" id="showOrig" name="addrDisplay" value=1>
+        <label for="showOrig">Original</label>
+        <input type="radio" id="showBoth" name="addrDisplay" value=2>
+        <label for="showBoth">Both</label>
+      </fieldset>`;
+
+    shadow.querySelectorAll('input[type=radio]').forEach((radio) => {
+      const checked = this.option === radio.getAttribute('value');
+      setBooleanAttribute(radio, 'checked', checked);
+
+      radio.addEventListener('change', (evt) => {
+        this.option = evt.target.value;
+      });
+    });
+  }
+
+  set option(value) {
+    this.setAttribute('data-option', parseInt(value));
+  }
+
+  get option() {
+    return this.getAttribute('data-option') ?? 1;
+  }
+
+  attributeChangedCallback(name, _oldValue, _newValue) {
+    if (name !== 'data-option') {
+      return;
+    }
+
+    this.dispatchEvent(new Event('change'));
+  }
+}
+
+class DiffDisplay extends window.HTMLElement {
+  static observedAttributes = ['data-option'];
+
+  connectedCallback() {
+    if (this.querySelector('diff-display-options') !== null) {
+      return;
+    }
+
+    const optControl = new DiffDisplayOptions();
+    optControl.option = this.option;
+    optControl.addEventListener('change', (evt) => {
+      this.option = evt.target.option;
+    });
+    this.appendChild(optControl);
+
+    const div = document.createElement('div');
+    const obj = getDataByAddr(this.address);
+
+    const createHeaderLine = (text, className) => {
+      const div = document.createElement('div');
+      div.textContent = text;
+      div.className = className;
+      return div;
+    };
+
+    const groups = obj.diff;
+    groups.forEach(([slug, subgroups]) => {
+      const secondTable = document.createElement('table');
+      secondTable.classList.add('diffTable');
+
+      const hdr = document.createElement('div');
+      hdr.appendChild(createHeaderLine('---', 'diffneg'));
+      hdr.appendChild(createHeaderLine('+++', 'diffpos'));
+      hdr.appendChild(createHeaderLine(slug, 'diffslug'));
+      div.appendChild(hdr);
+
+      const tbody = document.createElement('tbody');
+      secondTable.appendChild(tbody);
+
+      const diffs = formatAsm(subgroups, this.option);
+      for (const el of diffs) {
+        tbody.appendChild(el);
+      }
+
+      div.appendChild(secondTable);
+    });
+
+    this.appendChild(div);
+  }
+
+  get address() {
+    return this.getAttribute('data-address');
+  }
+
+  set address(value) {
+    this.setAttribute('data-address', value);
+  }
+
+  get option() {
+    return this.getAttribute('data-option') ?? 1;
+  }
+
+  set option(value) {
+    this.setAttribute('data-option', value);
+  }
+}
+
+class ListingOptions extends window.HTMLElement {
+  constructor() {
+    super();
+
+    // Register to receive updates
+    appState.addListener(() => this.onUpdate());
+
+    const input = this.querySelector('input[type=search]');
+    input.oninput = (evt) => {
+      appState.query = evt.target.value;
+    };
+
+    const hidePerf = this.querySelector('input#cbHidePerfect');
+    hidePerf.onchange = (evt) => {
+      appState.hidePerfect = evt.target.checked;
+    };
+    hidePerf.checked = appState.hidePerfect;
+
+    const hideStub = this.querySelector('input#cbHideStub');
+    hideStub.onchange = (evt) => {
+      appState.hideStub = evt.target.checked;
+    };
+    hideStub.checked = appState.hideStub;
+
+    const showRecomp = this.querySelector('input#cbShowRecomp');
+    showRecomp.onchange = (evt) => {
+      appState.showRecomp = evt.target.checked;
+    };
+    showRecomp.checked = appState.showRecomp;
+
+    this.querySelector('button#pagePrev').addEventListener('click', () => {
+      appState.page = appState.page - 1;
+    });
+
+    this.querySelector('button#pageNext').addEventListener('click', () => {
+      appState.page = appState.page + 1;
+    });
+
+    this.querySelector('select#pageSelect').addEventListener('change', (evt) => {
+      appState.page = evt.target.value;
+    });
+
+    this.querySelectorAll('input[name=filterType]').forEach((radio) => {
+      const checked = appState.filterType === parseInt(radio.getAttribute('value'));
+      radio.checked = checked;
+
+      radio.onchange = () => {
+        appState.filterType = radio.getAttribute('value');
+      };
+    });
+
+    this.onUpdate();
+  }
+
+  onUpdate() {
+    // Update input placeholder based on search type
+    this.querySelector('input[type=search]').placeholder =
+      appState.filterType === 1 ? 'Search for offset or function name...' : 'Search for instruction...';
+
+    // Update page number and max page
+    this.querySelector('fieldset#pageDisplay > legend').textContent =
+      `Page ${appState.page + 1} of ${Math.max(1, appState.pageCount())}`;
+
+    // Disable prev/next buttons on first/last page
+    setBooleanAttribute(this.querySelector('button#pagePrev'), 'disabled', appState.page === 0);
+    setBooleanAttribute(this.querySelector('button#pageNext'), 'disabled', appState.page === appState.maxPage());
+
+    // Update page select dropdown
+    const pageSelect = this.querySelector('select#pageSelect');
+    setBooleanAttribute(pageSelect, 'disabled', appState.resultsCount() === 0);
+    pageSelect.innerHTML = '';
+
+    if (appState.resultsCount() === 0) {
+      const opt = document.createElement('option');
+      opt.textContent = '- no results -';
+      pageSelect.appendChild(opt);
+    } else {
+      for (const row of appState.pageHeadings()) {
+        const opt = document.createElement('option');
+        opt.value = row[0];
+        if (appState.page === row[0]) {
+          opt.setAttribute('selected', '');
+        }
+
+        const [start, end] = [row[1], row[2]];
+
+        opt.textContent = `${appState.sortCol}: ${start} to ${end}`;
+        pageSelect.appendChild(opt);
+      }
+    }
+
+    // Update row count
+    this.querySelector('#rowcount').textContent = `${appState.resultsCount()}`;
+  }
+}
+
+// Main application.
+class ListingTable extends window.HTMLElement {
+  constructor() {
+    super();
+
+    // Register to receive updates
+    appState.addListener(() => this.somethingChanged());
+  }
+
+  setDiffRow(address, shouldExpand) {
+    const tbody = this.querySelector('tbody');
+    const funcrow = tbody.querySelector(`func-row[data-address="${address}"]`);
+    if (funcrow === null) {
+      return;
+    }
+
+    const existing = tbody.querySelector(`diff-row[data-address="${address}"]`);
+    if (existing !== null) {
+      if (!shouldExpand) {
+        tbody.removeChild(existing);
+      }
+
+      return;
+    }
+
+    const diffrow = document.createElement('diff-row');
+    diffrow.address = address;
+
+    // Decide what goes inside the diff row.
+    const obj = getDataByAddr(address);
+
+    if ('stub' in obj) {
+      const msg = document.createElement('no-diff');
+      const p = document.createElement('div');
+      p.innerText = 'Stub. No diff.';
+      msg.appendChild(p);
+      diffrow.appendChild(msg);
+    } else if (obj.diff.length === 0) {
+      const msg = document.createElement('no-diff');
+      const p = document.createElement('div');
+      p.innerText = 'Identical function - no diff';
+      msg.appendChild(p);
+      diffrow.appendChild(msg);
+    } else {
+      const dd = new DiffDisplay();
+      dd.option = '1';
+      dd.address = address;
+      diffrow.appendChild(dd);
+    }
+
+    // Insert the diff row after the parent func row.
+    tbody.insertBefore(diffrow, funcrow.nextSibling);
+  }
+
+  connectedCallback() {
+    const thead = this.querySelector('thead');
+    const headers = thead.querySelectorAll('th:not([data-no-sort])'); // TODO
+    headers.forEach((th) => {
+      const col = th.getAttribute('data-col');
+      if (col) {
+        const span = th.querySelector('span');
+        if (span) {
+          span.addEventListener('click', () => {
+            appState.sortCol = col;
+          });
+        }
+      }
+    });
+
+    this.somethingChanged();
+  }
+
+  somethingChanged() {
+    // Toggle recomp/diffs column
+    setBooleanAttribute(this.querySelector('table'), 'show-recomp', appState.showRecomp);
+    this.querySelectorAll('func-row[data-address]').forEach((row) => {
+      setBooleanAttribute(row, 'show-recomp', appState.showRecomp);
+    });
+
+    const thead = this.querySelector('thead');
+    const headers = thead.querySelectorAll('th');
+
+    // Update sort indicator
+    headers.forEach((th) => {
+      const col = th.getAttribute('data-col');
+      const indicator = th.querySelector('sort-indicator');
+      if (indicator === null) {
+        return;
+      }
+
+      if (appState.sortCol === col) {
+        indicator.setAttribute('data-sort', appState.sortDesc ? 'desc' : 'asc');
+      } else {
+        indicator.removeAttribute('data-sort');
+      }
+    });
+
+    // Add the rows
+    const tbody = this.querySelector('tbody');
+    tbody.innerHTML = ''; // ?
+
+    for (const obj of appState.pageSlice()) {
+      const row = document.createElement('func-row');
+      row.setAttribute('data-address', obj.address); // ?
+      row.addEventListener('name-click', () => {
+        appState.toggleExpanded(obj.address);
+        this.setDiffRow(obj.address, appState.isExpanded(obj.address));
+      });
+      setBooleanAttribute(row, 'show-recomp', appState.showRecomp);
+      setBooleanAttribute(row, 'expanded', appState.isExpanded(row));
+
+      const items = [
+        ['address', obj.address],
+        ['recomp', obj.recomp],
+        ['name', obj.name],
+        ['diffs', countDiffs(obj)],
+        ['matching', getMatchPercentText(obj)],
+      ];
+
+      items.forEach(([slotName, content]) => {
+        const div = document.createElement('span');
+        div.setAttribute('slot', slotName);
+        div.innerText = content;
+        row.appendChild(div);
+      });
+
+      tbody.appendChild(row);
+
+      if (appState.isExpanded(obj.address)) {
+        this.setDiffRow(obj.address, true);
+      }
+    }
+  }
+}
+
+window.onload = () => {
+  window.customElements.define('listing-table', ListingTable);
+  window.customElements.define('listing-options', ListingOptions);
+  window.customElements.define('diff-display', DiffDisplay);
+  window.customElements.define('diff-display-options', DiffDisplayOptions);
+  window.customElements.define('sort-indicator', SortIndicator);
+  window.customElements.define('func-row', FuncRow);
+  window.customElements.define('diff-row', DiffRow);
+  window.customElements.define('no-diff', NoDiffMessage);
+  window.customElements.define('can-copy', CanCopy);
+};
+</script>
+    </script>
+  </head>
+  <body>
+    <div class="main">
+      <h1>Decompilation Status</h1>
+      <listing-options>
+        <input id="search" type="search" placeholder="Search for offset or function name...">
+        <div class="filters">
+          <fieldset>
+            <legend>Options:</legend>
+            <input type="checkbox" id="cbHidePerfect" />
+            <label for="cbHidePerfect">Hide 100% match</label>
+            <input type="checkbox" id="cbHideStub" />
+            <label for="cbHideStub">Hide stubs</label>
+            <input type="checkbox" id="cbShowRecomp" />
+            <label for="cbShowRecomp">Show recomp address</label>
+          </fieldset>
+          <fieldset>
+            <legend>Search filters on:</legend>
+            <input type="radio" name="filterType" id="filterName" value=1 checked />
+            <label for="filterName">Name/address</label>
+            <input type="radio" name="filterType" id="filterAsm" value=2 />
+            <label for="filterAsm">Asm output</label>
+            <input type="radio" name="filterType" id="filterDiff" value=3 />
+            <label for="filterDiff">Asm diffs only</label>
+          </fieldset>
+        </div>
+        <div class="filters">
+          <p class="rowcount">Results: <span id="rowcount"></span></p>
+          <fieldset id="pageDisplay">
+            <legend>Page</legend>
+            <button id="pagePrev">prev</button>
+            <select id="pageSelect">
+            </select>
+            <button id="pageNext">next</button>
+          </fieldset>
+        </div>
+      </listing-options>
+      <listing-table>
+        <table id="listing">
+          <thead>
+            <tr>
+              <th data-col="address">
+                <div>
+                  <span>Address</span>
+                  <sort-indicator/>
+                </div>
+              </th>
+              <th data-col="recomp">
+                <div>
+                  <span>Recomp</span>
+                  <sort-indicator/>
+                </div>
+              </th>
+              <th data-col="name">
+                <div>
+                  <span>Name</span>
+                  <sort-indicator/>
+                </div>
+              </th>
+              <th data-col="diffs" data-no-sort></th>
+              <th data-col="matching">
+                <div>
+                  <sort-indicator></sort-indicator>
+                  <span>Matching</span>
+                </div>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+      </listing-table>
+    </div>
+    <template id="funcrow-template">
+      <style>
+        :host(:not([hidden])) {
+          display: table-row;
+        }
+
+        :host(:not([show-recomp])) > div[data-col="recomp"] {
+          display: none;
+        }
+
+        div[data-col="name"]:hover {
+          cursor: pointer;
+        }
+
+        div[data-col="name"]:hover > ::slotted(*) {
+          text-decoration: underline;
+          text-decoration-style: dotted;
+        }
+
+        ::slotted(*:not([slot="name"])) {
+          white-space: nowrap;
+        }
+
+        :host > div {
+          border-top: 1px #f0f0f0 solid;
+          display: table-cell;
+          padding: 0.5em;
+          word-break: break-all !important;
+        }
+
+        :host > div:last-child {
+          text-align: right;
+        }
+      </style>
+      <div data-col="address"><can-copy><slot name="address"></slot></can-copy></div>
+      <div data-col="recomp"><can-copy><slot name="recomp"></slot></can-copy></div>
+      <div data-col="name"><slot name="name"></slot></div>
+      <div data-col="diffs"><slot name="diffs"></slot></div>
+      <div data-col="matching"><slot name="matching"></slot></div>
+    </template>
+    <template id="diffrow-template">
+      <style>
+        :host(:not([hidden])) {
+          display: table-row;
+          contain: paint;
+        }
+
+        td.singleCell {
+          border: 1px #f0f0f0 solid;
+          border-bottom: 0px none;
+          display: table-cell;
+          padding: 0.5em;
+          word-break: break-all !important;
+        }
+      </style>
+      <td class="singleCell" colspan="5">
+        <slot></slot>
+      </td>
+    </template>
+    <template id="nodiff-template">
+      <style>
+        ::slotted(*) {
+          font-style: italic;
+          text-align: center;
+        }
+      </style>
+      <slot></slot>
+    </template>
+    <template id="can-copy-template">
+      <style>
+        :host {
+          position: relative;
+        }
+        ::slotted(*) {
+          cursor: pointer;
+        }
+        slot::after {
+          background-color: #fff;
+          color: #222;
+          display: none;
+          font-size: 12px;
+          padding: 1px 2px;
+          width: fit-content;
+          border-radius: 1px;
+          text-align: center;
+          bottom: 120%;
+          box-shadow: 0 4px 14px 0 rgba(0,0,0,.2), 0 0 0 1px rgba(0,0,0,.05);
+          position: absolute;
+          white-space: nowrap;
+          transition: .1s;
+          content: 'Copy to clipboard';
+        }
+        ::slotted(*:hover) {
+          text-decoration: underline;
+          text-decoration-style: dotted;
+        }
+        slot:hover::after {
+          display: block;
+        }
+        :host([copied]) > slot:hover::after {
+          content: 'Copied!';
+        }
+      </style>
+      <slot></slot>
+    </template>
+  </body>
+</html>
