@@ -18,7 +18,7 @@ jobs:
       - name: Download original cmr2 binary
         if: ${{ !steps.cache-original-binary.outputs.cache-hit }}
         run: |
-          wget https://github.com/CMR2Decomp/SilentPatchCMR2/blob/master/game-bin/CMR2.exe --directory-prefix=cmr2bin
+          wget https://raw.githubusercontent.com/CMR2Decomp/SilentPatchCMR2/refs/heads/master/game-bin/CMR2.exe --directory-prefix=cmr2bin
 
       - name: Cache original binary
         if: ${{ !steps.cache-original-binary.outputs.cache-hit }}
