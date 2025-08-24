@@ -69,13 +69,13 @@ jobs:
       - name: Compare Accuracy With Current main
         shell: bash
         env:
-          RELEASE_URL: https://github.com/CMR2Decomp/CMR2Decomp/tree/main/
+          RELEASE_URL: https://raw.githubusercontent.com/CMR2Decomp/CMR2Decomp/refs/heads/main/CMR2PROGRESS/
         run: |
           # Download the current main state
-          curl -fLSs -o summary-old.json $RELEASE_URL/sumary.json || echo "" >summary-old.json
+          curl -fLSs -o summary-old.json $RELEASE_URL/summary.json || echo "" >summary-old.json
 
           # Compare with current main
-          reccmp-reccmp --target CONFIG --diff CMR2PROGRESS-old.json || echo "Current master not found"
+          reccmp-reccmp --target CMR2 --diff summary-old.json || echo "Current master not found"
 
       - name: Test Exports
         shell: bash
