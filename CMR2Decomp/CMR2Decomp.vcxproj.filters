@@ -27,6 +27,12 @@
     <ClCompile Include="StageSplitData.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="RallyTiming.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="StageTiming.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Stage.h">
@@ -36,6 +42,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="StageSplitData.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RallyTiming.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="StageTiming.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

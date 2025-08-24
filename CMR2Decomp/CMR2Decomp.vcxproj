@@ -134,13 +134,17 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="RallyData.cpp" />
+    <ClCompile Include="RallyTiming.cpp" />
     <ClCompile Include="Stage.cpp" />
     <ClCompile Include="StageSplitData.cpp" />
+    <ClCompile Include="StageTiming.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="RallyData.h" />
+    <ClInclude Include="RallyTiming.h" />
     <ClInclude Include="Stage.h" />
     <ClInclude Include="StageSplitData.h" />
+    <ClInclude Include="StageTiming.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
