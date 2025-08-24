@@ -16,6 +16,7 @@ jobs:
       - name: Build
         shell: cmd
         run: ${{ '"C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\Tools\VsDevCmd.bat" && msbuild /p:Platform=x86' }}
+        working-directory: CMR2Decomp
 
       - name: Upload Artifact
         uses: actions/upload-artifact@main
