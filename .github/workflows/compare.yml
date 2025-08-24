@@ -7,88 +7,88 @@ jobs:
     name: Download original binary
     uses: ./.github/workflows/cmr2bin.yml
 
-build:
-    name: Compile Visual Studio project with MSBuild
-    runs-on: "windows-latest"
-    steps:
+  build:
+      name: Compile Visual Studio project with MSBuild
+      runs-on: "windows-latest"
+      steps:
 
-    -name: Build
-    shell: cmd 
-    run: ${{ '"C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\Tools\VsDevCmd.bat" && msbuild' }}
+      -name: Build
+      shell: cmd 
+      run: ${{ '"C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\Tools\VsDevCmd.bat" && msbuild' }}
 
-    -name: Upload Artifact
-    uses: actions/upload-artifact@main
-    with:
-      name: Win32
-      path: |
-        build/CMR2.EXE
-        build/CMR2.PDB
-
-verify:
-  name: Verify decomp
-  needs: [build, fetch-deps]
-  runs-on: windows-latest
-  steps:
-    - uses: actions/checkout@main
-
-    - uses: actions/setup-python@v5
-      with:
-        python-version: "3.12"
-
-    - uses: actions/download-artifact@main
-      with:
-        name: Win32
-        path: build
-
-    - name: Restore cached original binary
-      id: cache-original-binary
-      uses: actions/cache/restore@v4
-      with:
-        enableCrossOsArchive: true
-        path: cmr2bin
-        key: cmr2bin
-
-    - name: Install python packages
-      shell: bash
-      run: |
-        pip install -r tools/requirements.txt
-    - name: Detect binary
-      run: |
-        reccmp-project detect --what original   --search-path cmr2bin
-        reccmp-project detect --what recompiled --search-path build
-    - name: Summarize Accuracy
-      shell: bash
-      run: |
-        reccmp-reccmp --target CMR2 --output index.html --json CMR2PROGRESS.json
-
-    - name: Compare Accuracy With Current Master
-      shell: bash
-      env:
-        RELEASE_URL: https://github.com/isledecomp/isle/releases/download/continuous
-      run: |
-        # Download the current master state
-        curl -fLSs -o CMR2PROGRESS-old.json $RELEASE_URL/CMR2PROGRESS.json || echo "" >CMR2PROGRESS-old.json
-
-        # Compare with current master
-        reccmp-reccmp --target CONFIG --diff CMR2PROGRESS-old.json || echo "Current master not found"
-
-    - name: Test Exports
-      shell: bash
-      run: |
-        reccmp-verexp --target CMR2
-    - name: Check Vtables
-      shell: bash
-      run: |
-        reccmp-vtable --target CMR2
-
-    - name: Check Variables
-      shell: bash
-      run: |
-        reccmp-datacmp --target CMR2
-
-    - name: Upload Artifact
+      -name: Upload Artifact
       uses: actions/upload-artifact@main
       with:
-        name: Accuracy Report
+        name: Win32
         path: |
-          CMR2PROGRESS*
+          build/CMR2.EXE
+          build/CMR2.PDB
+
+  verify:
+    name: Verify decomp
+    needs: [build, fetch-deps]
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@main
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - uses: actions/download-artifact@main
+        with:
+          name: Win32
+          path: build
+
+      - name: Restore cached original binary
+        id: cache-original-binary
+        uses: actions/cache/restore@v4
+        with:
+          enableCrossOsArchive: true
+          path: cmr2bin
+          key: cmr2bin
+
+      - name: Install python packages
+        shell: bash
+        run: |
+          pip install -r tools/requirements.txt
+      - name: Detect binary
+        run: |
+          reccmp-project detect --what original   --search-path cmr2bin
+          reccmp-project detect --what recompiled --search-path build
+      - name: Summarize Accuracy
+        shell: bash
+        run: |
+          reccmp-reccmp --target CMR2 --output index.html --json CMR2PROGRESS.json
+
+      - name: Compare Accuracy With Current Master
+        shell: bash
+        env:
+          RELEASE_URL: https://github.com/isledecomp/isle/releases/download/continuous
+        run: |
+          # Download the current master state
+          curl -fLSs -o CMR2PROGRESS-old.json $RELEASE_URL/CMR2PROGRESS.json || echo "" >CMR2PROGRESS-old.json
+
+          # Compare with current master
+          reccmp-reccmp --target CONFIG --diff CMR2PROGRESS-old.json || echo "Current master not found"
+
+      - name: Test Exports
+        shell: bash
+        run: |
+          reccmp-verexp --target CMR2
+      - name: Check Vtables
+        shell: bash
+        run: |
+          reccmp-vtable --target CMR2
+
+      - name: Check Variables
+        shell: bash
+        run: |
+          reccmp-datacmp --target CMR2
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@main
+        with:
+          name: Accuracy Report
+          path: |
+            CMR2PROGRESS*
