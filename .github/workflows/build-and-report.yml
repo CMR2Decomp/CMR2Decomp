@@ -42,7 +42,7 @@ jobs:
 
     steps:
       - name: Fetch MSVC 6.0
-      - uses: actions/checkout@v4
+        uses: actions/checkout@v4
         with:
           repository: itsmattkc/msvc600
           path: msvc600
