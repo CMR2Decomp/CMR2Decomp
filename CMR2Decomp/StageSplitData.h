@@ -1,7 +1,7 @@
 #ifndef _STAGE_SPLIT_DATA_H
 #define _STAGE_SPLIT_DATA_H
 
-typedef struct StageSplitData {
+struct StageSplitData {
 	unsigned int split;
 	unsigned int playerTime;
 	unsigned int leaderTime;
