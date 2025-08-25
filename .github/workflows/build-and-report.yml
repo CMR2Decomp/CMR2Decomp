@@ -49,7 +49,7 @@ jobs:
 
       - name: Build
         shell: cmd
-        run: ./msvc600/bin/VCVARS32.BAT x86
+        run: call ./msvc600/bin/VCVARS32.BAT x86
 
       - name: Upload Build
         uses: actions/upload-artifact@main
