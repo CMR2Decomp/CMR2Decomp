@@ -16,18 +16,42 @@ jobs:
     name: Download original binary
     uses: ./.github/workflows/cmr2bin.yml
 
+  # build:
+  #   name: Compile Visual Studio project with MSBuild
+  #   needs: [fetch-deps]
+  #   runs-on: "windows-latest"
+  #   steps:
+  #     - uses: actions/checkout@main
+  #     - name: Build
+  #       shell: cmd
+  #       run: ${{ '"C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\Tools\VsDevCmd.bat" && msbuild /p:Platform=x86' }}
+  #       working-directory: CMR2Decomp
+
+  #     - name: Upload Artifact
+  #       uses: actions/upload-artifact@main
+  #       with:
+  #         name: Win32
+  #         path: |
+  #           CMR2Decomp/Debug/CMR2.exe
+  #           CMR2Decomp/Debug/CMR2.pdb
+
   build:
-    name: Compile Visual Studio project with MSBuild
+    name: Build (MSVC 6.0)
     needs: [fetch-deps]
     runs-on: "windows-latest"
+
     steps:
-      - uses: actions/checkout@main
+      - name: Fetch MSVC 6.0
+      - uses: actions/checkout@v4
+        with:
+          repository: itsmattkc/msvc600
+          path: msvc600
+
       - name: Build
         shell: cmd
-        run: ${{ '"C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\Tools\VsDevCmd.bat" && msbuild /p:Platform=x86' }}
-        working-directory: CMR2Decomp
+        run: msvc600/bin/VCVARS32.BAT x86
 
-      - name: Upload Artifact
+      - name: Upload Build
         uses: actions/upload-artifact@main
         with:
           name: Win32
