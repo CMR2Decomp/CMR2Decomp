@@ -1,4 +1,3 @@
-#include <cstdint>
 
 int main(void)
 {

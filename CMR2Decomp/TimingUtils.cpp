@@ -1,6 +1,6 @@
 #include "TimingUtils.h"
 
-#include <cstdio>
+#include <stdio.h>
 
 // FUNCTION: CMR2 0x004de170
 void __stdcall FormatCentisecondsAsMinSecMSec(int iTime, char* pcFormattedTime) {
