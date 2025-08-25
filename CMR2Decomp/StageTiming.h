@@ -4,5 +4,3 @@
 int __stdcall StageTiming_GetTimeForPosition(int positionIx);
 
 #endif
-
-
