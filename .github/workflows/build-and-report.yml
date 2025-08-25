@@ -8,6 +8,10 @@ on:
     branches:
       - main
 
+concurrency:
+  group: ${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+
 permissions:
   contents: write
 
@@ -16,24 +20,53 @@ jobs:
     name: Download original binary
     uses: ./.github/workflows/cmr2bin.yml
 
+  # build:
+  #   name: Compile Visual Studio project with MSBuild
+  #   needs: [fetch-deps]
+  #   runs-on: "windows-latest"
+  #   steps:
+  #     - uses: actions/checkout@main
+  #     - name: Build
+  #       shell: cmd
+  #       run: ${{ '"C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\Tools\VsDevCmd.bat" && msbuild /p:Platform=x86' }}
+  #       working-directory: CMR2Decomp
+
+  #     - name: Upload Artifact
+  #       uses: actions/upload-artifact@main
+  #       with:
+  #         name: Win32
+  #         path: |
+  #           CMR2Decomp/Debug/CMR2.exe
+  #           CMR2Decomp/Debug/CMR2.pdb
+
   build:
-    name: Compile Visual Studio project with MSBuild
+    name: Build (MSVC 6.0)
     needs: [fetch-deps]
     runs-on: "windows-latest"
+
     steps:
       - uses: actions/checkout@main
+
+      - name: Fetch MSVC 6.0
+        uses: actions/checkout@main
+        with:
+          repository: itsmattkc/msvc600
+          path: msvc600
+
       - name: Build
         shell: cmd
-        run: ${{ '"C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\Tools\VsDevCmd.bat" && msbuild /p:Platform=x86' }}
-        working-directory: CMR2Decomp
+        run: |
+          mkdir build
+          call .\msvc600\VC98\bin\VCVARS32.BAT x86
+          call .\msvc600\VC98\bin\cl.exe .\CMR2Decomp\*.cpp /Fe"build/CMR2.exe" /Zi
 
-      - name: Upload Artifact
+      - name: Upload Build
         uses: actions/upload-artifact@main
         with:
           name: Win32
           path: |
-            CMR2Decomp/Debug/CMR2.exe
-            CMR2Decomp/Debug/CMR2.pdb
+            build/CMR2.exe
+            build/CMR2.pdb
 
   verify:
     name: Verify decomp

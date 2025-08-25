@@ -1,6 +1,8 @@
-#pragma once
+#ifndef _RALLY_TIMING_H
+#define _RALLY_TIMING_H
 
-#include <cstdint>
+int __stdcall RallyTiming_GetOverallPositionDriverID(int iPosition);
+int RallyTiming_GetOverallTimeForPosition(int iPosition);
+void RallyTiming_ResetOverallPlayerTimes(void);
 
-int32_t __stdcall RallyTiming_GetOverallPositionDriverID(int32_t iPosition);
-int32_t RallyTiming_GetOverallTimeForPosition(int32_t iPosition);
+#endif

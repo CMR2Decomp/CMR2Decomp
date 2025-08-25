@@ -1,5 +1,3 @@
-#include <cstdint>
-
 int main(void)
 {
 	while (true) {}

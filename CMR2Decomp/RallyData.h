@@ -1,7 +1,8 @@
-#pragma once
+#ifndef _RALLY_DATA_H
+#define _RALLY_DATA_H
 
-#include <cstdint>
+unsigned int RallyDataCountryIndex(void);
+unsigned int RallyDataStageIndex(void);
+unsigned int RallyDataState(void);
 
-uint32_t RallyDataCountryIndex(void);
-uint32_t RallyDataStageIndex(void);
-uint32_t RallyDataState(void);
+#endif
