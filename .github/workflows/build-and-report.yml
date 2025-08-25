@@ -56,16 +56,17 @@ jobs:
       - name: Build
         shell: cmd
         run: |
+          mkdir build
           call .\msvc600\VC98\bin\VCVARS32.BAT x86
-          call .\msvc600\VC98\bin\cl.exe .\CMR2Decomp\*.cpp /Fe:CMR2.exe
+          call .\msvc600\VC98\bin\cl.exe .\CMR2Decomp\*.cpp /Fe:.\build\CMR2.exe
 
       - name: Upload Build
         uses: actions/upload-artifact@main
         with:
           name: Win32
           path: |
-            CMR2Decomp/Debug/CMR2.exe
-            CMR2Decomp/Debug/CMR2.pdb
+            build/CMR2.exe
+            build/CMR2.pdb
 
   verify:
     name: Verify decomp
