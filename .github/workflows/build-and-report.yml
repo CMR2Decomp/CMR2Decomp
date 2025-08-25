@@ -8,6 +8,10 @@ on:
     branches:
       - main
 
+concurrency:
+  group: ${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+
 permissions:
   contents: write
 
@@ -49,7 +53,8 @@ jobs:
 
       - name: Build
         shell: cmd
-        run: call ./msvc600/bin/VCVARS32.BAT x86
+        run: |
+        call .\msvc600\bin\VCVARS32.BAT x86
 
       - name: Upload Build
         uses: actions/upload-artifact@main
