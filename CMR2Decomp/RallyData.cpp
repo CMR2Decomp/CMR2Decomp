@@ -1,7 +1,7 @@
 #include "RallyData.h"
 
 // GLOBAL: CMR2 0x0052f2ac
-int g_selectedRallyData = 0;
+unsigned int g_selectedRallyData = 0;
 
 // FUNCTION: CMR2 0x00406910
 unsigned int RallyDataCountryIndex(void) {
