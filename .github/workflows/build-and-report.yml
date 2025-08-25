@@ -56,8 +56,6 @@ jobs:
       - name: Build
         shell: cmd
         run: |
-          mkdir build
-          dir
           call .\msvc600\VC98\bin\VCVARS32.BAT x86
           call .\msvc600\VC98\bin\cl.exe .\CMR2Decomp\*.cpp /Fe"build/CMR2.exe" /Zi
 
