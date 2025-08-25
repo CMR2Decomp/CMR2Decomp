@@ -55,8 +55,7 @@ jobs:
         shell: cmd
         run: |
           call .\msvc600\VC98\bin\VCVARS32.BAT x86
-          call .\msvc600\VC98\bin\cl.exe main.cpp
-        working-directory: CMR2Decomp
+          call .\msvc600\VC98\bin\cl.exe .\CMR2Decomp\main.cpp
 
       - name: Upload Build
         uses: actions/upload-artifact@main
