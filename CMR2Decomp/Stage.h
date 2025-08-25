@@ -1,5 +1,6 @@
-#pragma once
+#ifndef _STAGE_H
+#define _STAGE_H
 
-#include <cstdint>
+int GetStageSplitCount(void);
 
-int32_t GetStageSplitCount(void);
+#endif

@@ -1,6 +1,8 @@
-#pragma once
+#ifndef _STAGE_TIMING_H
+#define _STAGE_TIMING_H
 
-#include <cstdint>
+int __stdcall StageTiming_GetTimeForPosition(int positionIx);
 
-int32_t __stdcall StageTiming_GetTimeForPosition(int32_t positionIx);
+#endif
+
 
