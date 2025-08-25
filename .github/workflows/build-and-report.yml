@@ -58,7 +58,7 @@ jobs:
         run: |
           mkdir build
           call .\msvc600\VC98\bin\VCVARS32.BAT x86
-          call .\msvc600\VC98\bin\cl.exe .\CMR2Decomp\*.cpp /Fe"build/CMR2.exe" /Zi
+          call .\msvc600\VC98\bin\cl.exe .\CMR2Decomp\*.cpp /Fe"build/CMR2.exe" /O2 /DNDEBUG /Zi /MD /link /DEBUG /PDB:"build\CMR2.pdb"
 
       - name: Upload Build
         uses: actions/upload-artifact@main
