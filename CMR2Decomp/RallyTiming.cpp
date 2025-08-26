@@ -1,4 +1,5 @@
 #include "RallyTiming.h"
+#include "TimingUtils.h"
 
 // GLOBAL: CMR2 0x00533638
 char g_rallyOverallOrderDriverID[16];
@@ -16,10 +17,12 @@ int __stdcall RallyTiming_GetOverallPositionDriverID(int iPosition)
 }
 
 // FUNCTION: CMR2 0x0040d3b0
-int RallyTiming_GetOverallTimeForPosition(int iPosition)
+int __stdcall RallyTiming_GetOverallTimeForPosition(int iPosition)
 {
-	int rawTime = g_rallyOverallTimesRaw[g_rallyOverallOrderDriverID[iPosition]];
-	return 2200;
+	int iTime;
+
+	iTime = g_rallyOverallTimesRaw[g_rallyOverallOrderDriverID[iPosition]];
+	return ConvertRawTimeToCentiseconds(iTime);
 }
 
 // FUNCTION: CMR2 0x0040d100
