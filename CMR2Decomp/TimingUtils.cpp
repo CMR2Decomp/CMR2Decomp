@@ -8,7 +8,7 @@ const char *g_minSecMSECFormatString = "%02d:%02d.%02d";
 // FUNCTION: CMR2 0x004de170
 void __stdcall FormatCentisecondsAsMinSecMSec(int iTime, char *pcFormattedTime)
 {
-	sprintf(pcFormattedTime, g_minSecMSECFormatString, iTime / 6000, (iTime % 6000) / 100, iTime % 100);
+	sprintf(pcFormattedTime, "%02d:%02d.%02d", iTime / 6000, (iTime % 6000) / 100, iTime % 100);
 }
 
 // FUNCTION: CMR2 0x0040d480
