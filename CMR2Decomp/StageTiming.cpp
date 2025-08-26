@@ -8,6 +8,8 @@ char g_stageSplitDriverIndices[10][16];
 
 // GLOBAL: CMR2 0x00542198
 int g_stageSplitTimesRaw[10][16];
+// GLOBAL: CMR2 0x005420ec
+char g_stageSplitTimesRawDriverIx[10][16];
 
 // FUNCTION: CMR2 0x00455cf0
 int __stdcall StageTiming_GetDriverIDForPosition(int positionIx)
@@ -28,8 +30,8 @@ int __stdcall StageTiming_GetTimeForPosition(int iPosition)
     if (iPosition >= 0 && iPosition <= 15)
     {
         stageSplitCount = GetStageSplitCount();
-        iTime = ConvertRawTimeToCentiseconds(g_stageSplitTimesRaw[stageSplitCount][g_stageSplitDriverIndices[stageSplitCount][iPosition]]);
-        return iTime;
+        iTime = g_stageSplitTimesRaw[stageSplitCount][g_stageSplitTimesRawDriverIx[stageSplitCount][iPosition]];
+        return ConvertRawTimeToCentiseconds(iTime);
     }
 
     return -1;
