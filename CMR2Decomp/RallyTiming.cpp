@@ -4,7 +4,7 @@
 char g_rallyOverallOrderDriverID[16];
 
 // GLOBAL: CMR2 0x00533658
-int g_rallyOverallTimesRaw[32];
+int g_rallyOverallTimesRaw[16];
 
 // FUNCTION: CMR2 0x0040d390
 int __stdcall RallyTiming_GetOverallPositionDriverID(int iPosition)
@@ -22,14 +22,14 @@ int RallyTiming_GetOverallTimeForPosition(int iPosition)
 // FUNCTION: CMR2 0x0040d100
 void RallyTiming_ResetOverallPlayerTimes(void)
 {
-	int iVar1 = 0;
-	int *puVar2 = g_rallyOverallTimesRaw;
+	unsigned int ix = 0;
+	int *ptr = g_rallyOverallTimesRaw;
 
 	do
 	{
-		*puVar2 = 0;
-		g_rallyOverallOrderDriverID[iVar1] = iVar1;
-		puVar2 += 1;
-		iVar1 += 1;
-	} while (puVar2 < (int *)(0x00533698));
+		*ptr = 0;
+		g_rallyOverallOrderDriverID[ix] = ix;
+		ptr++;
+		ix = ix + 1;
+	} while (ptr < (int *)(*(&g_rallyOverallTimesRaw + 1) - g_rallyOverallTimesRaw));
 }
