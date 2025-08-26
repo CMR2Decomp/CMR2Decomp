@@ -30,6 +30,6 @@ void RallyTiming_ResetOverallPlayerTimes(void)
 		*ptr = 0;
 		g_rallyOverallOrderDriverID[ix] = ix;
 		ptr++;
-		ix = ix + 1;
+		ix++;
 	} while (ptr < (int *)(*(&g_rallyOverallTimesRaw + 1) - g_rallyOverallTimesRaw));
 }
