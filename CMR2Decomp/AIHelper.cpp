@@ -20,18 +20,31 @@ char g_aiNames[15][20] = {
     "cooper",
     "utzman"};
 
-// STUB: CMR2 0x00407f80
-int __stdcall FUN_00407f80(unsigned char param1)
+// FUNCTION: CMR2 0x00407f80
+int __stdcall CAIHelper::FUN_00407f80(int id)
 {
-    return 0;
+    unsigned char uVar1;
+
+    if ((id < 0) || (5 < id))
+        id = 0;
+
+    uVar1 = FUN_00405d90();
+    if (uVar1 == 2)
+        return id;
+
+    uVar1 = FUN_00405d90();
+    if (uVar1 == 1)
+        return id + 5;
+
+    return id + 10;
 }
 
 // FUNCTION: CMR2 0x00407ec0
-char *__stdcall AIHelper_GetNameForID(int id)
+char *__stdcall CAIHelper::GetNameForID(int id)
 {
     unsigned int uVar1;
     unsigned int uVar2;
-    int uVar3;
+    int iVar3;
 
     uVar1 = FUN_00405d80();
     if (uVar1 != 5)
@@ -42,12 +55,13 @@ char *__stdcall AIHelper_GetNameForID(int id)
             {
                 if (id < 0 || id > 15)
                     id = 0;
+
                 return g_aiNames[id];
             }
         }
     }
 
     uVar2 = RallyDataState();
-    uVar3 = FUN_00407f80(id - (uVar2 & 0xff));
-    return g_aiNames[uVar3];
+    uVar2 = CAIHelper::FUN_00407f80(id - (unsigned char)uVar2);
+    return g_aiNames[uVar2];
 }

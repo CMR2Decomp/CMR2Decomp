@@ -3,6 +3,6 @@
 
 unsigned int RallyDataCountryIndex(void);
 unsigned int RallyDataStageIndex(void);
-unsigned char RallyDataState(void);
+unsigned int RallyDataState(void);
 
 #endif

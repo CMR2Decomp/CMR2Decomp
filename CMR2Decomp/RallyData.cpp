@@ -16,7 +16,7 @@ unsigned int RallyDataStageIndex(void)
 }
 
 // FUNCTION: CMR2 0x004074f0
-unsigned char RallyDataState(void)
+unsigned int RallyDataState(void)
 {
 	return g_selectedRallyData >> 0xe & 3;
 }

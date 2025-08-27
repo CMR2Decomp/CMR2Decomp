@@ -6,6 +6,7 @@ typedef unsigned char undefined;
 unsigned char GetGameLanguage(void);
 unsigned int GetGameRegion(void);
 unsigned char FUN_00405d80(void);
+unsigned char FUN_00405d90(void);
 
 struct GameInfo
 {

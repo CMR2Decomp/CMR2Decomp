@@ -23,3 +23,8 @@ unsigned char FUN_00405d80(void)
 {
     return g_gameInfo.field2_0x14 >> 3 & 0x7f;
 }
+
+unsigned char FUN_00405d90(void)
+{
+    return g_gameInfo.field2_0x14 >> 10 & 7;
+}
