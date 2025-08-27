@@ -5,12 +5,13 @@ typedef unsigned char undefined;
 
 unsigned char GetGameLanguage(void);
 unsigned int GetGameRegion(void);
+unsigned char FUN_00405d80(void);
 
 struct GameInfo
 {
     unsigned char empty[16];
-    int magicNumber; /* Always 0x11 */
-    int field2_0x14; /* first byte of this contains language */
+    int magicNumber;          /* Always 0x11 */
+    unsigned int field2_0x14; /* first byte of this contains language */
     int field3_0x18;
     undefined field4_0x1c;
     undefined field5_0x1d;
