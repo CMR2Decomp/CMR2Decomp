@@ -14,33 +14,35 @@ char g_lpszMenuName[5] = "menu";
 int WinMain(HINSTANCE instance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd)
 {
 	HINSTANCE hInstance = GetModuleHandleA(NULL);
-	Initialize(hInstance, 0, ""); // TODO: params aren't correct
-
-	MSG msg;
-	while (GetMessage(&msg, NULL, 0, 0))
-	{
-	}
-	return 1;
+	return Initialize(hInstance, 0, lpCmdLine); // TODO: params aren't correct
 }
 
 // STUB: CMR2 0x004a9720
-unsigned char Initialize(HINSTANCE hInstance, unsigned char param2, char *param3)
+unsigned char Initialize(HINSTANCE hInstance, unsigned char param2, LPSTR param3)
 {
 	HWND hWnd;
 	hWnd = FindWindowA("Colin McRae Rally 2", "Colin McRae Rally 2");
 	if (hWnd != NULL)
-	{
 		return 0;
-	}
 
 	g_hInstance = hInstance;
-	CreateGameWindow(hInstance, &g_hWndList[g_hWndIx], "Colin McRae Rally 2", NULL);
+	CreateGameWindow(hInstance, &g_hWndList[g_hWndIx], "Colin McRae Rally 2", MessageHandler);
+
+	MSG msg;
+	while (GetMessageA(&msg, NULL, 0, 0))
+	{
+		TranslateMessage(&msg);
+		DispatchMessageA(&msg);
+	}
+
+	return 0;
 }
 
 // STUB: CMR2 0x004a8270
-void FUN_004a8270(void)
+BOOL FUN_004a8270(void)
 {
 	// todo
+	return 1;
 }
 
 // STUB: CMR2 0x0049c0a0
@@ -51,19 +53,20 @@ int __stdcall FUN_0049c0a0(void *param1, void *param2)
 }
 
 // FUNCTION: CMR2 0x004a8140
-BOOL __stdcall CreateGameWindow(HINSTANCE hInstance, HWND *pHWND, LPCSTR sWindowName, WNDPROC *param_4)
+BOOL __stdcall CreateGameWindow(HINSTANCE hInstance, HWND *pHWND, LPCSTR sWindowName, WNDPROC wndProc)
 {
 	ATOM AVar1;
 	int nScreenHeight;
 	int nScreenWidth;
 	HWND hWnd;
-	DWORD dwStyle;
+	DWORD dwStyle = 0;
 	HWND hWndParent;
 	HMENU hMenu;
 	LPVOID lpParam;
 	WNDCLASSA wndClass;
+	int nCmdShow;
 
-	wndClass.lpfnWndProc = *param_4;
+	wndClass.lpfnWndProc = wndProc;
 	wndClass.cbClsExtra = 0;
 	wndClass.cbWndExtra = 0;
 	wndClass.hInstance = hInstance;
@@ -73,16 +76,11 @@ BOOL __stdcall CreateGameWindow(HINSTANCE hInstance, HWND *pHWND, LPCSTR sWindow
 	wndClass.lpszClassName = sWindowName;
 	wndClass.style = 3;
 
+	dwStyle = 0x81cf0000;
 	if (!g_pGraphics->isFullscreen)
-	{
 		wndClass.hCursor = LoadCursorA(NULL, (const char *)0x7f00);
-		dwStyle = 0x81cf0000;
-	}
 	else
-	{
 		wndClass.hCursor = NULL;
-		dwStyle = 0;
-	}
 
 	AVar1 = RegisterClassA(&wndClass);
 	if (AVar1 == 0)
@@ -91,25 +89,56 @@ BOOL __stdcall CreateGameWindow(HINSTANCE hInstance, HWND *pHWND, LPCSTR sWindow
 	lpParam = NULL;
 	hMenu = NULL;
 	hWndParent = NULL;
-	nScreenWidth = GetSystemMetrics(0);
 	nScreenHeight = GetSystemMetrics(1);
+	nScreenWidth = GetSystemMetrics(0);
 
-	hWnd = CreateWindowExA(0x40000, sWindowName, sWindowName, dwStyle, 0, 0, nScreenWidth, nScreenHeight,
+	hWnd = CreateWindowExA((DWORD)0x40000, sWindowName, sWindowName, dwStyle, 0, 0, nScreenWidth, nScreenHeight,
 						   hWndParent, hMenu, hInstance, lpParam);
 
-	*(&g_hWndList[g_hWndIx]) = hWnd;
+	g_hWndList[g_hWndIx] = hWnd;
 	if (hWnd == NULL)
 		return FALSE;
 
 	if (!g_pGraphics->isFullscreen)
-		nScreenHeight = 0;
+		nCmdShow = SW_SHOWDEFAULT; // TODO: should be SW_HIDE
 	else
-		nScreenHeight = 3;
+		nCmdShow = SW_MAXIMIZE;
 
-	ShowWindow(hWnd, nScreenHeight);
+	ShowWindow(hWnd, nCmdShow);
 	UpdateWindow(hWnd);
 	SetFocus(hWnd);
 	*pHWND = hWnd;
 	FUN_0049c0a0(FUN_004a8270, NULL);
 	return TRUE;
+}
+
+// FUNCTION: CMR2 0x004a98b0
+LRESULT __stdcall MessageHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
+{
+	switch (msg)
+	{
+	default:
+		break;
+
+	case WM_SIZE:
+		break;
+
+	case WM_SETFOCUS:
+		break;
+
+	case WM_KILLFOCUS:
+		break;
+
+	case WM_PAINT:
+		break;
+
+	case WM_CLOSE:
+		break;
+
+	case WM_DESTROY:
+		PostQuitMessage(0);
+		break;
+	}
+
+	return DefWindowProcA(hWnd, msg, wParam, lParam);
 }
