@@ -115,7 +115,7 @@ jobs:
         shell: bash
         run: |
           echo "BRANCH_NAME=$(echo ${GITHUB_HEAD_REF} | tr / -)" >> $GITHUB_ENV
-          git checkout ${{ BRANCH_NAME }}
+          git checkout ${{ env.BRANCH_NAME }}
           git config user.name github-actions
           git config user.email github-actions@github.com
           git add index.html CMR2PROGRESS/summary.json
