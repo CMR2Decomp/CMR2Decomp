@@ -15,7 +15,7 @@ char CMain::m_logFileHeader1[29] = "FILE_PRINT DEBUG INFORMATION";
 char CMain::m_logFileAsterisks[29] = "****************************";
 char CMain::m_logFileBlankLine[1] = "";
 char CMain::m_logFileFinishedNormally[30] = "* Program finished normally *";
-BOOL CMain::m_isShowingCursor = false;
+BOOL CMain::m_isShowingCursor = TRUE;
 
 // GLOBAL: CMR2 0x00520b94
 char g_lpszMenuName[5] = "menu";
