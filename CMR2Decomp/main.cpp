@@ -1,5 +1,6 @@
 #include "main.h"
 #include "Graphics.h"
+#include "Logger.h"
 
 // GLOBAL: CMR2 0x00663db0
 HINSTANCE g_hInstance;
@@ -8,32 +9,65 @@ HWND g_hWndList[1];
 // GLOBAL: CMR2 0x00663dac
 int g_hWndIx = 0;
 
+char CMain::m_logFileLocation[14] = "c:\\error.txt";
+char CMain::m_gameName[20] = "Colin McRae Rally 2";
+char CMain::m_logFileHeader1[29] = "FILE_PRINT DEBUG INFORMATION";
+char CMain::m_logFileAsterisks[29] = "****************************";
+char CMain::m_logFileBlankLine[1] = "";
+char CMain::m_logFileFinishedNormally[30] = "* Program finished normally *";
+BOOL CMain::m_isShowingCursor = false;
+
 // GLOBAL: CMR2 0x00520b94
 char g_lpszMenuName[5] = "menu";
 
 int WinMain(HINSTANCE instance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd)
 {
 	HINSTANCE hInstance = GetModuleHandleA(NULL);
-	return Initialize(hInstance, 0, lpCmdLine); // TODO: params aren't correct
+	return CMain::Initialize(hInstance, 0, lpCmdLine); // TODO: params aren't correct
 }
 
 // FUNCTION: CMR2 0x004a9720
-unsigned char Initialize(HINSTANCE hInstance, unsigned char param2, LPSTR param3)
+unsigned char CMain::Initialize(HINSTANCE hInstance, unsigned char param2, LPSTR param3)
 {
 	HWND hWnd;
-	hWnd = FindWindowA("Colin McRae Rally 2", "Colin McRae Rally 2");
+	hWnd = FindWindowA(m_gameName, m_gameName);
 	if (hWnd != NULL)
 		return 0;
 
+	CLogger::OpenLogFile(m_logFileLocation);
+	CLogger::LogToFile(m_logFileHeader1);
+	CLogger::LogToFile(m_logFileAsterisks);
+	CLogger::LogToFile(m_logFileBlankLine);
 	g_hInstance = hInstance;
-	CreateGameWindow(hInstance, &g_hWndList[g_hWndIx], "Colin McRae Rally 2", MessageHandler);
+
+	CreateGameWindow(hInstance, &g_hWndList[g_hWndIx], m_gameName, MessageHandler);
 
 	MSG msg;
 	while (GetMessageA(&msg, NULL, 0, 0))
 	{
 		TranslateMessage(&msg);
 		DispatchMessageA(&msg);
+
+		if (g_pGraphics->isFullscreen == FALSE)
+		{
+			if (m_isShowingCursor == FALSE)
+			{
+				ShowCursor(1);
+				m_isShowingCursor = TRUE;
+			}
+		}
+		else if (m_isShowingCursor != FALSE)
+		{
+			ShowCursor(0);
+			m_isShowingCursor = FALSE;
+		}
 	}
+
+	CLogger::LogToFile(m_logFileBlankLine);
+	CLogger::LogToFile(m_logFileAsterisks);
+	CLogger::LogToFile(m_logFileFinishedNormally);
+	CLogger::LogToFile(m_logFileAsterisks);
+	CLogger::CloseLogFile();
 
 	return 0;
 }
@@ -53,7 +87,7 @@ int __stdcall FUN_0049c0a0(void *param1, void *param2)
 }
 
 // FUNCTION: CMR2 0x004a8140
-BOOL __stdcall CreateGameWindow(HINSTANCE hInstance, HWND *pHWND, LPCSTR sWindowName, WNDPROC wndProc)
+BOOL __stdcall CMain::CreateGameWindow(HINSTANCE hInstance, HWND *pHWND, LPCSTR sWindowName, WNDPROC wndProc)
 {
 	ATOM AVar1;
 	int nScreenHeight;
@@ -113,7 +147,7 @@ BOOL __stdcall CreateGameWindow(HINSTANCE hInstance, HWND *pHWND, LPCSTR sWindow
 }
 
 // FUNCTION: CMR2 0x004a98b0
-LRESULT __stdcall MessageHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
+LRESULT __stdcall CMain::MessageHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	switch (msg)
 	{
