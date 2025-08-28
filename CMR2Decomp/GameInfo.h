@@ -2,12 +2,6 @@
 #define _GAME_INFO_H
 
 typedef unsigned char undefined;
-
-unsigned char GetGameLanguage(void);
-unsigned int GetGameRegion(void);
-unsigned char FUN_00405d80(void);
-unsigned char FUN_00405d90(void);
-
 struct GameInfo
 {
     unsigned char empty[16];
@@ -26,6 +20,26 @@ struct GameInfo
     int screenHeight;
     int screenColourDepth;
     undefined field15_0x30_field14704_0x399a;
+};
+
+class CGameInfo
+{
+public:
+    static unsigned char GetGameLanguage(void);
+    static unsigned int GetGameRegion(void);
+    static unsigned char FUN_00405d80(void);
+    static unsigned char FUN_00405d90(void);
+    static int GetScreenWidth(void);
+    static int GetScreenHeight(void);
+    static int GetColourDepth(void);
+    static char *GetInstalledFrontendDir();
+
+    // GLOBAL: CMR2 0x0052afa0
+    static GameInfo m_gameInfo;
+    // GLOBAL: CMR2 0x0052ea54
+    static unsigned int m_gameRegion;
+    // GLOBAL: CMR2 0x005366bc
+    static char m_installedFrontendDir[260];
 };
 
 #endif

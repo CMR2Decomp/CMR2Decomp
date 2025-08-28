@@ -28,11 +28,11 @@ int __stdcall CAIHelper::FUN_00407f80(int id)
     if ((id < 0) || (5 < id))
         id = 0;
 
-    uVar1 = FUN_00405d90();
+    uVar1 = CGameInfo::FUN_00405d90();
     if (uVar1 == 2)
         return id;
 
-    uVar1 = FUN_00405d90();
+    uVar1 = CGameInfo::FUN_00405d90();
     if (uVar1 == 1)
         return id + 5;
 
@@ -46,12 +46,12 @@ char *__stdcall CAIHelper::GetNameForID(int id)
     unsigned int uVar2;
     int iVar3;
 
-    uVar1 = FUN_00405d80();
+    uVar1 = CGameInfo::FUN_00405d80();
     if (uVar1 != 5)
     {
-        if (FUN_00405d80() != 6)
+        if (CGameInfo::FUN_00405d80() != 6)
         {
-            if (FUN_00405d80() != 7)
+            if (CGameInfo::FUN_00405d80() != 7)
             {
                 if (id < 0 || id > 15)
                     id = 0;
