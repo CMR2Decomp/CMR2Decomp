@@ -28,25 +28,25 @@ unsigned char CGameInfo::FUN_00405d90(void)
 }
 
 // FUNCTION: CMR2 0x00405c10
-int __stdcall CGameInfo::GetScreenWidth(void)
+int CGameInfo::GetScreenWidth(void)
 {
     return m_gameInfo.screenWidth;
 }
 
 // FUNCTION: CMR2 0x00405c30
-int __stdcall CGameInfo::GetScreenHeight(void)
+int CGameInfo::GetScreenHeight(void)
 {
     return m_gameInfo.screenHeight;
 }
 
 // FUNCTION: CMR2 0x00405c50
-int __stdcall CGameInfo::GetColourDepth(void)
+int CGameInfo::GetColourDepth(void)
 {
     return m_gameInfo.screenColourDepth;
 }
 
 // FUNCTION: CMR2 0x0040ed90
-char *__stdcall CGameInfo::GetInstalledFrontendDir()
+char *CGameInfo::GetInstalledFrontendDir()
 {
     return m_installedFrontendDir;
 }

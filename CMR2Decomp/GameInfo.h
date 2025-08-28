@@ -29,10 +29,10 @@ public:
     static unsigned int GetGameRegion(void);
     static unsigned char FUN_00405d80(void);
     static unsigned char FUN_00405d90(void);
-    static int __stdcall GetScreenWidth(void);
-    static int __stdcall GetScreenHeight(void);
-    static int __stdcall GetColourDepth(void);
-    static char *__stdcall GetInstalledFrontendDir();
+    static int GetScreenWidth(void);
+    static int GetScreenHeight(void);
+    static int GetColourDepth(void);
+    static char *GetInstalledFrontendDir();
 
     // GLOBAL: CMR2 0x0052afa0
     static GameInfo m_gameInfo;
