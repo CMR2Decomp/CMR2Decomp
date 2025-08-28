@@ -1,0 +1,29 @@
+name: Install reccmp
+
+on:
+  workflow_call:
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Restore cached original binary
+        id: cache-reccmp-install
+        uses: actions/cache/restore@v4
+        with:
+          enableCrossOsArchive: true
+          path: reccmp-python-package
+          key: reccmp-python-package
+
+      - name: Install reccmp python package
+        if: ${{ !steps.cache-reccmp-install.outputs.cache-hit }}
+        run: |
+          pip install git+https://github.com/isledecomp/reccmp
+
+      - name: Cache reccmp install
+        if: ${{ !steps.cache-reccmp-install.outputs.cache-hit }}
+        uses: actions/cache/save@v4
+        with:
+          enableCrossOsArchive: true
+          path: reccmp-python-package
+          key: reccmp-python-package

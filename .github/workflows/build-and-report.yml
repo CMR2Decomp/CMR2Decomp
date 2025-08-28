@@ -75,10 +75,12 @@ jobs:
           path: cmr2bin
           key: cmr2bin
 
-      - name: Install python packages
-        shell: bash
-        run: |
-          pip install git+https://github.com/isledecomp/reccmp
+      - name: Install reccmp
+        # shell: bash
+        # run: |
+        #   pip install git+https://github.com/isledecomp/reccmp
+        uses: ./.github/workflows/reccmp.yml
+
       - name: Detect binary
         run: |
           reccmp-project detect --what original   --search-path cmr2bin
