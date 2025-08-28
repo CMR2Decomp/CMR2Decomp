@@ -16,6 +16,6 @@ When running this from the root directory of this repository via `cmd.exe`, the 
 call "<msvc600_dir>/VC98/bin/cl.exe" CMR2Decomp/*.cpp /Fe"build/CMR2.exe" /O2 /DNDEBUG /Zi /MD /link user32.lib gdi32.lib /DEBUG /PDB:"build\CMR2.pdb" /SUBSYSTEM:WINDOWS
 ```
 
-# GitHub Workflows
+## GitHub Workflows
 
 However, when pushing to this repository it is being compiled with the help of a portable version of [MSVC6.0](https://github.com/itsmattkc/MSVC600). Which we understand is probably the closest compiler we'll get to what was originally used. As you can see from the [reccmp output](https://cmr2decomp.github.io/CMR2Decomp/) the accuracy is much better than when it was compiled with modern day compilers.
