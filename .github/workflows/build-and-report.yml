@@ -75,11 +75,31 @@ jobs:
           path: cmr2bin
           key: cmr2bin
 
-      - name: Install reccmp
-        # shell: bash
-        # run: |
-        #   pip install git+https://github.com/isledecomp/reccmp
-        uses: ./.github/workflows/reccmp.yml
+      # - name: Install reccmp
+      # shell: bash
+      # run: |
+      #   pip install git+https://github.com/isledecomp/reccmp
+
+      - name: Restore cached reccmp install
+        id: cache-reccmp-install
+        uses: actions/cache/restore@v4
+        with:
+          enableCrossOsArchive: true
+          path: reccmp-python-package
+          key: reccmp-python-package
+
+      - name: Install reccmp python package
+        if: ${{ !steps.cache-reccmp-install.outputs.cache-hit }}
+        run: |
+          pip install git+https://github.com/isledecomp/reccmp
+
+      - name: Cache reccmp install
+        if: ${{ !steps.cache-reccmp-install.outputs.cache-hit }}
+        uses: actions/cache/save@v4
+        with:
+          enableCrossOsArchive: true
+          path: reccmp-python-package
+          key: reccmp-python-package
 
       - name: Detect binary
         run: |
