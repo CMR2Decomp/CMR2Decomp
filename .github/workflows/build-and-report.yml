@@ -55,6 +55,8 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@main
+        run: |
+          git checkout ${{ github.head_ref }}
 
       - uses: actions/setup-python@v5
         with:
@@ -88,7 +90,6 @@ jobs:
         env:
           RELEASE_URL: https://raw.githubusercontent.com/CMR2Decomp/CMR2Decomp/refs/heads/main/CMR2PROGRESS/
         run: |
-          git checkout ${{ github.head_ref }}
 
           # Download the current main state
           curl -fLSs -o summary-old.json $RELEASE_URL/summary.json || echo "" >summary-old.json
