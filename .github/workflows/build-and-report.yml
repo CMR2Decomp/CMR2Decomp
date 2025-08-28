@@ -114,6 +114,8 @@ jobs:
         if: github.ref != 'refs/heads/main' # Only runs on the 'main' branch
         shell: bash
         run: |
+          echo "BRANCH_NAME=$(echo ${GITHUB_HEAD_REF} | tr / -)" >> $GITHUB_ENV
+          git checkout ${{ BRANCH_NAME }}
           git config user.name github-actions
           git config user.email github-actions@github.com
           git add index.html CMR2PROGRESS/summary.json
