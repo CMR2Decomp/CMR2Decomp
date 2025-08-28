@@ -88,6 +88,8 @@ jobs:
         env:
           RELEASE_URL: https://raw.githubusercontent.com/CMR2Decomp/CMR2Decomp/refs/heads/main/CMR2PROGRESS/
         run: |
+          git checkout ${{ github.head_ref }}
+
           # Download the current main state
           curl -fLSs -o summary-old.json $RELEASE_URL/summary.json || echo "" >summary-old.json
 
@@ -114,8 +116,6 @@ jobs:
         if: github.ref != 'refs/heads/main' # Only runs on the 'main' branch
         shell: bash
         run: |
-          echo "BRANCH_NAME=$(echo ${GITHUB_HEAD_REF} | tr / -)" >> $GITHUB_ENV
-          git checkout ${{ env.BRANCH_NAME }}
           git config user.name github-actions
           git config user.email github-actions@github.com
           git add index.html CMR2PROGRESS/summary.json
