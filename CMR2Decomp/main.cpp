@@ -17,7 +17,7 @@ int WinMain(HINSTANCE instance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nS
 	return Initialize(hInstance, 0, lpCmdLine); // TODO: params aren't correct
 }
 
-// STUB: CMR2 0x004a9720
+// FUNCTION: CMR2 0x004a9720
 unsigned char Initialize(HINSTANCE hInstance, unsigned char param2, LPSTR param3)
 {
 	HWND hWnd;
