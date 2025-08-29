@@ -1,0 +1,6 @@
+[submodule "third_party/dx7sdk-7001"]
+	path = third_party/dx7sdk-7001
+	url = git@github.com:CMR2Decomp/dx7sdk-7001.git
+[submodule "third_party/bink-sdk-1.0p"]
+	path = third_party/bink-sdk-1.0p
+	url = git@github.com:CMR2Decomp/bink-sdk-1.0p.git
