@@ -56,7 +56,25 @@ unsigned int CGameInfo::GetScreenHeight(void)
 }
 
 // FUNCTION: CMR2 0x00405c50
-int CGameInfo::GetColourDepth(void)
+unsigned int CGameInfo::GetColourDepth(void)
 {
     return m_gameInfo.screenColourDepth;
+}
+
+// FUNCTION: CMR2 0x00405c20
+void __stdcall CGameInfo::SetScreenWidth(unsigned int width)
+{
+    m_gameInfo.screenWidth = width;
+}
+
+// FUNCTION: CMR2 0x00405c40
+void __stdcall CGameInfo::SetScreenHeight(unsigned int height)
+{
+    m_gameInfo.screenHeight = height;
+}
+
+// FUNCTION: CMR2 0x00405c60
+void __stdcall CGameInfo::SetColourDepth(unsigned int depth)
+{
+    m_gameInfo.screenColourDepth = depth;
 }
