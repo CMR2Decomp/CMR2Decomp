@@ -21,10 +21,7 @@ GenericFile CFrontend::m_unk0x00818260;
 // FUNCTION: CMR2 0x004d21e0
 void __stdcall CFrontend::FUN_004d21e0(void)
 {
-    int iVar1, iVar2, iVar3, iVar5, iVar6, iVar7, iVar8, iVar9;
-    BOOL bVar;
-    unsigned int screenWidth, regionID;
-    char *frontendDir, *regionDir, *countrySpecificDir, *filePath;
+    unsigned int regionID;
     char regionKey;
 
     if (CGenericFileLoader::m_genericFile.buffer != NULL)
@@ -33,42 +30,30 @@ void __stdcall CFrontend::FUN_004d21e0(void)
         CGenericFileLoader::m_genericFile.buffer = NULL;
     }
 
-    CGenericFileLoader::m_genericFile.didFileLoad = NULL;
-    CGenericFileLoader::m_genericFile.fileSize = NULL;
+    CGenericFileLoader::m_genericFile.didFileLoad = 0;
+    CGenericFileLoader::m_genericFile.fileSize = 0;
 
-    if (CGameInfo::GetScreenWidth() > 1024U)
+    if (CGameInfo::GetScreenWidth() >= 1024U)
     {
-        iVar7 = FUN_004b7560(1024);
-        if (iVar7 != 0)
+        if (FUN_004b7560(1024) != 0)
         {
-            iVar8 = FUN_004b7590(1024);
-            if (iVar8 != 0)
+            if (FUN_004b7590(1024) != 0)
             {
-                iVar9 = FUN_004a9700();
-                if (iVar9 != FALSE)
-                {
-                    frontendDir = CInstallInfo::GetFrontendDir();
-                    sprintf(m_stringDest, m_feRes1024C, frontendDir);
-                }
+                if (FUN_004a9700() != FALSE)
+                    sprintf(m_stringDest, m_feRes1024C, CInstallInfo::GetFrontendDir());
+
                 else
-                {
-                    frontendDir = CInstallInfo::GetFrontendDir();
-                    sprintf(m_stringDest, m_feRes1024, frontendDir);
-                }
+                    sprintf(m_stringDest, m_feRes1024, CInstallInfo::GetFrontendDir());
             }
         }
     }
-
-    iVar1 = FUN_004a9700();
-    if (iVar1 != FALSE)
-    {
-        frontendDir = CInstallInfo::GetFrontendDir();
-        sprintf(m_stringDest, m_feRes640C, frontendDir);
-    }
     else
     {
-        frontendDir = CInstallInfo::GetFrontendDir();
-        sprintf(m_stringDest, m_feRes640, frontendDir);
+
+        if (FUN_004a9700() != FALSE)
+            sprintf(m_stringDest, m_feRes640C, CInstallInfo::GetFrontendDir());
+        else
+            sprintf(m_stringDest, m_feRes640, CInstallInfo::GetFrontendDir());
     }
 
     CGenericFileLoader::FUN_004a9d70(&CGenericFileLoader::m_genericFile, m_stringDest);
@@ -88,47 +73,25 @@ void __stdcall CFrontend::FUN_004d21e0(void)
     else
         regionKey = 0x45; // E
 
-    if (CGameInfo::GetScreenWidth() > 1024U)
+    if (CGameInfo::GetScreenWidth() >= 1024U)
     {
-        iVar2 = FUN_004b7560(1024);
-        if (iVar2 != FALSE)
+        if (FUN_004b7560(1024) != FALSE)
         {
-            iVar3 = FUN_004b7590(1024);
-            if (iVar3 != FALSE)
+            if (FUN_004b7590(1024) != FALSE)
             {
-                bVar = FUN_004a9700();
-                if (bVar != FALSE)
-                {
-                    iVar5 = regionKey;
-                    regionDir = CGameInfo::GetGameRegionDirectory();
-                    countrySpecificDir = CInstallInfo::GetCountrySpecificDir();
-                    sprintf(m_stringDest, m_feRes1024CountrySpecific, countrySpecificDir, regionDir, iVar5);
-                }
+                if (FUN_004a9700())
+                    sprintf(m_stringDest, m_feRes1024CCountrySpecific, CInstallInfo::GetCountrySpecificDir(), CGameInfo::GetGameRegionDirectory(), regionKey);
                 else
-                {
-                    iVar5 = regionKey;
-                    regionDir = CGameInfo::GetGameRegionDirectory();
-                    countrySpecificDir = CInstallInfo::GetCountrySpecificDir();
-                    sprintf(m_stringDest, m_feRes1024CCountrySpecific, countrySpecificDir, regionDir, iVar5);
-                }
+                    sprintf(m_stringDest, m_feRes1024CountrySpecific, CInstallInfo::GetCountrySpecificDir(), CGameInfo::GetGameRegionDirectory(), regionKey);
             }
         }
     }
     else
     {
-        bVar = FUN_004a9700();
-        if (bVar != FALSE)
-        {
-            regionDir = CGameInfo::GetGameRegionDirectory();
-            countrySpecificDir = CInstallInfo::GetCountrySpecificDir();
-            sprintf(m_stringDest, m_feRes640CountrySpecific, countrySpecificDir, regionDir);
-        }
+        if (FUN_004a9700())
+            sprintf(m_stringDest, m_feRes640CCountrySpecific, CInstallInfo::GetCountrySpecificDir(), CGameInfo::GetGameRegionDirectory(), regionKey);
         else
-        {
-            regionDir = CGameInfo::GetGameRegionDirectory();
-            countrySpecificDir = CInstallInfo::GetCountrySpecificDir();
-            sprintf(m_stringDest, m_feRes640CCountrySpecific, countrySpecificDir, regionDir);
-        }
+            sprintf(m_stringDest, m_feRes640CountrySpecific, CInstallInfo::GetCountrySpecificDir(), CGameInfo::GetGameRegionDirectory(), regionKey);
     }
 
     CGenericFileLoader::FUN_004a9d70(&m_unk0x00818260, m_stringDest);
