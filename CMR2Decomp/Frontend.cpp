@@ -21,7 +21,8 @@ GenericFile CFrontend::m_unk0x00818260;
 // FUNCTION: CMR2 0x004d21e0
 void __stdcall CFrontend::FUN_004d21e0(void)
 {
-    int iVar1, iVar2, iVar3, iVar4, iVar5, iVar6, iVar7, iVar8, iVar9;
+    int iVar1, iVar2, iVar3, iVar5, iVar6, iVar7, iVar8, iVar9;
+    BOOL bVar;
     unsigned int screenWidth, regionID;
     char *frontendDir, *regionDir, *countrySpecificDir, *filePath;
     char regionKey;
@@ -79,10 +80,13 @@ void __stdcall CFrontend::FUN_004d21e0(void)
     m_unk0x00818260.didFileLoad = 0;
     m_unk0x00818260.fileSize = 0;
 
+    // almost certainly not how this was written but this gets us better instruction matching
+    // this is basically (if regionID is 3, then use poland)
     regionID = CGameInfo::GetGameRegion();
-    regionKey = 0x50;
-    if (regionID < 3)
-        regionKey = 0x45;
+    if (regionID && --regionID && --regionID)
+        regionKey = 0x50; // P
+    else
+        regionKey = 0x45; // E
 
     if (CGameInfo::GetScreenWidth() > 1024U)
     {
@@ -92,8 +96,8 @@ void __stdcall CFrontend::FUN_004d21e0(void)
             iVar3 = FUN_004b7590(1024);
             if (iVar3 != FALSE)
             {
-                iVar4 = FUN_004a9700();
-                if (iVar4 != FALSE)
+                bVar = FUN_004a9700();
+                if (bVar != FALSE)
                 {
                     iVar5 = regionKey;
                     regionDir = CGameInfo::GetGameRegionDirectory();
@@ -112,8 +116,8 @@ void __stdcall CFrontend::FUN_004d21e0(void)
     }
     else
     {
-        iVar4 = FUN_004a9700();
-        if (iVar4 != FALSE)
+        bVar = FUN_004a9700();
+        if (bVar != FALSE)
         {
             regionDir = CGameInfo::GetGameRegionDirectory();
             countrySpecificDir = CInstallInfo::GetCountrySpecificDir();
