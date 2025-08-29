@@ -1,8 +1,18 @@
 #include "GameInfo.h"
 
+// GLOBAL: CMR2 0x00516134
+char gameRegionPoland[9] = "\\Poland\\";
+// GLOBAL: CMR2 0x00516140
+char gameRegionJapan[8] = "\\Japan\\";
+// GLOBAL: CMR2 0x00516148
+char gameRegionUSA[6] = "\\Usa\\";
+// GLOBAL: CMR2 0x00516150
+char gameRegionEurope[9] = "\\Europe\\";
+
 GameInfo CGameInfo::m_gameInfo;
 unsigned int CGameInfo::m_gameRegion;
-char CGameInfo::m_installedFrontendDir[260];
+char *CGameInfo::m_gameRegionStrings[4] = {
+    gameRegionEurope, gameRegionUSA, gameRegionJapan, gameRegionPoland};
 
 // FUNCTION: CMR2 0x004057f0
 unsigned char CGameInfo::GetGameLanguage(void)
@@ -14,6 +24,12 @@ unsigned char CGameInfo::GetGameLanguage(void)
 unsigned int CGameInfo::GetGameRegion(void)
 {
     return m_gameRegion;
+}
+
+// FUNCTION: CMR2 0x00405820
+char *CGameInfo::GetGameRegionDirectory(void)
+{
+    return m_gameRegionStrings[m_gameRegion];
 }
 
 // FUNCTION: CMR2 0x00405d80
@@ -28,13 +44,13 @@ unsigned char CGameInfo::FUN_00405d90(void)
 }
 
 // FUNCTION: CMR2 0x00405c10
-int CGameInfo::GetScreenWidth(void)
+unsigned int CGameInfo::GetScreenWidth(void)
 {
     return m_gameInfo.screenWidth;
 }
 
 // FUNCTION: CMR2 0x00405c30
-int CGameInfo::GetScreenHeight(void)
+unsigned int CGameInfo::GetScreenHeight(void)
 {
     return m_gameInfo.screenHeight;
 }
@@ -43,10 +59,4 @@ int CGameInfo::GetScreenHeight(void)
 int CGameInfo::GetColourDepth(void)
 {
     return m_gameInfo.screenColourDepth;
-}
-
-// FUNCTION: CMR2 0x0040ed90
-char *CGameInfo::GetInstalledFrontendDir()
-{
-    return m_installedFrontendDir;
 }

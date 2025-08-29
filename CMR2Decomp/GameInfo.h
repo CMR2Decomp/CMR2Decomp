@@ -29,17 +29,18 @@ public:
     static unsigned int GetGameRegion(void);
     static unsigned char FUN_00405d80(void);
     static unsigned char FUN_00405d90(void);
-    static int GetScreenWidth(void);
-    static int GetScreenHeight(void);
+    static unsigned int GetScreenWidth(void);
+    static unsigned int GetScreenHeight(void);
     static int GetColourDepth(void);
-    static char *GetInstalledFrontendDir();
+    static char *GetGameRegionDirectory(void);
 
     // GLOBAL: CMR2 0x0052afa0
     static GameInfo m_gameInfo;
     // GLOBAL: CMR2 0x0052ea54
     static unsigned int m_gameRegion;
-    // GLOBAL: CMR2 0x005366bc
-    static char m_installedFrontendDir[260];
+
+    // GLOBAL: CMR2 0x00516124
+    static char *m_gameRegionStrings[4];
 };
 
 #endif
