@@ -23,7 +23,8 @@ void __stdcall CFrontend::FUN_004d21e0(void)
 {
     int iVar1, iVar2, iVar3, iVar4, iVar5, iVar6, iVar7, iVar8, iVar9;
     unsigned int screenWidth, regionID;
-    char *frontendDir, *regionDir, *countrySpecificDir, *filePath, *cRegionKey;
+    char *frontendDir, *regionDir, *countrySpecificDir, *filePath;
+    char regionKey;
 
     if (CGenericFileLoader::m_genericFile.buffer != NULL)
     {
@@ -79,12 +80,11 @@ void __stdcall CFrontend::FUN_004d21e0(void)
     m_unk0x00818260.fileSize = 0;
 
     regionID = CGameInfo::GetGameRegion();
+    regionKey = 0x50;
+    if (regionID < 3)
+        regionKey = 0x45;
 
-    cRegionKey = "P";
-    if (regionID == 0 || regionID == 1 || regionID == 2)
-        cRegionKey = "E";
-
-    if (1023U < screenWidth)
+    if (CGameInfo::GetScreenWidth() > 1024U)
     {
         iVar2 = FUN_004b7560(1024);
         if (iVar2 != FALSE)
@@ -95,16 +95,17 @@ void __stdcall CFrontend::FUN_004d21e0(void)
                 iVar4 = FUN_004a9700();
                 if (iVar4 != FALSE)
                 {
-                    // iVar5 = cRegionKey;
+                    iVar5 = regionKey;
                     regionDir = CGameInfo::GetGameRegionDirectory();
                     countrySpecificDir = CInstallInfo::GetCountrySpecificDir();
-                    sprintf(m_stringDest, m_feRes1024CountrySpecific, countrySpecificDir, regionDir);
+                    sprintf(m_stringDest, m_feRes1024CountrySpecific, countrySpecificDir, regionDir, iVar5);
                 }
                 else
                 {
+                    iVar5 = regionKey;
                     regionDir = CGameInfo::GetGameRegionDirectory();
                     countrySpecificDir = CInstallInfo::GetCountrySpecificDir();
-                    sprintf(m_stringDest, m_feRes1024CCountrySpecific, countrySpecificDir, regionDir);
+                    sprintf(m_stringDest, m_feRes1024CCountrySpecific, countrySpecificDir, regionDir, iVar5);
                 }
             }
         }
@@ -126,7 +127,7 @@ void __stdcall CFrontend::FUN_004d21e0(void)
         }
     }
 
-    CGenericFileLoader::FUN_004a9d70((GenericFile *)(0x00818260), m_stringDest);
+    CGenericFileLoader::FUN_004a9d70(&m_unk0x00818260, m_stringDest);
 }
 
 // STUB: CMR2 0x004b7560
