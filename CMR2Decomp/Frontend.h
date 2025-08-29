@@ -36,6 +36,18 @@ public:
     // unknowns
     // GLOBAL: CMR2 0x00818260;
     static GenericFile m_unk0x00818260;
+    // GLOBAL: CMR2 0x006e0c5c
+    static unsigned int m_unk0x006e0c5c;
+    // GLOBAL: CMR2 0x006e0c64
+    static unsigned int m_unk0x006e0c64;
+    // GLOBAL: CMR2 0x006e0c60
+    static unsigned int m_unk0x006e0c60;
+    // GLOBAL: CMR2 0x006e0c68
+    static unsigned int m_unk0x006e0c68;
+    // GLOBAL: CMR2 0x00663b38
+    static unsigned int m_unk0x00663b38;
+    // GLOBAL: CMR2 0x00663b48
+    static unsigned int m_unk0x00663b48;
 };
 
 #endif

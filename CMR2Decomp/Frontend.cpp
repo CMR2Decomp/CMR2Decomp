@@ -17,6 +17,12 @@ char CFrontend::m_feRes1024[15] = "%s\\Res1024.bfl";
 char CFrontend::m_feRes1024C[16] = "%s\\Res1024C.bfl";
 
 GenericFile CFrontend::m_unk0x00818260;
+unsigned int CFrontend::m_unk0x006e0c5c;
+unsigned int CFrontend::m_unk0x006e0c64;
+unsigned int CFrontend::m_unk0x006e0c60;
+unsigned int CFrontend::m_unk0x006e0c68;
+unsigned int CFrontend::m_unk0x00663b38;
+unsigned int CFrontend::m_unk0x00663b48;
 
 // FUNCTION: CMR2 0x004d21e0
 void __stdcall CFrontend::FUN_004d21e0(void)
@@ -97,32 +103,29 @@ void __stdcall CFrontend::FUN_004d21e0(void)
     CGenericFileLoader::FUN_004a9d70(&m_unk0x00818260, m_stringDest);
 }
 
-// STUB: CMR2 0x004b7560
+// FUNCTION: CMR2 0x004b7560
 BOOL __stdcall CFrontend::FUN_004b7560(unsigned int param_1)
 {
-    if (((unsigned int)0x006e0c5c <= param_1) && (param_1 <= (unsigned int)0x006e0c64))
-    {
-        return 1;
-    }
-    return 0;
+    if (m_unk0x006e0c5c <= param_1 && param_1 <= m_unk0x006e0c64)
+        return TRUE;
+
+    return FALSE;
 }
 
-// STUB: CMR2 0x004b7590
+// FUNCTION: CMR2 0x004b7590
 BOOL __stdcall CFrontend::FUN_004b7590(unsigned int param_1)
 {
-    if (((unsigned int)0x006e0c60 <= param_1) && (param_1 <= (unsigned int)0x006e0c68))
-    {
-        return 1;
-    }
-    return 0;
+    if (m_unk0x006e0c60 <= param_1 && param_1 <= m_unk0x006e0c68)
+        return TRUE;
+
+    return FALSE;
 }
 
-// STUB: CMR2 0x004a9700
+// FUNCTION: CMR2 0x004a9700
 BOOL __stdcall CFrontend::FUN_004a9700(void)
 {
-    if (((unsigned int)0x00663b38 == 0) && ((unsigned int)0x00663b48 == 0))
-    {
-        return 0;
-    }
-    return 1;
+    if (!m_unk0x00663b38 && !m_unk0x00663b48)
+        return FALSE;
+
+    return TRUE;
 }
