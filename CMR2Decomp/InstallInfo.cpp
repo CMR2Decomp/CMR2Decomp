@@ -15,7 +15,7 @@ char *CInstallInfo::GetCountrySpecificDir(void)
     return m_countrySpecificDir;
 }
 
-BOOL CInstallInfo::ShowNoCDErrorMessage(BOOL param1)
+BOOL __fastcall CInstallInfo::ShowNoCDErrorMessage(void)
 {
     return FALSE;
 }

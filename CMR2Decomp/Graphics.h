@@ -918,7 +918,7 @@ struct Graphics
     unsigned char field909_0x3b2;
     unsigned char field910_0x3b3;
     IDirectDraw7 **pDD;
-    IDirectDraw7 **pDD7;
+    IDirectDraw7 *pDD7;
     unsigned char field913_0x3bc;
     unsigned char field914_0x3bd;
     unsigned char field915_0x3be;

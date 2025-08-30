@@ -2,7 +2,7 @@
 #include "FileBuffer.h"
 
 GenericFile CGenericFileLoader::m_genericFile;
-int CGenericFileLoader::m_unk0x00663fe8;
+DWORD CGenericFileLoader::m_unk0x00663fe8;
 
 // FUNCTION: CMR2 0x004a9d70
 bool __stdcall CGenericFileLoader::FUN_004a9d70(GenericFile *file, char *fileName)

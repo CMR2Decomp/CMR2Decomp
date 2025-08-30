@@ -8,7 +8,7 @@ class CInstallInfo
 public:
     static char *GetFrontendDir();
     static char *GetCountrySpecificDir();
-    static BOOL ShowNoCDErrorMessage(BOOL param1);
+    static BOOL __fastcall ShowNoCDErrorMessage(void);
 
 private:
     // GLOBAL: CMR2 0x005366bc
