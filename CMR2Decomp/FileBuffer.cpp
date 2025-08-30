@@ -123,26 +123,28 @@ void *__stdcall CFileBuffer::GetGenericFileBuffer(char *fileName, BOOL param2)
                         pGraphics->pDD7->FlipToGDISurface();
 
                     fileAttributes = GetFileAttributesA(_fileName);
-                    if (fileAttributes != -1)
+                    if (fileAttributes == -1)
                     {
-                        fileSize = GetFileSize(hFile, NULL);
-                        if (fileSize != INVALID_FILE_SIZE)
-                            return NULL;
+                        // another retry counter?
+                        if (50 > ++m_unk0x00664620)
+                            GetGenericFileBuffer(_fileName, param2);
 
-                        lpBuffer = AllocateLockedBuffer(fileSize);
-                        ReadFile(hFile, lpBuffer, fileSize, &fileSizeRead, NULL);
-                        if (fileSizeRead == fileSize)
-                        {
-                            CGenericFileLoader::m_unk0x00663fe8 = fileSize;
-
-                            CloseHandle(hFile);
-                            return lpBuffer;
-                        }
+                        return NULL;
                     }
 
-                    // another retry counter?
-                    if (50 > ++m_unk0x00664620)
-                        GetGenericFileBuffer(_fileName, param2);
+                    fileSize = GetFileSize(hFile, NULL);
+                    CGenericFileLoader::m_unk0x00663fe8 = fileSize;
+
+                    if (fileSize == INVALID_FILE_SIZE)
+                        return NULL;
+
+                    lpBuffer = AllocateLockedBuffer(fileSize);
+                    ReadFile(hFile, lpBuffer, fileSize, &fileSizeRead, NULL);
+                    if (fileSizeRead != fileSize)
+                        return NULL;
+
+                    CloseHandle(hFile);
+                    return lpBuffer;
                 }
             }
         }
