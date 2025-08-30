@@ -14,3 +14,8 @@ char *CInstallInfo::GetCountrySpecificDir(void)
 {
     return m_countrySpecificDir;
 }
+
+BOOL CInstallInfo::ShowNoCDErrorMessage(BOOL param1)
+{
+    return FALSE;
+}

@@ -10,7 +10,14 @@ public:
     static BOOL __stdcall CreateGameWindow(HINSTANCE hInstance, HWND *pHWND, LPCSTR sWindowName, WNDPROC param_4);
     static LRESULT __stdcall MessageHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
+    // GLOBAL: CMR2 0x00663c84
+    static HWND m_hWndList[1];
+    // GLOBAL: CMR2 0x00663dac
+    static int m_hWndIx;
+
 private:
+    // GLOBAL: CMR2 0x00663db0
+    static HINSTANCE m_hInstance;
     // GLOBAL: CMR2 0x00511430
     static char m_gameName[20];
     // GLOBAL: CMR2 0x00520c74

@@ -20,9 +20,8 @@ public:
 
     // TODO: should this not be a static class? seems silly to pass this in like this
     static bool __stdcall FUN_004a9d70(GenericFile *file, char *fileName);
-    static bool __stdcall FUN_004a9c30(void *param_1, GenericFile *param_2);
+    static bool __stdcall FUN_004a9c30(char *fileName, GenericFile *param_2);
     static int GetGenericFileSize(void);
-    static void *__stdcall GetGenericFileBuffer(void *param1, BOOL param2);
 };
 
 #endif
