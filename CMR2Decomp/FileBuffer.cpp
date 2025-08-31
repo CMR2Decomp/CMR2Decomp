@@ -53,8 +53,8 @@ void *__stdcall CFileBuffer::GetGenericFileBuffer(char *fileName, BOOL isLocalFi
     void *unk0x004bdee0, *lpBuffer;
     BFLHeader pFileHeaderOut;
     DWORD fileAttributes, fileSize, fileSizeRead;
-    int iHeaderSize;
-    BOOL bIsBFL;
+    size_t iHeaderSize;
+    bool bIsBFL;
     HANDLE hFile;
     char _fileName[MAX_PATH];
     // Graphics *pGraphics;
@@ -101,17 +101,15 @@ void *__stdcall CFileBuffer::GetGenericFileBuffer(char *fileName, BOOL isLocalFi
     // make sure file exists
     fileAttributes = GetFileAttributesA(_fileName);
     if (fileAttributes == -1)
-    {
-        // retry counter?
-        if (++m_unk0x0066461c < 50)
-            GetGenericFileBuffer(fileName, isLocalFile);
-        else
-            return NULL;
-    }
+        return NULL;
+
+    // retry counter?
+    if (++m_unk0x0066461c < 50)
+        GetGenericFileBuffer(fileName, isLocalFile);
 
     // check if its a BFL
     iHeaderSize = FUN_004be660(unk0x004bdee0, &pFileHeaderOut, 8);
-    if (iHeaderSize == 8 && pFileHeaderOut.ident[0] == 0x43 && pFileHeaderOut.ident[1] == 0x4d && pFileHeaderOut.ident[2] == 0x50 && pFileHeaderOut.ident[3] == 0x52)
+    if (iHeaderSize == 8U && pFileHeaderOut.ident[0] == 0x43 && pFileHeaderOut.ident[1] == 0x4d && pFileHeaderOut.ident[2] == 0x50 && pFileHeaderOut.ident[3] == 0x52)
     {
         if (pFileHeaderOut.archiveSize == INVALID_FILE_SIZE)
             return NULL;
@@ -121,9 +119,8 @@ void *__stdcall CFileBuffer::GetGenericFileBuffer(char *fileName, BOOL isLocalFi
         FUN_004be660(unk0x004bdee0, lpBuffer, pFileHeaderOut.archiveSize);
         bIsBFL = true;
     }
-    else
 
-        FUN_004bec70(unk0x004bdee0);
+    FUN_004bec70(unk0x004bdee0);
 
     if (!bIsBFL)
     {
@@ -136,33 +133,27 @@ void *__stdcall CFileBuffer::GetGenericFileBuffer(char *fileName, BOOL isLocalFi
                     (*g_pGraphics->pDD7)->FlipToGDISurface();
             }
         }
-        else
-        {
 
-            fileAttributes = GetFileAttributesA(_fileName);
-            if (fileAttributes == -1)
-            {
-                // another retry counter?
-                if (50 > ++m_unk0x00664620)
-                    GetGenericFileBuffer(_fileName, isLocalFile);
-            }
-            else
-            {
+        fileAttributes = GetFileAttributesA(_fileName);
+        if (fileAttributes == -1)
+            return NULL;
 
-                fileSize = GetFileSize(hFile, NULL);
-                CGenericFileLoader::m_unk0x00663fe8 = fileSize;
+        // another retry counter?
+        if (50 > ++m_unk0x00664620)
+            GetGenericFileBuffer(_fileName, isLocalFile);
 
-                if (fileSize == INVALID_FILE_SIZE)
-                    return NULL;
+        fileSize = GetFileSize(hFile, NULL);
+        CGenericFileLoader::m_unk0x00663fe8 = fileSize;
 
-                lpBuffer = AllocateLockedBuffer(fileSize);
-                ReadFile(hFile, lpBuffer, fileSize, &fileSizeRead, NULL);
-                if (fileSizeRead != fileSize)
-                    return NULL;
+        if (fileSize == INVALID_FILE_SIZE)
+            return NULL;
 
-                CloseHandle(hFile);
-            }
-        }
+        lpBuffer = AllocateLockedBuffer(fileSize);
+        ReadFile(hFile, lpBuffer, fileSize, &fileSizeRead, NULL);
+        if (fileSizeRead != fileSize)
+            return NULL;
+
+        CloseHandle(hFile);
     }
 
     return lpBuffer;
