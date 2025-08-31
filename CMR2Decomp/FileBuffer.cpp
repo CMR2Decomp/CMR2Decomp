@@ -104,8 +104,8 @@ void *__stdcall CFileBuffer::GetGenericFileBuffer(char *fileName, BOOL isLocalFi
         return NULL;
 
     // retry counter?
-    if (++m_unk0x0066461c < 50)
-        GetGenericFileBuffer(fileName, isLocalFile);
+    if (50 > ++m_unk0x0066461c)
+        return GetGenericFileBuffer(fileName, isLocalFile);
 
     // check if its a BFL
     iHeaderSize = FUN_004be660(unk0x004bdee0, &pFileHeaderOut, 8);
@@ -127,20 +127,21 @@ void *__stdcall CFileBuffer::GetGenericFileBuffer(char *fileName, BOOL isLocalFi
         hFile = CreateFileA(_fileName, GENERIC_READ, 1, NULL, 3, FILE_ATTRIBUTE_NORMAL, NULL);
         if (hFile == INVALID_HANDLE_VALUE)
         {
-            if (g_pGraphics)
-            {
-                if (g_pGraphics->pDD7)
-                    (*g_pGraphics->pDD7)->FlipToGDISurface();
-            }
+            if (g_pGraphics && g_pGraphics->pDD7)
+                (*g_pGraphics->pDD7)->FlipToGDISurface();
+
+            fileAttributes = GetFileAttributesA(_fileName);
+            if (fileAttributes == -1)
+                return NULL;
+
+            // another retry counter?
+            // i swear this needs to return but the original asm doesn't have a huge RET block here
+            // whereas the new ASM does if this returns. returning here makes way more sense though
+            if (50 > ++m_unk0x00664620)
+                return GetGenericFileBuffer(_fileName, isLocalFile);
+            else
+                return NULL;
         }
-
-        fileAttributes = GetFileAttributesA(_fileName);
-        if (fileAttributes == -1)
-            return NULL;
-
-        // another retry counter?
-        if (50 > ++m_unk0x00664620)
-            GetGenericFileBuffer(_fileName, isLocalFile);
 
         fileSize = GetFileSize(hFile, NULL);
         CGenericFileLoader::m_unk0x00663fe8 = fileSize;
