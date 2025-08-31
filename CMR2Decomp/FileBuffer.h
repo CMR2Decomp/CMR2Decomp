@@ -12,9 +12,9 @@ public:
     static void __stdcall FreeGenericFileBuffer(void *buffer);
 
     // unknowns
-    static void *FUN_004bdee0(char *fileName, void *param_2);
+    static void *__stdcall FUN_004bdee0(char *fileName, void *param_2);
     static size_t FUN_004be660(void *param_1, void *param_2, size_t param_3);
-    static void *m_unk0x00520f1c;
+    static byte *m_unk0x00520f1c;
     static int m_unk0x0066461c;
     static int m_unk0x00664620;
 };

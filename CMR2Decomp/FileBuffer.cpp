@@ -6,7 +6,7 @@
 
 #include <stdio.h>
 
-void *CFileBuffer::m_unk0x00520f1c;
+byte *CFileBuffer::m_unk0x00520f1c;
 int CFileBuffer::m_unk0x0066461c;
 int CFileBuffer::m_unk0x00664620;
 
@@ -46,45 +46,50 @@ void *__stdcall CFileBuffer::ReallocateLockedBuffer(void *buffer, size_t iSize)
 }
 
 // FUNCTION: CMR2 0x004aa220
-void *__stdcall CFileBuffer::GetGenericFileBuffer(char *fileName, BOOL param2)
+void *__stdcall CFileBuffer::GetGenericFileBuffer(char *fileName, BOOL isLocalFile)
 {
-    // todo: check param2 is BOOL
+    // isLocalFile is basically is it on the HDD? this function is called by loadnetworkleaderboards,loadcontrollerconfig,etc. with param2 as 1
     void *unk0x004bdee0, *lpBuffer;
     char *unk004be660Out;
     DWORD fileAttributes, fileSize, fileSizeRead;
     int iResult, iNoCDErrorMessageResult, iVar4;
-    bool bDoesFileExist;
+    BOOL bDoesFileExist;
     HANDLE hFile;
     char _fileName[MAX_PATH];
     size_t size;
     Graphics *pGraphics;
 
     lpBuffer = NULL;
-    bDoesFileExist = false;
+    bDoesFileExist = FALSE;
     sprintf(_fileName, fileName);
 
-    unk0x004bdee0 = FUN_004bdee0(_fileName, m_unk0x00520f1c);
-    if (!unk0x004bdee0)
+    do
     {
-        pGraphics = g_pGraphics;
-        if (param2 || pGraphics)
+        unk0x004bdee0 = FUN_004bdee0(_fileName, m_unk0x00520f1c);
+        if (!unk0x004bdee0)
         {
-            if (pGraphics->pDD7 != NULL)
-                pGraphics->pDD7->FlipToGDISurface();
+            pGraphics = g_pGraphics;
 
-            ShowCursor(TRUE);
-
-            // show nocdmessage constantly
-            do
+            // should be an install/cd file
+            if (!isLocalFile && pGraphics)
             {
-                if (CInstallInfo::ShowNoCDErrorMessage())
-                    unk0x004bdee0 = FUN_004bdee0(_fileName, m_unk0x00520f1c);
-            } while (!unk0x004bdee0);
+                // flip gdi surface
+                if (pGraphics->pDD7 != NULL)
+                {
+                    pGraphics->pDD7->FlipToGDISurface();
+                    ShowCursor(TRUE);
+                }
 
-            ShowCursor(FALSE);
-            ShowWindow(CMain::m_hWndList[CMain::m_hWndIx], SW_RESTORE);
+                // show the no cd error message
+                if (CInstallInfo::ShowNoCDErrorMessage())
+                    // check again
+                    unk0x004bdee0 = FUN_004bdee0(_fileName, m_unk0x00520f1c);
+            }
         }
-    }
+    } while (!unk0x004bdee0);
+
+    ShowCursor(FALSE);
+    ShowWindow(CMain::m_hWndList[CMain::m_hWndIx], SW_RESTORE);
 
     // make sure file exists
     fileAttributes = GetFileAttributesA(_fileName);
@@ -93,7 +98,7 @@ void *__stdcall CFileBuffer::GetGenericFileBuffer(char *fileName, BOOL param2)
 
     // retry counter?
     if (50 > ++m_unk0x0066461c)
-        GetGenericFileBuffer(_fileName, param2);
+        GetGenericFileBuffer(_fileName, isLocalFile);
     else
     {
         iResult = FUN_004be660(unk0x004bdee0, &unk004be660Out, 8);
@@ -127,7 +132,7 @@ void *__stdcall CFileBuffer::GetGenericFileBuffer(char *fileName, BOOL param2)
                     {
                         // another retry counter?
                         if (50 > ++m_unk0x00664620)
-                            GetGenericFileBuffer(_fileName, param2);
+                            GetGenericFileBuffer(_fileName, isLocalFile);
 
                         return NULL;
                     }
@@ -152,7 +157,7 @@ void *__stdcall CFileBuffer::GetGenericFileBuffer(char *fileName, BOOL param2)
 }
 
 // STUB: CMR2 0x004bdee0
-void *CFileBuffer::FUN_004bdee0(char *fileName, void *param_2)
+void *__stdcall CFileBuffer::FUN_004bdee0(char *fileName, void *param_2)
 {
     // todo: implement
     return 0;
