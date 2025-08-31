@@ -32,7 +32,7 @@ void __stdcall CFrontend::FUN_004d21e0(void)
 
     if (CGenericFileLoader::m_genericFile.buffer != NULL)
     {
-        FreeGenericFileBuffer(CGenericFileLoader::m_genericFile.buffer);
+        CFileBuffer::FreeGenericFileBuffer(CGenericFileLoader::m_genericFile.buffer);
         CGenericFileLoader::m_genericFile.buffer = NULL;
     }
 
@@ -65,7 +65,7 @@ void __stdcall CFrontend::FUN_004d21e0(void)
     CGenericFileLoader::FUN_004a9d70(&CGenericFileLoader::m_genericFile, m_stringDest);
     if (m_unk0x00818260.buffer != NULL)
     {
-        FreeGenericFileBuffer(m_unk0x00818260.buffer);
+        CFileBuffer::FreeGenericFileBuffer(m_unk0x00818260.buffer);
         m_unk0x00818260.buffer = NULL;
     }
     m_unk0x00818260.didFileLoad = 0;

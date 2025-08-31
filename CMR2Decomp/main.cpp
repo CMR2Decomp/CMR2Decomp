@@ -2,12 +2,9 @@
 #include "Graphics.h"
 #include "Logger.h"
 
-// GLOBAL: CMR2 0x00663db0
-HINSTANCE g_hInstance;
-// GLOBAL: CMR2 0x00663c84
-HWND g_hWndList[1];
-// GLOBAL: CMR2 0x00663dac
-int g_hWndIx = 0;
+HINSTANCE CMain::m_hInstance;
+HWND CMain::m_hWndList[1];
+int CMain::m_hWndIx = 0;
 
 char CMain::m_logFileLocation[14] = "c:\\error.txt";
 char CMain::m_gameName[20] = "Colin McRae Rally 2";
@@ -18,7 +15,7 @@ char CMain::m_logFileFinishedNormally[30] = "* Program finished normally *";
 BOOL CMain::m_isShowingCursor = TRUE;
 
 // GLOBAL: CMR2 0x00520b94
-char g_lpszMenuName[5] = "menu";
+char m_lpszMenuName[5] = "menu";
 
 int WinMain(HINSTANCE instance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd)
 {
@@ -38,9 +35,9 @@ unsigned char CMain::Initialize(HINSTANCE hInstance, unsigned char param2, LPSTR
 	CLogger::LogToFile(m_logFileHeader1);
 	CLogger::LogToFile(m_logFileAsterisks);
 	CLogger::LogToFile(m_logFileBlankLine);
-	g_hInstance = hInstance;
+	m_hInstance = hInstance;
 
-	CreateGameWindow(hInstance, &g_hWndList[g_hWndIx], m_gameName, MessageHandler);
+	CreateGameWindow(hInstance, &m_hWndList[m_hWndIx], m_gameName, MessageHandler);
 
 	MSG msg;
 	while (GetMessageA(&msg, NULL, 0, 0))
@@ -106,7 +103,7 @@ BOOL __stdcall CMain::CreateGameWindow(HINSTANCE hInstance, HWND *pHWND, LPCSTR 
 	wndClass.hInstance = hInstance;
 	wndClass.hIcon = LoadIconA(hInstance, (const char *)0x6e);
 	wndClass.hbrBackground = (HBRUSH)GetStockObject(4);
-	wndClass.lpszMenuName = g_lpszMenuName;
+	wndClass.lpszMenuName = m_lpszMenuName;
 	wndClass.lpszClassName = sWindowName;
 	wndClass.style = 3;
 
@@ -129,7 +126,7 @@ BOOL __stdcall CMain::CreateGameWindow(HINSTANCE hInstance, HWND *pHWND, LPCSTR 
 	hWnd = CreateWindowExA((DWORD)0x40000, sWindowName, sWindowName, dwStyle, 0, 0, nScreenWidth, nScreenHeight,
 						   hWndParent, hMenu, hInstance, lpParam);
 
-	g_hWndList[g_hWndIx] = hWnd;
+	m_hWndList[m_hWndIx] = hWnd;
 	if (hWnd == NULL)
 		return FALSE;
 

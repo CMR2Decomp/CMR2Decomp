@@ -1,18 +1,35 @@
 #include "GenericFileLoader.h"
+#include "FileBuffer.h"
 
 GenericFile CGenericFileLoader::m_genericFile;
+DWORD CGenericFileLoader::m_unk0x00663fe8;
 
-// STUB: CMR2 0x004a9d70
-unsigned int __stdcall CGenericFileLoader::FUN_004a9d70(GenericFile *file, char *fileName)
+// FUNCTION: CMR2 0x004a9d70
+bool __stdcall CGenericFileLoader::FUN_004a9d70(GenericFile *file, char *fileName)
 {
-    unsigned int uVar1 = 0;
+    file->didFileLoad = FALSE;
+    if (FUN_004a9c30(fileName, file) != FALSE)
+        return file->didFileLoad = TRUE;
 
-    file->didFileLoad = 0;
-    // uVar1 = FUN_004a9c30(param_2, &file->buffer);
-    if (uVar1 != '\0')
+    return false;
+}
+
+// FUNCTION: CMR2 0x004a9c30
+bool __stdcall CGenericFileLoader::FUN_004a9c30(char *fileName, GenericFile *param_2)
+{
+    param_2->buffer = CFileBuffer::GetGenericFileBuffer(fileName, 0);
+    if (param_2->buffer != NULL)
     {
-        file->didFileLoad = 1;
-        return 1;
+        param_2->fileSize = GetGenericFileSize();
+        return true;
     }
-    return uVar1 & 0xffffff00;
+
+    param_2->fileSize = 0;
+    return false;
+}
+
+// FUNCTION: CMR2 0x004aa590
+int CGenericFileLoader::GetGenericFileSize(void)
+{
+    return m_unk0x00663fe8;
 }
