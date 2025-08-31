@@ -3,8 +3,8 @@
 
 typedef struct _BFLHeader
 {
-    char ident[4];
-    int size;
+    char ident[4];             // always CMPR
+    unsigned long archiveSize; // size of BFL minus the header
 } BFLHeader;
 
 typedef struct _BFLFileList
