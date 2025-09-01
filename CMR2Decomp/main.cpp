@@ -13,6 +13,7 @@ char CMain::m_logFileAsterisks[29] = "****************************";
 char CMain::m_logFileBlankLine[1] = "";
 char CMain::m_logFileFinishedNormally[30] = "* Program finished normally *";
 BOOL CMain::m_isShowingCursor = TRUE;
+int CMain::m_unk0x00663c70 = 0;
 
 // GLOBAL: CMR2 0x00520b94
 char m_lpszMenuName[5] = "menu";
@@ -60,13 +61,14 @@ unsigned char CMain::Initialize(HINSTANCE hInstance, unsigned char param2, LPSTR
 		}
 	}
 
+	FUN_0049c130();
 	CLogger::LogToFile(m_logFileBlankLine);
 	CLogger::LogToFile(m_logFileAsterisks);
 	CLogger::LogToFile(m_logFileFinishedNormally);
 	CLogger::LogToFile(m_logFileAsterisks);
 	CLogger::CloseLogFile();
 
-	return 0;
+	return m_unk0x00663c70;
 }
 
 // STUB: CMR2 0x004a8270
@@ -172,4 +174,9 @@ LRESULT __stdcall CMain::MessageHandler(HWND hWnd, UINT msg, WPARAM wParam, LPAR
 	}
 
 	return DefWindowProcA(hWnd, msg, wParam, lParam);
+}
+
+// STUB: CMR2 0x0049c130
+void CMain::FUN_0049c130(void)
+{
 }
