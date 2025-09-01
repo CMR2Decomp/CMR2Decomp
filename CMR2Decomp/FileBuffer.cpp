@@ -81,7 +81,7 @@ void *__stdcall CFileBuffer::GetGenericFileBuffer(char *fileName, BOOL isLocalFi
 
                     do
                     {
-                        if (CInstallInfo::ShowNoCDErrorMessage())
+                        if (CInstallInfo::ShowNoCDErrorMessage(0))
                             unk0x004bdee0 = FUN_004bdee0(_fileName, m_unk0x00520f1c);
                     } while (!unk0x004bdee0);
 
