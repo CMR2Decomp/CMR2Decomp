@@ -26,6 +26,12 @@ unsigned int CGameInfo::GetGameRegion(void)
     return m_gameRegion;
 }
 
+// FUNCTION: CMR2 0x00405810
+void __stdcall CGameInfo::SetGameRegion(unsigned int region)
+{
+    m_gameRegion = region;
+}
+
 // FUNCTION: CMR2 0x00405820
 char *CGameInfo::GetGameRegionDirectory(void)
 {

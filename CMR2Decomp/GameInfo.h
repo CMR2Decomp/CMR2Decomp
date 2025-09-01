@@ -27,6 +27,7 @@ class CGameInfo
 public:
     static unsigned char GetGameLanguage(void);
     static unsigned int GetGameRegion(void);
+    static void __stdcall SetGameRegion(unsigned int region);
     static unsigned char FUN_00405d80(void);
     static unsigned char FUN_00405d90(void);
     static unsigned int GetScreenWidth(void);

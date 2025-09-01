@@ -97,7 +97,7 @@ BOOL CInstallInfo::ShowNoCDErrorMessage(int param1)
         }
     }
 
-    if (MessageBoxA(CMain::m_hWndList[CMain::m_hWndIx], m_noCDMessages[languageID][0], m_noCDMessages[languageID][1], MB_RETRYCANCEL) == 2)
+    if (MessageBoxA(CMain::m_hWndList[CMain::m_hWndIx], m_noCDMessages[languageID][0], m_noCDMessages[languageID][1], MB_RETRYCANCEL) == IDCANCEL)
     {
         CMain::FUN_0049c130();
         CLogger::CloseLogFile();
