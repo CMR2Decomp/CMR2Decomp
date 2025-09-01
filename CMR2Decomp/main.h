@@ -35,6 +35,9 @@ private:
     static char m_logFileFinishedNormally[30];
     // GLOBAL: CMR2 0x00520bf0
     static BOOL m_isShowingCursor;
+
+    // GLOBAL: CMR2 0x00663c68
+    static MSG m_win32Msg;
 };
 
 #endif

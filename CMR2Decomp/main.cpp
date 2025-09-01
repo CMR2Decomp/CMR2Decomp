@@ -1,6 +1,7 @@
 #include "main.h"
 #include "Graphics.h"
 #include "Logger.h"
+#include "Game.h"
 
 HINSTANCE CMain::m_hInstance;
 HWND CMain::m_hWndList[1];
@@ -15,6 +16,8 @@ char CMain::m_logFileFinishedNormally[30] = "* Program finished normally *";
 BOOL CMain::m_isShowingCursor = TRUE;
 int CMain::m_unk0x00663c70 = 0;
 
+MSG CMain::m_win32Msg;
+
 // GLOBAL: CMR2 0x00520b94
 char m_lpszMenuName[5] = "menu";
 
@@ -28,6 +31,8 @@ int WinMain(HINSTANCE instance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nS
 unsigned char CMain::Initialize(HINSTANCE hInstance, unsigned char param2, LPSTR param3)
 {
 	HWND hWnd;
+	BOOL isMessageAvailable;
+
 	hWnd = FindWindowA(m_gameName, m_gameName);
 	if (hWnd != NULL)
 		return 0;
@@ -41,10 +46,29 @@ unsigned char CMain::Initialize(HINSTANCE hInstance, unsigned char param2, LPSTR
 	CreateGameWindow(hInstance, &m_hWndList[m_hWndIx], m_gameName, MessageHandler);
 
 	MSG msg;
-	while (GetMessageA(&msg, NULL, 0, 0))
+	while (!CGame::m_shouldExit)
 	{
-		TranslateMessage(&msg);
-		DispatchMessageA(&msg);
+		if (!CGame::m_isActive)
+			isMessageAvailable = PeekMessageA(&m_win32Msg, NULL, 0, 0, 1);
+		else
+			isMessageAvailable = GetMessageA(&m_win32Msg, NULL, 0, 0);
+
+		if ((m_win32Msg.message == WM_ACTIVATEAPP) || (isMessageAvailable == 0))
+		{
+			if (!CGame::m_isActive)
+			{
+				// 	FUN_004b7a40();
+				CGame::FUN_004d0780();
+			}
+		}
+		else
+		{
+			if (m_win32Msg.message == WM_QUIT)
+				break;
+
+			TranslateMessage(&m_win32Msg);
+			DispatchMessageA(&m_win32Msg);
+		}
 
 		if (g_pGraphics->isFullscreen == FALSE)
 		{
