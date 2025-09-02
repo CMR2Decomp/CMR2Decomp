@@ -14,7 +14,6 @@ char CMain::m_logFileAsterisks[29] = "****************************";
 char CMain::m_logFileBlankLine[1] = "";
 char CMain::m_logFileFinishedNormally[30] = "* Program finished normally *";
 BOOL CMain::m_isShowingCursor = TRUE;
-int CMain::m_unk0x00663c70 = 0;
 
 MSG CMain::m_win32Msg;
 
@@ -92,7 +91,7 @@ unsigned char CMain::Initialize(HINSTANCE hInstance, unsigned char param2, LPSTR
 	CLogger::LogToFile(m_logFileAsterisks);
 	CLogger::CloseLogFile();
 
-	return m_unk0x00663c70;
+	return m_win32Msg.wParam;
 }
 
 // STUB: CMR2 0x004a8270

@@ -101,7 +101,7 @@ BOOL CInstallInfo::ShowNoCDErrorMessage(int param1)
     {
         CMain::FUN_0049c130();
         CLogger::CloseLogFile();
-        ExitProcess(CMain::m_unk0x00663c70);
+        ExitProcess(CMain::m_win32Msg.wParam);
     }
 
     return TRUE;
