@@ -4,7 +4,7 @@ BOOL CGame::m_shouldExit = FALSE;
 BOOL CGame::m_isActive = FALSE;
 int CGame::m_unk0x00523c58 = -1;
 int CGame::m_unk0x00523c5c = -1;
-BYTE CGame::m_unk0x00817da0;
+Unk0049c2c0 CGame::m_unk0x00817da0;
 int CGame::m_unk0x0052ea4c;
 bool CGame::m_unk0x00817eb0;
 BYTE CGame::m_unk0x00817d98;
@@ -67,8 +67,13 @@ void __stdcall CGame::FUN_0049c310(void *param1) {}
 void __stdcall CGame::FUN_0049c370(void *param1) {}
 // STUB: CMR2 0x0049c150
 void __stdcall CGame::FUN_0049c150(void *param1, unsigned int param2, unsigned int param3) {}
-// STUB: CMR2 0x0049c190
-void __stdcall CGame::FUN_0049c190(void *p1, unsigned int p2, LPBYTE p3, void *p4, void *p5) {}
+void __stdcall CGame::FUN_0049c190(Unk0049c2c0 *p1, BYTE count, BYTE *unk, void *funcPointer, void *unk2)
+{
+    p1->count = count;
+    p1->unk = unk;
+    p1->funcPointer = funcPointer;
+    p1->unk2 = unk2;
+}
 // STUB: CMR2 0x004ff450
 BOOL CGame::FUN_004ff450() { return FALSE; }
 // STUB: CMR2 0x0041b060
