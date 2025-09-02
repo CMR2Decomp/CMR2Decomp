@@ -15,8 +15,9 @@ public:
     static HWND m_hWndList[1];
     // GLOBAL: CMR2 0x00663dac
     static int m_hWndIx;
-    // GLOBAL: CMR2 0x00663c70
-    static int m_unk0x00663c70;
+
+    // GLOBAL: CMR2 0x00663c68
+    static MSG m_win32Msg;
 
 private:
     // GLOBAL: CMR2 0x00663db0
@@ -35,9 +36,6 @@ private:
     static char m_logFileFinishedNormally[30];
     // GLOBAL: CMR2 0x00520bf0
     static BOOL m_isShowingCursor;
-
-    // GLOBAL: CMR2 0x00663c68
-    static MSG m_win32Msg;
 };
 
 #endif
