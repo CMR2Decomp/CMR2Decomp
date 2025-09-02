@@ -67,6 +67,7 @@ void __stdcall CGame::FUN_0049c310(void *param1) {}
 void __stdcall CGame::FUN_0049c370(void *param1) {}
 // STUB: CMR2 0x0049c150
 void __stdcall CGame::FUN_0049c150(void *param1, unsigned int param2, unsigned int param3) {}
+// FUNCTION: CMR2 0x0049c190
 void __stdcall CGame::FUN_0049c190(Unk0049c2c0 *p1, BYTE count, BYTE *unk, void *funcPointer, void *unk2)
 {
     p1->count = count;
