@@ -3,7 +3,7 @@
 
 #include <windows.h>
 
-typedef void (*FuncTableEntry)(struct Unk0049c2c0 *, BYTE);
+typedef void(__stdcall *FuncTableEntry)(struct Unk0049c2c0 *, BYTE);
 
 struct Unk00817d98
 {
@@ -27,11 +27,11 @@ public:
     static BOOL FUN_004d0780(void);
     static int FUN_004057d0(void);
     static void __stdcall FUN_0049c2c0(Unk0049c2c0 *param1);
-    static void __stdcall FUN_0049c310(void *param1);
+    static void __stdcall FUN_0049c310(Unk0049c2c0 *param1);
     static void __stdcall FUN_0049c370(void *param1);
     static void __stdcall FUN_0049c150(Unk00817d98 *param1, int param2, int param3);
     static void __stdcall FUN_0049c190(Unk0049c2c0 *p1, BYTE count, Unk00817d98 *unk, FuncTableEntry *funcLookupTable, void *unk2);
-    static void InitializeGame(Unk0049c2c0 *p1, BYTE p2);
+    static void __stdcall InitializeGame(Unk0049c2c0 *p1, BYTE p2);
     static BOOL FUN_004ff450();
     static BOOL FUN_0041b060();
 
@@ -53,6 +53,8 @@ public:
     static Unk00817d98 m_unk0x00817d98;
     // GLOBAL: CMR2 0x00523c18
     static BYTE m_unk0x00523c18;
+    // GLOBAL: CMR2 0x00593cac
+    static BYTE m_unk0x00593cac;
     // GLOBAL: CMR2 0x00523bc8
     static FuncTableEntry m_funcTable[20];
 };

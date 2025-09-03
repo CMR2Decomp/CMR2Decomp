@@ -1,4 +1,5 @@
 #include "Game.h"
+#include "main.h"
 
 BOOL CGame::m_shouldExit = FALSE;
 BOOL CGame::m_isActive = FALSE;
@@ -9,6 +10,7 @@ int CGame::m_unk0x0052ea4c;
 bool CGame::m_unk0x00817eb0 = false;
 Unk00817d98 CGame::m_unk0x00817d98;
 BYTE CGame::m_unk0x00523c18;
+BYTE CGame::m_unk0x00593cac;
 
 FuncTableEntry CGame::m_funcTable[20] = {
     &CGame::InitializeGame,
@@ -61,7 +63,7 @@ int CGame::FUN_004057d0(void)
 }
 
 // STUB: CMR2 0x004d15e0
-void CGame::InitializeGame(Unk0049c2c0 *p1, BYTE p2)
+void __stdcall CGame::InitializeGame(Unk0049c2c0 *p1, BYTE p2)
 {
     return;
 }
@@ -89,8 +91,35 @@ void __stdcall CGame::FUN_0049c2c0(Unk0049c2c0 *param1)
     }
 }
 
-// STUB: CMR2 0x0049c310
-void __stdcall CGame::FUN_0049c310(void *param1) {}
+// FUNCTION: CMR2 0x0049c310
+void __stdcall CGame::FUN_0049c310(Unk0049c2c0 *param1)
+{
+    FuncTableEntry func;
+    BYTE counter;
+    BYTE unkIx;
+
+    if (m_unk0x00593cac == 0)
+    {
+
+        counter = 0;
+        unkIx = 0;
+        if (param1->count > 0)
+        {
+            do
+            {
+                func = param1->funcLookupTable[param1->unk[unkIx].field0x1 & 0xFF];
+                if (func != NULL)
+                    (func)(param1, unkIx);
+
+                counter++;
+                unkIx = counter;
+            } while (counter < param1->count);
+        }
+    }
+    else
+        m_unk0x00593cac = 0;
+}
+
 // STUB: CMR2 0x0049c370
 void __stdcall CGame::FUN_0049c370(void *param1) {}
 
