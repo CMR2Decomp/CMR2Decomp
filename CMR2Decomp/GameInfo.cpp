@@ -1,4 +1,5 @@
 #include "GameInfo.h"
+#include "main.h"
 
 // GLOBAL: CMR2 0x00516134
 char gameRegionPoland[9] = "\\Poland\\";
@@ -108,4 +109,38 @@ void CGameInfo::FUN_004f4b40(void)
 void __stdcall CGameInfo::FUN_00405de0(BYTE param1)
 {
     m_gameInfo.field2_0x14 = ((param1 & 1) << 0x13) | (m_gameInfo.field2_0x14 & 0xfff7ffffU);
+}
+
+// FUNCTION: CMR2 0x00510410
+void CGameInfo::FUN_00510410(void)
+{
+    memset(&m_gameInfo, 0, sizeof(m_gameInfo));
+    m_gameInfo.magicNumber = 0x11;
+
+    strcpy(m_gameInfo.field_0x3950, CMain::m_logFileBlankLine);
+    strcpy(m_gameInfo.field_0x3965, CMain::m_logFileBlankLine);
+
+    m_gameInfo.field_0x3980 = 8;
+    m_gameInfo.field_0x3990 = 8;
+    m_gameInfo.field_0x9c = (m_gameInfo.field_0x9c & 0xffc11157U) | 0x11154;
+    m_gameInfo.field_0x18 = (m_gameInfo.field_0x18 & 0xfcffffffU) | 0xbc000000;
+    m_gameInfo.field_0x1c = (m_gameInfo.field_0x1c & 0xfff33d19U) | 0x33518;
+    m_gameInfo.field_0x14 = (m_gameInfo.field_0x14 & 0x807627ffU) | 0x42400;
+    m_gameInfo.field_0x397c = 10;
+    m_gameInfo.field_0x3984 = 6;
+    m_gameInfo.field_0x3988 = 3;
+    m_gameInfo.field_0x398c = 30;
+    FUN_00510570();
+    m_gameInfo.field_0x98 = 4;
+    m_gameInfo.field_0x18 = (m_gameInfo.field_0x18 & 0xfff93264) | 0x40393264;
+}
+
+// FUNCTION: CMR2 0x00510570
+void CGameInfo::FUN_00510570(void)
+{
+    m_gameInfo.field_0x88 = 0x18000;
+    m_gameInfo.field_0x8c = 0x68000;
+    m_gameInfo.field_0x94 = 0x2d;
+    m_gameInfo.field_0x90 = 0xe0000;
+    return;
 }
