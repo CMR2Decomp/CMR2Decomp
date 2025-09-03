@@ -1,17 +1,10 @@
 #include "InstallInfo.h"
 #include "main.h"
 #include "Logger.h"
+#include "RegKey.h"
 
 char CInstallInfo::m_frontendDir[MAX_PATH];
 char CInstallInfo::m_countrySpecificDir[MAX_PATH];
-char CInstallInfo::m_regKeyLanguage[9] = "Language";
-char CInstallInfo::m_regKeyValueAmerican[9] = "American";
-char CInstallInfo::m_regKeyValuePolish[7] = "Polish";
-char CInstallInfo::m_regKeyValueSpanish[8] = "Spanish";
-char CInstallInfo::m_regKeyValueItalian[8] = "Italian";
-char CInstallInfo::m_regKeyValueGerman[7] = "German";
-char CInstallInfo::m_regKeyValueFrench[7] = "French";
-char CInstallInfo::m_regKeyValueEnglish[8] = "English";
 
 char CInstallInfo::m_noCDBodyEnglish[43] = "Make sure the CMR2 CD is in the CD drive";
 char CInstallInfo::m_noCDBodyGerman[72] = "Vergewissern Sie sich, da\xdf sich die CMR2-CD im CD-ROM-Laufwerk befindet";
@@ -38,12 +31,6 @@ char *CInstallInfo::m_noCDMessages[7][2] = {
     {m_noCDBodyPolish, m_noCDHeaderPolish},
     {m_noCDBodyAmerican, m_noCDHeaderAmerican}};
 
-// STUB: CMR2 0x004aa720
-char *CInstallInfo::GetRegKeyValue(char *key)
-{
-    return 0;
-}
-
 // FUNCTION: CMR2 0x0040ed90
 char *CInstallInfo::GetFrontendDir(void)
 {
@@ -62,31 +49,31 @@ BOOL CInstallInfo::ShowNoCDErrorMessage(int param1)
     char *gameLanguage;
     int languageID;
 
-    gameLanguage = GetRegKeyValue(m_regKeyLanguage);
-    languageID = _stricmp(gameLanguage, m_regKeyValueEnglish);
+    gameLanguage = CRegKey::GetValueFromKey(CRegKey::m_regKeyLanguage);
+    languageID = _stricmp(gameLanguage, CRegKey::m_regKeyValueEnglish);
     if (languageID != 0)
     {
-        if (_stricmp(gameLanguage, m_regKeyValueFrench) == 0)
+        if (_stricmp(gameLanguage, CRegKey::m_regKeyValueFrench) == 0)
             languageID = 4;
         else
         {
-            if (_stricmp(gameLanguage, m_regKeyValueGerman) == 0)
+            if (_stricmp(gameLanguage, CRegKey::m_regKeyValueGerman) == 0)
                 languageID = 1;
             else
             {
-                if (_stricmp(gameLanguage, m_regKeyValueItalian) == 0)
+                if (_stricmp(gameLanguage, CRegKey::m_regKeyValueItalian) == 0)
                     languageID = 2;
                 else
                 {
-                    if (_stricmp(gameLanguage, m_regKeyValueSpanish) == 0)
+                    if (_stricmp(gameLanguage, CRegKey::m_regKeyValueSpanish) == 0)
                         languageID = 3;
                     else
                     {
-                        if (_stricmp(gameLanguage, m_regKeyValuePolish) == 0)
+                        if (_stricmp(gameLanguage, CRegKey::m_regKeyValuePolish) == 0)
                             languageID = 5;
                         else
                         {
-                            if (_stricmp(gameLanguage, m_regKeyValueAmerican) == 0)
+                            if (_stricmp(gameLanguage, CRegKey::m_regKeyValueAmerican) == 0)
                                 languageID = 6;
                             else
                                 languageID = param1;

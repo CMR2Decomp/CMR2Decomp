@@ -14,6 +14,8 @@ unsigned int CGameInfo::m_gameRegion;
 char *CGameInfo::m_gameRegionStrings[4] = {
     gameRegionEurope, gameRegionUSA, gameRegionJapan, gameRegionPoland};
 
+int CGameInfo::m_unk0x0081a754;
+
 // FUNCTION: CMR2 0x004057f0
 unsigned char CGameInfo::GetGameLanguage(void)
 {
@@ -83,4 +85,21 @@ void CGameInfo::SetScreenHeight(unsigned int height)
 void CGameInfo::SetColourDepth(unsigned int depth)
 {
     m_gameInfo.screenColourDepth = depth;
+}
+
+// FUNCTION: CMR2 0x004f4b40
+void CGameInfo::FUN_004f4b40(void)
+{
+    switch (GetGameRegion())
+    {
+    case 0:
+        m_unk0x0081a754 = 5;
+        return;
+    case 1:
+        m_unk0x0081a754 = 3;
+        return;
+    case 2:
+    case 3:
+        m_unk0x0081a754 = 1;
+    }
 }

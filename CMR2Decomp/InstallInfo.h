@@ -10,30 +10,11 @@ public:
     static char *GetCountrySpecificDir();
     static BOOL ShowNoCDErrorMessage(int param1);
 
-    static char *GetRegKeyValue(char *key);
-
 private:
     // GLOBAL: CMR2 0x005366bc
     static char m_frontendDir[MAX_PATH];
     // GLOBAL: CMR2 0x00535b90
     static char m_countrySpecificDir[MAX_PATH];
-    // GLOBAL: CMR2 0x00520f5c
-    static char m_regKeyLanguage[9];
-
-    // GLOBAL: CMR2 0x00520f20
-    static char m_regKeyValueAmerican[9];
-    // GLOBAL: CMR2 0x00520f2c
-    static char m_regKeyValuePolish[7];
-    // GLOBAL: CMR2 0x00520f34
-    static char m_regKeyValueSpanish[8];
-    // GLOBAL: CMR2 0x00520f3c
-    static char m_regKeyValueItalian[8];
-    // GLOBAL: CMR2 0x00520f44
-    static char m_regKeyValueGerman[7];
-    // GLOBAL: CMR2 0x00520f4c
-    static char m_regKeyValueFrench[7];
-    // GLOBAL: CMR2 0x00520f54
-    static char m_regKeyValueEnglish[8];
 
     // GLOBAL: CMR2 0x00520ef0
     static char m_noCDBodyEnglish[43];
