@@ -2,6 +2,7 @@
 #include "main.h"
 #include "RegKey.h"
 #include "GameInfo.h"
+#include "InstallInfo.h"
 
 #include <time.h>
 
@@ -18,8 +19,13 @@ BYTE CGame::m_unk0x00593cac;
 BYTE CGame::m_unk0x00593ba8;
 Unk00817d98 *CGame::m_unk0x00593ba4;
 
-BYTE CGame::m_unk0x00523d68;
+BYTE CGame::m_unk0x00523d68 = 1;
 BYTE CGame::m_unk0x008180f9;
+BYTE CGame::m_unk0x008180fc;
+BYTE CGame::m_unk0x00516120 = 1;
+BYTE CGame::m_unk0x00531768;
+BYTE CGame::m_unk0x0052ea58;
+BYTE CGame::m_unk0x0052ea59;
 
 FuncTableGroup CGame::m_initializeGameGroupedFuncTable[10] = {
     {InitializeGame,
@@ -76,27 +82,36 @@ int CGame::FUN_004057d0(void)
 void __stdcall CGame::InitializeGame(Unk0049c2c0 *p1, BYTE p2)
 {
     time_t srandSeed;
+    char *skuValue, *skuRegion;
 
     srandSeed = time(NULL);
     srand(srandSeed);
 
     // europe sku check
-    if (strcmp(CRegKey::GetValueFromKey(CRegKey::m_regKeySkuType), CRegKey::m_skuEurope) == 0)
+    skuValue = CRegKey::GetValueFromKey(CRegKey::m_regKeySkuType);
+    skuRegion = CRegKey::m_skuEurope;
+    if (strcmp(skuValue, skuRegion) == 0)
         CGameInfo::SetGameRegion(0);
     else
     {
         // america sku check
-        if (strcmp(CRegKey::GetValueFromKey(CRegKey::m_regKeySkuType), CRegKey::m_skuAmerica) == 0)
+        skuValue = CRegKey::GetValueFromKey(CRegKey::m_regKeySkuType);
+        skuRegion = CRegKey::m_skuAmerica;
+        if (strcmp(skuValue, skuRegion) == 0)
             CGameInfo::SetGameRegion(1);
         else
         {
             // japan sku check
-            if (strcmp(CRegKey::GetValueFromKey(CRegKey::m_regKeySkuType), CRegKey::m_skuJapan) == 0)
+            skuValue = CRegKey::GetValueFromKey(CRegKey::m_regKeySkuType);
+            skuRegion = CRegKey::m_skuJapan;
+            if (strcmp(skuValue, skuRegion) == 0)
                 CGameInfo::SetGameRegion(2);
             else
             {
                 // poland sku check
-                if (strcmp(CRegKey::GetValueFromKey(CRegKey::m_regKeySkuType), CRegKey::m_skuPoland) == 0)
+                skuValue = CRegKey::GetValueFromKey(CRegKey::m_regKeySkuType);
+                skuRegion = CRegKey::m_skuPoland;
+                if (strcmp(skuValue, skuRegion) == 0)
                     CGameInfo::SetGameRegion(3);
                 else // otherwise die
                     CGame::SetShouldExit();
@@ -107,6 +122,21 @@ void __stdcall CGame::InitializeGame(Unk0049c2c0 *p1, BYTE p2)
     CGameInfo::FUN_004f4b40();
     m_unk0x00523d68 = 1;
     m_unk0x008180f9 = 0;
+    m_unk0x008180fc = FUN_004ea880();
+    if (FUN_004ea880() != 0)
+    {
+        FUN_004083e0(0);
+        FUN_00406810(0);
+        FUN_004067e0();
+        CGameInfo::FUN_00405de0(0);
+
+        if (CInstallInfo::FUN_0040e8d0() != 0)
+        {
+            CGameInfo::FUN_00405de0(0);
+        }
+    }
+
+    CGame::SetShouldExit();
 }
 
 // FUNCTION: CMR2 0x0049c2c0
@@ -211,3 +241,31 @@ BOOL CGame::FUN_0041b060() { return FALSE; }
 
 // FUNCTION: CMR2 0x00501680
 void __stdcall CGame::FUN_00501680(struct Unk0049c2c0 *, BYTE) { return; }
+
+// FUNCTION: CMR2 0x004ea880
+BYTE CGame::FUN_004ea880(void) { return m_unk0x00516120; }
+
+// FUNCTION: CMR2 0x004083e0
+void __stdcall CGame::FUN_004083e0(BYTE param1)
+{
+    m_unk0x00531768 = param1;
+}
+
+// FUNCTION: CMR2 0x00406810
+void __stdcall CGame::FUN_00406810(BYTE param1)
+
+{
+    m_unk0x0052ea59 = param1;
+    return;
+}
+
+// FUNCTION CMR2 0x004067e0
+bool CGame::FUN_004067e0(void)
+{
+    if (m_unk0x0052ea58 != 0)
+    {
+        m_unk0x0052ea58 = 0;
+        return true;
+    }
+    return false;
+}

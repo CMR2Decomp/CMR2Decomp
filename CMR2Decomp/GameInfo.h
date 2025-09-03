@@ -1,25 +1,26 @@
 #ifndef _GAME_INFO_H
 #define _GAME_INFO_H
 
-typedef unsigned char undefined;
+#include <windows.h>
+
 struct GameInfo
 {
     unsigned char empty[16];
     int magicNumber;          /* Always 0x11 */
     unsigned int field2_0x14; /* first byte of this contains language */
     int field3_0x18;
-    undefined field4_0x1c;
-    undefined field5_0x1d;
-    undefined field6_0x1e;
-    undefined field7_0x1f;
-    undefined field8_0x20;
-    undefined field9_0x21;
-    undefined field10_0x22;
-    undefined field11_0x23;
+    BYTE field4_0x1c;
+    BYTE field5_0x1d;
+    BYTE field6_0x1e;
+    BYTE field7_0x1f;
+    BYTE field8_0x20;
+    BYTE field9_0x21;
+    BYTE field10_0x22;
+    BYTE field11_0x23;
     int screenWidth;
     int screenHeight;
     int screenColourDepth;
-    undefined field15_0x30_field14704_0x399a;
+    BYTE field15_0x30_field14704_0x399a;
 };
 
 class CGameInfo
@@ -38,6 +39,7 @@ public:
     static void SetColourDepth(unsigned int depth);
     static char *GetGameRegionDirectory(void);
     static void FUN_004f4b40(void);
+    static void __stdcall FUN_00405de0(BYTE param1);
 
     // GLOBAL: CMR2 0x0052afa0
     static GameInfo m_gameInfo;
