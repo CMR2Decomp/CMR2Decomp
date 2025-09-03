@@ -42,6 +42,10 @@ public:
     static BOOL FUN_004ff450();
     static BOOL FUN_0041b060();
     static void __stdcall FUN_00501680(struct Unk0049c2c0 *, BYTE);
+    static BYTE FUN_004ea880(void);
+    static void __stdcall FUN_004083e0(BYTE param1);
+    static void __stdcall FUN_00406810(BYTE param1);
+    static bool FUN_004067e0(void);
 
     // GLOBAL: CMR2 0x00663db8
     static BOOL m_shouldExit;
@@ -76,6 +80,16 @@ public:
     static BYTE m_unk0x00523d68;
     // GLOBAL: CMR2 0x008180f9
     static BYTE m_unk0x008180f9;
+    // GLOBAL: CMR2 0x008180fc
+    static BYTE m_unk0x008180fc;
+    // GLOBAL: CMR2 0x00516120
+    static BYTE m_unk0x00516120;
+    // GLOBAL: CMR2 0x00531768
+    static BYTE m_unk0x00531768;
+    // GLOBAL: CMR2 0x0052ea58
+    static BYTE m_unk0x0052ea58;
+    // GLOBAL: CMR2 0x0052ea59
+    static BYTE m_unk0x0052ea59;
 };
 
 #endif

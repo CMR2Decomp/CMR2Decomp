@@ -23,16 +23,32 @@ public:
     // GLOBAL: CMR2 0x00520f54
     static char m_regKeyValueEnglish[8];
 
-    // GLOBAL: CMR2 0x00519340
-    static char m_skuJapan[6];
     // GLOBAL: CMR2 0x00523d98
     static char m_regKeySkuType[9];
+    // GLOBAL: CMR2 0x00519340
+    static char m_skuJapan[6];
     // GLOBAL: CMR2 0x00523d80
     static char m_skuPoland[7];
     // GLOBAL: CMR2 0x00523d88
     static char m_skuAmerica[8];
     // GLOBAL: CMR2 0x00523d90
     static char m_skuEurope[7];
+
+    // rkv=reg key value
+    // GLOBAL: CMR2 0x00516a38
+    static char m_rkv_gameHDPath[12];
+    // GLOBAL: CMR2 0x00516b34
+    static char m_rkv_gameCDPath[12];
+    // GLOBAL: CMR2 0x00516b24
+    static char m_rkv_installVersion[16];
+    // GLOBAL: CMR2 0x00516b1c
+    static char m_rkv_installMinimum[8];
+    // GLOBAL: CMR2 0x00516a88
+    static char m_rkv_installMedium[7];
+    // GLOBAL: CMR2 0x00516a80
+    static char m_rkv_installFull[5];
+    // GLOBAL: CMR2 0x00516a70
+    static char m_rkv_installNetworkOnly[13];
 };
 
 #endif

@@ -19,6 +19,15 @@ char CRegKey::m_skuPoland[7] = "POLAND";
 char CRegKey::m_skuAmerica[8] = "AMERICA";
 char CRegKey::m_skuEurope[7] = "EUROPE";
 
+// installation related values
+char CRegKey::m_rkv_gameHDPath[12] = "Game_HDPath";
+char CRegKey::m_rkv_gameCDPath[12] = "Game_CDPath";
+char CRegKey::m_rkv_installVersion[16] = "Install_Version";
+char CRegKey::m_rkv_installMinimum[8] = "Minimum";
+char CRegKey::m_rkv_installMedium[7] = "Medium";
+char CRegKey::m_rkv_installFull[5] = "Full";
+char CRegKey::m_rkv_installNetworkOnly[13] = "Network Only";
+
 // STUB: CMR2 0x004aa720
 char *__stdcall CRegKey::GetValueFromKey(char *key)
 {
@@ -26,5 +35,6 @@ char *__stdcall CRegKey::GetValueFromKey(char *key)
     if (!strcmp(key, m_regKeySkuType))
         return m_skuEurope;
 
-    return 0;
+    char blank[1] = "";
+    return blank;
 }

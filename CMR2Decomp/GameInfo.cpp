@@ -103,3 +103,9 @@ void CGameInfo::FUN_004f4b40(void)
         m_unk0x0081a754 = 1;
     }
 }
+
+// FUNCTION: CMR2 0x00405de0
+void __stdcall CGameInfo::FUN_00405de0(BYTE param1)
+{
+    m_gameInfo.field2_0x14 = ((param1 & 1) << 0x13) | (m_gameInfo.field2_0x14 & 0xfff7ffffU);
+}
