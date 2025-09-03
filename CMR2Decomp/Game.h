@@ -4,6 +4,7 @@
 #include <windows.h>
 
 typedef void(__stdcall *FuncTableEntry)(struct Unk0049c2c0 *, BYTE);
+typedef void(__stdcall *OtherFuncTableEntry)(struct Unk0049c2c0 *, BYTE);
 
 struct Unk00817d98
 {
@@ -11,12 +12,18 @@ struct Unk00817d98
     int field0x2;
 };
 
+struct FuncTableGroup
+{
+    FuncTableEntry func1;
+    OtherFuncTableEntry func2;
+};
+
 struct Unk0049c2c0
 {
     BYTE count;
     BYTE pad[3];                     // is this meant to be something?
     Unk00817d98 *unk;                // pointer to an 8 byte struct?
-    FuncTableEntry *funcLookupTable; // pointer to the function table which points to functions like initializegame
+    FuncTableGroup *funcLookupTable; // pointer to the function table which points to functions like initializegame
     void *unk2;                      // pointer to something that is 64 bytes?
 };
 
@@ -30,10 +37,11 @@ public:
     static void __stdcall FUN_0049c310(Unk0049c2c0 *param1);
     static void __stdcall FUN_0049c370(void *param1);
     static void __stdcall FUN_0049c150(Unk00817d98 *param1, int param2, int param3);
-    static void __stdcall FUN_0049c190(Unk0049c2c0 *p1, BYTE count, Unk00817d98 *unk, FuncTableEntry *funcLookupTable, void *unk2);
+    static void __stdcall FUN_0049c190(Unk0049c2c0 *p1, BYTE count, Unk00817d98 *unk, FuncTableGroup *funcLookupTable, void *unk2);
     static void __stdcall InitializeGame(Unk0049c2c0 *p1, BYTE p2);
     static BOOL FUN_004ff450();
     static BOOL FUN_0041b060();
+    static void __stdcall FUN_00501680(struct Unk0049c2c0 *, BYTE);
 
     // GLOBAL: CMR2 0x00663db8
     static BOOL m_shouldExit;
@@ -56,7 +64,7 @@ public:
     // GLOBAL: CMR2 0x00593cac
     static BYTE m_unk0x00593cac;
     // GLOBAL: CMR2 0x00523bc8
-    static FuncTableEntry m_funcTable[20];
+    static FuncTableGroup m_groupedFuncTable[10];
 };
 
 #endif

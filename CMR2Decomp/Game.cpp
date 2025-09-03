@@ -12,8 +12,9 @@ Unk00817d98 CGame::m_unk0x00817d98;
 BYTE CGame::m_unk0x00523c18;
 BYTE CGame::m_unk0x00593cac;
 
-FuncTableEntry CGame::m_funcTable[20] = {
-    &CGame::InitializeGame,
+FuncTableGroup CGame::m_groupedFuncTable[10] = {
+    {InitializeGame,
+     FUN_00501680},
 };
 
 // FUNCTION: CMR2 0x004a9a40
@@ -47,7 +48,7 @@ BOOL CGame::FUN_004d0780(void)
         }
 
         FUN_0049c150(&m_unk0x00817d98, 0, 0xFF);
-        FUN_0049c190(&m_unk0x00817da0, 1, &m_unk0x00817d98, m_funcTable, &m_unk0x00523c18);
+        FUN_0049c190(&m_unk0x00817da0, 1, &m_unk0x00817d98, m_groupedFuncTable, &m_unk0x00523c18);
         m_unk0x00817eb0 = true;
         return FALSE;
 
@@ -81,7 +82,7 @@ void __stdcall CGame::FUN_0049c2c0(Unk0049c2c0 *param1)
     {
         do
         {
-            func = param1->funcLookupTable[param1->unk[unkIx].field0x1 & 0xFF];
+            func = param1->funcLookupTable[param1->unk[unkIx].field0x1 & 0xFF].func1;
             if (func != NULL)
                 (func)(param1, unkIx);
 
@@ -94,7 +95,7 @@ void __stdcall CGame::FUN_0049c2c0(Unk0049c2c0 *param1)
 // FUNCTION: CMR2 0x0049c310
 void __stdcall CGame::FUN_0049c310(Unk0049c2c0 *param1)
 {
-    FuncTableEntry func;
+    OtherFuncTableEntry func;
     BYTE counter;
     BYTE unkIx;
 
@@ -107,7 +108,7 @@ void __stdcall CGame::FUN_0049c310(Unk0049c2c0 *param1)
         {
             do
             {
-                func = param1->funcLookupTable[param1->unk[unkIx].field0x1 & 0xFF];
+                func = param1->funcLookupTable[param1->unk[unkIx].field0x1 & 0xFF].func2;
                 if (func != NULL)
                     (func)(param1, unkIx);
 
@@ -132,7 +133,7 @@ void __stdcall CGame::FUN_0049c150(Unk00817d98 *param1, int param2, int param3)
 }
 
 // FUNCTION: CMR2 0x0049c190
-void __stdcall CGame::FUN_0049c190(Unk0049c2c0 *p1, BYTE count, Unk00817d98 *unk, FuncTableEntry *funcLookupTable, void *unk2)
+void __stdcall CGame::FUN_0049c190(Unk0049c2c0 *p1, BYTE count, Unk00817d98 *unk, FuncTableGroup *funcLookupTable, void *unk2)
 {
     p1->count = count;
     p1->unk = unk;
@@ -143,3 +144,6 @@ void __stdcall CGame::FUN_0049c190(Unk0049c2c0 *p1, BYTE count, Unk00817d98 *unk
 BOOL CGame::FUN_004ff450() { return FALSE; }
 // STUB: CMR2 0x0041b060
 BOOL CGame::FUN_0041b060() { return FALSE; }
+
+// FUNCTION: CMR2 0x00501680
+void __stdcall CGame::FUN_00501680(struct Unk0049c2c0 *, BYTE) { return; }
