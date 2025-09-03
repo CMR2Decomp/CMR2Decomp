@@ -20,7 +20,25 @@ struct GameInfo
     int screenWidth;
     int screenHeight;
     int screenColourDepth;
-    BYTE field15_0x30_field14704_0x399a;
+    unsigned int field_0x14;
+    unsigned int field_0x18;
+    unsigned int field_0x1c;
+    unsigned int field_0x88;
+    unsigned int field_0x8c;
+    unsigned int field_0x90;
+    short field_0x94;
+    unsigned int field_0x98;
+    unsigned int field_0x9c;
+    char field_0x3950[21];
+    char field_0x3965[23];
+    int field_0x397c;
+    BYTE field_0x3980;
+    BYTE pad[3];
+    int field_0x3984;
+    int field_0x3988;
+    int field_0x398c;
+    int field_0x3990;
+    BYTE buffer[3500];
 };
 
 class CGameInfo
@@ -40,6 +58,8 @@ public:
     static char *GetGameRegionDirectory(void);
     static void FUN_004f4b40(void);
     static void __stdcall FUN_00405de0(BYTE param1);
+    static void FUN_00510410(void);
+    static void FUN_00510570(void);
 
     // GLOBAL: CMR2 0x0052afa0
     static GameInfo m_gameInfo;
