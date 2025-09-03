@@ -11,6 +11,8 @@ bool CGame::m_unk0x00817eb0 = false;
 Unk00817d98 CGame::m_unk0x00817d98;
 BYTE CGame::m_unk0x00523c18;
 BYTE CGame::m_unk0x00593cac;
+BYTE CGame::m_unk0x00593ba8;
+Unk00817d98 *CGame::m_unk0x00593ba4;
 
 FuncTableGroup CGame::m_groupedFuncTable[10] = {
     {InitializeGame,
@@ -121,8 +123,32 @@ void __stdcall CGame::FUN_0049c310(Unk0049c2c0 *param1)
         m_unk0x00593cac = 0;
 }
 
-// STUB: CMR2 0x0049c370
-void __stdcall CGame::FUN_0049c370(void *param1) {}
+// FUNCTION: CMR2 0x0049c370
+void __stdcall CGame::FUN_0049c370(Unk0049c2c0 *param1)
+{
+    unsigned int tVar1;
+
+    m_unk0x00593ba8 = m_unk0x00593ba8 & 0xffffff00;
+    if (param1->count > 0)
+    {
+        do
+        {
+            m_unk0x00593ba4 = &param1->unk[m_unk0x00593ba8];
+            tVar1 = m_unk0x00593ba4->field0x1;
+            if (tVar1 & 0x3000000)
+            {
+                m_unk0x00593ba4->field0x1 = ((tVar1 >> 0x10) & 0xff) | (tVar1 & 0xffffff00);
+                m_unk0x00593ba4->field0x1 = m_unk0x00593ba4->field0x1 & 0xff00ffff;
+                m_unk0x00593ba4->field0x1 = m_unk0x00593ba4->field0x1 & 0xfcffffff;
+                m_unk0x00593ba4->field0x2 = 0;
+            }
+            else
+                m_unk0x00593ba4->field0x2 = m_unk0x00593ba4->field0x2 + 1;
+
+            m_unk0x00593ba8++;
+        } while (m_unk0x00593ba8 < param1->count);
+    }
+}
 
 // FUNCTION: CMR2 0x0049c150
 void __stdcall CGame::FUN_0049c150(Unk00817d98 *param1, int param2, int param3)

@@ -35,7 +35,7 @@ public:
     static int FUN_004057d0(void);
     static void __stdcall FUN_0049c2c0(Unk0049c2c0 *param1);
     static void __stdcall FUN_0049c310(Unk0049c2c0 *param1);
-    static void __stdcall FUN_0049c370(void *param1);
+    static void __stdcall FUN_0049c370(Unk0049c2c0 *param1);
     static void __stdcall FUN_0049c150(Unk00817d98 *param1, int param2, int param3);
     static void __stdcall FUN_0049c190(Unk0049c2c0 *p1, BYTE count, Unk00817d98 *unk, FuncTableGroup *funcLookupTable, void *unk2);
     static void __stdcall InitializeGame(Unk0049c2c0 *p1, BYTE p2);
@@ -63,6 +63,12 @@ public:
     static BYTE m_unk0x00523c18;
     // GLOBAL: CMR2 0x00593cac
     static BYTE m_unk0x00593cac;
+
+    // GLOBAL: CMR2 0x00593ba4
+    static Unk00817d98 *m_unk0x00593ba4;
+    // GLOBAL: CMR2 0x00593ba8
+    static BYTE m_unk0x00593ba8;
+
     // GLOBAL: CMR2 0x00523bc8
     static FuncTableGroup m_groupedFuncTable[10];
 };
