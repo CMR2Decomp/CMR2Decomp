@@ -1,5 +1,9 @@
 #include "Game.h"
 #include "main.h"
+#include "RegKey.h"
+#include "GameInfo.h"
+
+#include <time.h>
 
 BOOL CGame::m_shouldExit = FALSE;
 BOOL CGame::m_isActive = FALSE;
@@ -14,7 +18,10 @@ BYTE CGame::m_unk0x00593cac;
 BYTE CGame::m_unk0x00593ba8;
 Unk00817d98 *CGame::m_unk0x00593ba4;
 
-FuncTableGroup CGame::m_groupedFuncTable[10] = {
+BYTE CGame::m_unk0x00523d68;
+BYTE CGame::m_unk0x008180f9;
+
+FuncTableGroup CGame::m_initializeGameGroupedFuncTable[10] = {
     {InitializeGame,
      FUN_00501680},
 };
@@ -50,7 +57,7 @@ BOOL CGame::FUN_004d0780(void)
         }
 
         FUN_0049c150(&m_unk0x00817d98, 0, 0xFF);
-        FUN_0049c190(&m_unk0x00817da0, 1, &m_unk0x00817d98, m_groupedFuncTable, &m_unk0x00523c18);
+        FUN_0049c190(&m_unk0x00817da0, 1, &m_unk0x00817d98, m_initializeGameGroupedFuncTable, &m_unk0x00523c18);
         m_unk0x00817eb0 = true;
         return FALSE;
 
@@ -65,10 +72,41 @@ int CGame::FUN_004057d0(void)
     return m_unk0x0052ea4c;
 }
 
-// STUB: CMR2 0x004d15e0
+// FUNCTION: CMR2 0x004d15e0
 void __stdcall CGame::InitializeGame(Unk0049c2c0 *p1, BYTE p2)
 {
-    return;
+    time_t srandSeed;
+
+    srandSeed = time(NULL);
+    srand(srandSeed);
+
+    // europe sku check
+    if (strcmp(CRegKey::GetValueFromKey(CRegKey::m_regKeySkuType), CRegKey::m_skuEurope) == 0)
+        CGameInfo::SetGameRegion(0);
+    else
+    {
+        // america sku check
+        if (strcmp(CRegKey::GetValueFromKey(CRegKey::m_regKeySkuType), CRegKey::m_skuAmerica) == 0)
+            CGameInfo::SetGameRegion(1);
+        else
+        {
+            // japan sku check
+            if (strcmp(CRegKey::GetValueFromKey(CRegKey::m_regKeySkuType), CRegKey::m_skuJapan) == 0)
+                CGameInfo::SetGameRegion(2);
+            else
+            {
+                // poland sku check
+                if (strcmp(CRegKey::GetValueFromKey(CRegKey::m_regKeySkuType), CRegKey::m_skuPoland) == 0)
+                    CGameInfo::SetGameRegion(3);
+                else // otherwise die
+                    CGame::SetShouldExit();
+            }
+        }
+    }
+
+    CGameInfo::FUN_004f4b40();
+    m_unk0x00523d68 = 1;
+    m_unk0x008180f9 = 0;
 }
 
 // FUNCTION: CMR2 0x0049c2c0

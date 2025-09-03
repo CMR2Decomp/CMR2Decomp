@@ -66,6 +66,9 @@
     <ClCompile Include="StageUI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="RegKey.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Stage.h">
@@ -120,6 +123,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="StageUI.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RegKey.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

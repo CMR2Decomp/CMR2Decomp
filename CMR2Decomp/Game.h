@@ -70,7 +70,12 @@ public:
     static BYTE m_unk0x00593ba8;
 
     // GLOBAL: CMR2 0x00523bc8
-    static FuncTableGroup m_groupedFuncTable[10];
+    static FuncTableGroup m_initializeGameGroupedFuncTable[10];
+
+    // GLOBAL: CMR2 0x00523d68
+    static BYTE m_unk0x00523d68;
+    // GLOBAL: CMR2 0x008180f9
+    static BYTE m_unk0x008180f9;
 };
 
 #endif

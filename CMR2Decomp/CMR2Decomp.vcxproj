@@ -144,6 +144,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="RallyData.cpp" />
     <ClCompile Include="RallyTiming.cpp" />
+    <ClCompile Include="RegKey.cpp" />
     <ClCompile Include="Stage.cpp" />
     <ClCompile Include="StageSplitData.cpp" />
     <ClCompile Include="StageTiming.cpp" />
@@ -164,6 +165,7 @@
     <ClInclude Include="main.h" />
     <ClInclude Include="RallyData.h" />
     <ClInclude Include="RallyTiming.h" />
+    <ClInclude Include="RegKey.h" />
     <ClInclude Include="Stage.h" />
     <ClInclude Include="StageSplitData.h" />
     <ClInclude Include="StageTiming.h" />
