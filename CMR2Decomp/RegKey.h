@@ -6,6 +6,17 @@ class CRegKey
 public:
     static char *__stdcall GetValueFromKey(char *key);
 
+    // GLOBAL: CMR2 0x00520f88
+    static char m_regKeyPathSoftware[9];
+    // GLOBAL: CMR2 0x00520f7c
+    static char m_regKeyPathCodemasters[12];
+    // GLOBAL: CMR2 0x00520f68
+    static char m_regKeyPathCMR2[20];
+    // GLOBAL: CMR2 0x00516180
+    static char m_regKeyPathFormatValue[3];
+    // GLOBAL: CMR2 0x00663ee4
+    static unsigned char m_regKeyReadData[100];
+
     // GLOBAL: CMR2 0x00520f5c
     static char m_regKeyLanguage[9];
     // GLOBAL: CMR2 0x00520f20
