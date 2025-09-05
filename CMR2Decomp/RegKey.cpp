@@ -8,7 +8,7 @@
 // registry key path value
 char CRegKey::m_regKeyPathSoftware[9] = "SOFTWARE";
 char CRegKey::m_regKeyPathCodemasters[12] = "Codemasters";
-char CRegKey::m_regKeyPathCMR2[20] = "Colin_McRae_Rally_2";
+char CRegKey::m_regKeyPathCMR2[20] = "Colin McRae Rally 2";
 char CRegKey::m_regKeyPathFormatValue[3] = "%s";
 BYTE CRegKey::m_regKeyReadData[100] = "";
 
