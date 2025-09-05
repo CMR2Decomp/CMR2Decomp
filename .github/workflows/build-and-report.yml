@@ -41,7 +41,7 @@ jobs:
         run: |
           mkdir build
           call .\msvc600\VC98\bin\VCVARS32.BAT x86
-          call .\msvc600\VC98\bin\cl.exe .\CMR2Decomp\*.cpp /Fe"build/CMR2.exe" /O2 /DNDEBUG /Zi /Gz /MD /link user32.lib gdi32.lib /DEBUG /PDB:"build\CMR2.pdb" /SUBSYSTEM:WINDOWS
+          call .\msvc600\VC98\bin\cl.exe .\CMR2Decomp\*.cpp /Fe"build/CMR2.exe" /O2 /DNDEBUG /Zi /Gz /MD /link user32.lib gdi32.lib advapi32.lib /DEBUG /PDB:"build\CMR2.pdb" /SUBSYSTEM:WINDOWS
 
       - name: Upload Build
         uses: actions/upload-artifact@main
