@@ -21,7 +21,7 @@ char g_aiNames[15][20] = {
     "utzman"};
 
 // FUNCTION: CMR2 0x00407f80
-int __stdcall CAIHelper::FUN_00407f80(int id)
+int CAIHelper::FUN_00407f80(int id)
 {
     unsigned char uVar1;
 
@@ -40,7 +40,7 @@ int __stdcall CAIHelper::FUN_00407f80(int id)
 }
 
 // FUNCTION: CMR2 0x00407ec0
-char *__stdcall CAIHelper::GetNameForID(int id)
+char *CAIHelper::GetNameForID(int id)
 {
     unsigned int uVar1;
     unsigned int uVar2;

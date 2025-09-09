@@ -19,8 +19,8 @@ public:
     static DWORD m_unk0x00663fe8;
 
     // TODO: should this not be a static class? seems silly to pass this in like this
-    static bool __stdcall FUN_004a9d70(GenericFile *file, char *fileName);
-    static bool __stdcall FUN_004a9c30(char *fileName, GenericFile *param_2);
+    static bool FUN_004a9d70(GenericFile *file, char *fileName);
+    static bool FUN_004a9c30(char *fileName, GenericFile *param_2);
     static int GetGenericFileSize(void);
 };
 

@@ -57,7 +57,7 @@ char *CInstallInfo::GetCountrySpecificDir(void)
 }
 
 // FUNCTION: CMR2 0x004aa480
-BOOL __stdcall CInstallInfo::ShowNoCDErrorMessage(int param1)
+BOOL CInstallInfo::ShowNoCDErrorMessage(int param1)
 {
     char *gameLanguage;
     int languageID;

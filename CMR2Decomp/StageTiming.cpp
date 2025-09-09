@@ -12,7 +12,7 @@ int g_stageSplitTimesRaw[10][16];
 char g_stageSplitTimesRawDriverIx[10][16];
 
 // FUNCTION: CMR2 0x00455cf0
-int __stdcall StageTiming_GetDriverIDForPosition(int positionIx)
+int StageTiming_GetDriverIDForPosition(int positionIx)
 {
     int iSplitIx = GetStageSplitCount();
 
@@ -22,7 +22,7 @@ int __stdcall StageTiming_GetDriverIDForPosition(int positionIx)
 }
 
 // FUNCTION: CMR2 0x00455d70
-int __stdcall StageTiming_GetTimeForPosition(int iPosition)
+int StageTiming_GetTimeForPosition(int iPosition)
 {
     int stageSplitCount;
     int iTime;

@@ -11,13 +11,13 @@ int g_rallyOverallTimesRaw[16];
 const int *unk0x533698 = (int *)g_rallyOverallTimesRaw[0] + 16;
 
 // FUNCTION: CMR2 0x0040d390
-int __stdcall RallyTiming_GetOverallPositionDriverID(int iPosition)
+int RallyTiming_GetOverallPositionDriverID(int iPosition)
 {
 	return g_rallyOverallOrderDriverID[iPosition];
 }
 
 // FUNCTION: CMR2 0x0040d3b0
-int __stdcall RallyTiming_GetOverallTimeForPosition(int iPosition)
+int RallyTiming_GetOverallTimeForPosition(int iPosition)
 {
 	int iTime;
 

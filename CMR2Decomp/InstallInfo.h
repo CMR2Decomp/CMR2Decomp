@@ -8,7 +8,7 @@ class CInstallInfo
 public:
     static char *GetFrontendDir();
     static char *GetCountrySpecificDir();
-    static BOOL __stdcall ShowNoCDErrorMessage(int param1);
+    static BOOL ShowNoCDErrorMessage(int param1);
 
     static char *GetRegKeyValue(char *key);
 

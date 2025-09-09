@@ -17,7 +17,7 @@ unsigned int FUN_004bec70(void *param1)
 }
 
 // FUNCTION: CMR2 0x004aad70
-void *__stdcall CFileBuffer::AllocateLockedBuffer(size_t iSize)
+void *CFileBuffer::AllocateLockedBuffer(size_t iSize)
 {
     HANDLE handle;
     void *buffer;
@@ -28,7 +28,7 @@ void *__stdcall CFileBuffer::AllocateLockedBuffer(size_t iSize)
 }
 
 // FUNCTION: CMR2 0x004aad90
-void *__stdcall CFileBuffer::ReallocateLockedBuffer(void *buffer, size_t iSize)
+void *CFileBuffer::ReallocateLockedBuffer(void *buffer, size_t iSize)
 {
     HGLOBAL handle;
     UINT flags;
@@ -47,7 +47,7 @@ void *__stdcall CFileBuffer::ReallocateLockedBuffer(void *buffer, size_t iSize)
 }
 
 // FUNCTION: CMR2 0x004aa220
-void *__stdcall CFileBuffer::GetGenericFileBuffer(char *fileName, BOOL isLocalFile)
+void *CFileBuffer::GetGenericFileBuffer(char *fileName, BOOL isLocalFile)
 {
     // isLocalFile is basically is it on the HDD? this function is called by loadnetworkleaderboards,loadcontrollerconfig,etc. with param2 as 1
     void *unk0x004bdee0, *lpBuffer;
@@ -161,7 +161,7 @@ void *__stdcall CFileBuffer::GetGenericFileBuffer(char *fileName, BOOL isLocalFi
 }
 
 // STUB: CMR2 0x004bdee0
-void *__stdcall CFileBuffer::FUN_004bdee0(char *fileName, char *param_2)
+void *CFileBuffer::FUN_004bdee0(char *fileName, char *param_2)
 {
     // todo: implement
     return 0;
@@ -174,7 +174,7 @@ size_t CFileBuffer::FUN_004be660(void *param_1, void *param_2, size_t param_3)
 }
 
 // FUNCTION: CMR2 0x004aade0
-void __stdcall CFileBuffer::FreeGenericFileBuffer(void *param1)
+void CFileBuffer::FreeGenericFileBuffer(void *param1)
 {
     HANDLE handle;
 

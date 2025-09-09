@@ -25,7 +25,7 @@ unsigned int CFrontend::m_unk0x00663b38;
 unsigned int CFrontend::m_unk0x00663b48;
 
 // FUNCTION: CMR2 0x004d21e0
-void __stdcall CFrontend::FUN_004d21e0(void)
+void CFrontend::FUN_004d21e0(void)
 {
     unsigned int regionID;
     char regionKey;
@@ -104,7 +104,7 @@ void __stdcall CFrontend::FUN_004d21e0(void)
 }
 
 // FUNCTION: CMR2 0x004b7560
-BOOL __stdcall CFrontend::FUN_004b7560(unsigned int param_1)
+BOOL CFrontend::FUN_004b7560(unsigned int param_1)
 {
     if (m_unk0x006e0c5c <= param_1 && param_1 <= m_unk0x006e0c64)
         return TRUE;
@@ -113,7 +113,7 @@ BOOL __stdcall CFrontend::FUN_004b7560(unsigned int param_1)
 }
 
 // FUNCTION: CMR2 0x004b7590
-BOOL __stdcall CFrontend::FUN_004b7590(unsigned int param_1)
+BOOL CFrontend::FUN_004b7590(unsigned int param_1)
 {
     if (m_unk0x006e0c60 <= param_1 && param_1 <= m_unk0x006e0c68)
         return TRUE;
@@ -122,7 +122,7 @@ BOOL __stdcall CFrontend::FUN_004b7590(unsigned int param_1)
 }
 
 // FUNCTION: CMR2 0x004a9700
-BOOL __stdcall CFrontend::FUN_004a9700(void)
+BOOL CFrontend::FUN_004a9700(void)
 {
     if (!m_unk0x00663b38 && !m_unk0x00663b48)
         return FALSE;
