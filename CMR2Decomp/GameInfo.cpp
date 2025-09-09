@@ -1,6 +1,8 @@
 #include "GameInfo.h"
 #include "main.h"
 
+#include <stdio.h>
+
 // GLOBAL: CMR2 0x00516134
 char gameRegionPoland[9] = "\\Poland\\";
 // GLOBAL: CMR2 0x00516140
@@ -16,6 +18,8 @@ char *CGameInfo::m_gameRegionStrings[4] = {
     gameRegionEurope, gameRegionUSA, gameRegionJapan, gameRegionPoland};
 
 int CGameInfo::m_unk0x0081a754;
+
+char CGameInfo::m_stringCMR[4] = "cmr";
 
 // FUNCTION: CMR2 0x004057f0
 unsigned char CGameInfo::GetGameLanguage(void)
@@ -130,9 +134,15 @@ void CGameInfo::FUN_00510410(void)
     m_gameInfo.field_0x3984 = 6;
     m_gameInfo.field_0x3988 = 3;
     m_gameInfo.field_0x398c = 30;
+
     FUN_00510570();
+
     m_gameInfo.field_0x98 = 4;
     m_gameInfo.field_0x18 = (m_gameInfo.field_0x18 & 0xfff93264) | 0x40393264;
+
+    FUN_00406010(&m_gameInfo.field_0xa4);
+    FUN_00406010(m_gameInfo.field_0x1368);
+    FUN_00406010(m_gameInfo.field_0x262c);
 }
 
 // FUNCTION: CMR2 0x00510570
@@ -143,4 +153,50 @@ void CGameInfo::FUN_00510570(void)
     m_gameInfo.field_0x94 = 0x2d;
     m_gameInfo.field_0x90 = 0xe0000;
     return;
+}
+
+// FUNCTION: CMR2 0x00406010
+void __stdcall CGameInfo::FUN_00406010(GameInfo0xa4 *param1)
+{
+    unsigned int outerLoop = 0, innerLoop = 0;
+    GameInfo0xa4 *base, *otherBlock;
+
+    // [3][5] block array?
+    base = param1;
+
+    // loop 3, sub loop 5
+    outerLoop = 3;
+    do
+    {
+        otherBlock = base;
+        innerLoop = 5;
+
+        do
+        {
+            strcpy(otherBlock->ident, m_stringCMR);
+
+            otherBlock->bitMask = (otherBlock->bitMask & 0xFFFFC000) | 0x3C000;
+            otherBlock->unk1 = 0;
+            otherBlock->unk2 = 0;
+            otherBlock++;
+        } while (--innerLoop != 0);
+    } while (--outerLoop != 0);
+
+    // block = param1 + 0xab;
+
+    // // loop 3, sub loop 5
+    // outerLoop = 3;
+    // do
+    // {
+    //     innerLoop = 5;
+    //     otherBlock = block;
+
+    //     do
+    //     {
+    //         strcpy((char *)&otherBlock->ident, m_stringCMR);
+
+    //     } while (--innerLoop != 0);
+
+    // } while (--outerLoop != 0);
+    // loop 3, sub loop 3
 }

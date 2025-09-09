@@ -3,6 +3,15 @@
 
 #include <windows.h>
 
+// 12 bytes
+struct GameInfo0xa4
+{
+    char ident[4];
+    unsigned int bitMask;
+    short unk1;
+    short unk2;
+};
+
 struct GameInfo
 {
     unsigned char empty[16];
@@ -29,6 +38,10 @@ struct GameInfo
     short field_0x94;
     unsigned int field_0x98;
     unsigned int field_0x9c;
+    GameInfo0xa4 field_0xa4;
+    GameInfo0xa4 field_0x1368[5];
+    GameInfo0xa4 field_0x262c[3];
+    BYTE field_0x38f8[22];
     char field_0x3950[21];
     char field_0x3965[23];
     int field_0x397c;
@@ -38,7 +51,7 @@ struct GameInfo
     int field_0x3988;
     int field_0x398c;
     int field_0x3990;
-    BYTE buffer[3500];
+    BYTE pad2[3500];
 };
 
 class CGameInfo
@@ -60,9 +73,11 @@ public:
     static void __stdcall FUN_00405de0(BYTE param1);
     static void FUN_00510410(void);
     static void FUN_00510570(void);
+    static void __stdcall FUN_00406010(GameInfo0xa4 *param1);
 
     // GLOBAL: CMR2 0x0052afa0
     static GameInfo m_gameInfo;
+
     // GLOBAL: CMR2 0x0052ea54
     static unsigned int m_gameRegion;
 
@@ -71,6 +86,9 @@ public:
 
     // GLOBAL: CMR2 0x0081a754
     static int m_unk0x0081a754;
+
+    // GLOBAL: CMR2 0x00516184
+    static char m_stringCMR[4];
 };
 
 #endif
