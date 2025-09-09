@@ -9,7 +9,7 @@ struct GameInfo0xa4
     char ident[4];
     unsigned int bitMask;
     short unk1;
-    short unk2;
+    BYTE unk2;
 };
 
 struct GameInfo
@@ -38,7 +38,7 @@ struct GameInfo
     short field_0x94;
     unsigned int field_0x98;
     unsigned int field_0x9c;
-    GameInfo0xa4 field_0xa4;
+    GameInfo0xa4 field_0xa4[15];
     GameInfo0xa4 field_0x1368[5];
     GameInfo0xa4 field_0x262c[3];
     BYTE field_0x38f8[22];

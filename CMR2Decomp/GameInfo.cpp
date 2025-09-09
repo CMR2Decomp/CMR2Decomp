@@ -140,7 +140,7 @@ void CGameInfo::FUN_00510410(void)
     m_gameInfo.field_0x98 = 4;
     m_gameInfo.field_0x18 = (m_gameInfo.field_0x18 & 0xfff93264) | 0x40393264;
 
-    FUN_00406010(&m_gameInfo.field_0xa4);
+    FUN_00406010(m_gameInfo.field_0xa4);
     FUN_00406010(m_gameInfo.field_0x1368);
     FUN_00406010(m_gameInfo.field_0x262c);
 }
@@ -158,20 +158,14 @@ void CGameInfo::FUN_00510570(void)
 // FUNCTION: CMR2 0x00406010
 void __stdcall CGameInfo::FUN_00406010(GameInfo0xa4 *param1)
 {
-    unsigned int outerLoop = 0, innerLoop = 0;
     GameInfo0xa4 *base, *otherBlock;
 
-    // [3][5] block array?
     base = param1;
 
-    // loop 3, sub loop 5
-    outerLoop = 3;
-    do
+    for (int outerLoop = 3; outerLoop > 0; outerLoop--)
     {
         otherBlock = base;
-        innerLoop = 5;
-
-        do
+        for (int innerLoop = 5; innerLoop > 0; innerLoop--)
         {
             strcpy(otherBlock->ident, m_stringCMR);
 
@@ -179,8 +173,9 @@ void __stdcall CGameInfo::FUN_00406010(GameInfo0xa4 *param1)
             otherBlock->unk1 = 0;
             otherBlock->unk2 = 0;
             otherBlock++;
-        } while (--innerLoop != 0);
-    } while (--outerLoop != 0);
+        }
+        // base = ++otherBlock;
+    }
 
     // block = param1 + 0xab;
 
