@@ -79,14 +79,14 @@ BOOL FUN_004a8270(void)
 }
 
 // STUB: CMR2 0x0049c0a0
-int __stdcall FUN_0049c0a0(void *param1, void *param2)
+int FUN_0049c0a0(void *param1, void *param2)
 {
 	// todo
 	return -1;
 }
 
 // FUNCTION: CMR2 0x004a8140
-BOOL __stdcall CMain::CreateGameWindow(HINSTANCE hInstance, HWND *pHWND, LPCSTR sWindowName, WNDPROC wndProc)
+BOOL CMain::CreateGameWindow(HINSTANCE hInstance, HWND *pHWND, LPCSTR sWindowName, WNDPROC wndProc)
 {
 	ATOM AVar1;
 	int nScreenHeight;
@@ -146,7 +146,7 @@ BOOL __stdcall CMain::CreateGameWindow(HINSTANCE hInstance, HWND *pHWND, LPCSTR 
 }
 
 // FUNCTION: CMR2 0x004a98b0
-LRESULT __stdcall CMain::MessageHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
+LRESULT CMain::MessageHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	switch (msg)
 	{

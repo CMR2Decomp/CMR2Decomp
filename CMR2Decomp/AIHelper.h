@@ -4,8 +4,8 @@
 class CAIHelper
 {
 public:
-    static char *__stdcall GetNameForID(int ix);
-    static int __stdcall FUN_00407f80(int id);
+    static char *GetNameForID(int ix);
+    static int FUN_00407f80(int id);
 };
 
 #endif

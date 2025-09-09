@@ -7,13 +7,13 @@
 class CFileBuffer
 {
 public:
-    static void *__stdcall AllocateLockedBuffer(size_t size);
-    static void *__stdcall ReallocateLockedBuffer(void *buffer, size_t iSize);
-    static void *__stdcall GetGenericFileBuffer(char *fileName, BOOL param2);
-    static void __stdcall FreeGenericFileBuffer(void *buffer);
+    static void *AllocateLockedBuffer(size_t size);
+    static void *ReallocateLockedBuffer(void *buffer, size_t iSize);
+    static void *GetGenericFileBuffer(char *fileName, BOOL param2);
+    static void FreeGenericFileBuffer(void *buffer);
 
     // unknowns
-    static void *__stdcall FUN_004bdee0(char *fileName, char *param_2);
+    static void *FUN_004bdee0(char *fileName, char *param_2);
     static size_t FUN_004be660(void *param_1, void *param_2, size_t param_3);
 
     // CMR2: GLOBAL 0x00520f1c

@@ -7,8 +7,8 @@ class CMain
 {
 public:
     static unsigned char Initialize(HINSTANCE hInstance, unsigned char param2, LPSTR param3);
-    static BOOL __stdcall CreateGameWindow(HINSTANCE hInstance, HWND *pHWND, LPCSTR sWindowName, WNDPROC param_4);
-    static LRESULT __stdcall MessageHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+    static BOOL CreateGameWindow(HINSTANCE hInstance, HWND *pHWND, LPCSTR sWindowName, WNDPROC param_4);
+    static LRESULT MessageHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
     static void FUN_0049c130(void);
 
     // GLOBAL: CMR2 0x00663c84

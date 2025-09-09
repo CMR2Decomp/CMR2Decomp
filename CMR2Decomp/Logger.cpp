@@ -9,7 +9,7 @@ unsigned int CLogger::unk0x00667348;
 HANDLE CLogger::hLogFileHandle;
 
 // FUNCTION: CMR2 0x004ab620
-void __stdcall CLogger::OpenLogFile(LPCSTR file)
+void CLogger::OpenLogFile(LPCSTR file)
 {
     lstrcpyA(unk0x00667204, file);
     unk0x00667344 = 0;
@@ -19,7 +19,7 @@ void __stdcall CLogger::OpenLogFile(LPCSTR file)
 }
 
 // FUNCTION: CMR2 0x004ab670
-void __stdcall CLogger::LogToFile(LPCSTR str)
+void CLogger::LogToFile(LPCSTR str)
 {
     LPCSTR lpBuffer;
     DWORD nSizeToWrite;
@@ -39,7 +39,7 @@ void __stdcall CLogger::LogToFile(LPCSTR str)
 }
 
 // FUNCTION: CMR2 0x004ab6f0
-void __stdcall CLogger::CloseLogFile(void)
+void CLogger::CloseLogFile(void)
 {
     CloseHandle(hLogFileHandle);
     bIsLogFileOpen = FALSE;

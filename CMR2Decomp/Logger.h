@@ -16,9 +16,9 @@ private:
     static HANDLE hLogFileHandle;
 
 public:
-    static void __stdcall OpenLogFile(LPCSTR file);
-    static void __stdcall LogToFile(LPCSTR str);
-    static void __stdcall CloseLogFile(void);
+    static void OpenLogFile(LPCSTR file);
+    static void LogToFile(LPCSTR str);
+    static void CloseLogFile(void);
 };
 
 #endif

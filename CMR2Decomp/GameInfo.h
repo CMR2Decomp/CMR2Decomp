@@ -30,11 +30,11 @@ public:
     static unsigned char FUN_00405d80(void);
     static unsigned char FUN_00405d90(void);
     static unsigned int GetScreenWidth(void);
-    static void __stdcall SetScreenWidth(unsigned int width);
+    static void SetScreenWidth(unsigned int width);
     static unsigned int GetScreenHeight(void);
-    static void __stdcall SetScreenHeight(unsigned int height);
+    static void SetScreenHeight(unsigned int height);
     static unsigned int GetColourDepth(void);
-    static void __stdcall SetColourDepth(unsigned int depth);
+    static void SetColourDepth(unsigned int depth);
     static char *GetGameRegionDirectory(void);
 
     // GLOBAL: CMR2 0x0052afa0
