@@ -39,7 +39,7 @@ char CRegKey::m_rkv_installFull[5] = "Full";
 char CRegKey::m_rkv_installNetworkOnly[13] = "Network Only";
 
 // FUNCTION: CMR2 0x004aa720
-char *__stdcall CRegKey::GetValueFromKey(char *key)
+char *CRegKey::GetValueFromKey(char *key)
 {
     LONG regOpenKeyStatus;
     HKEY regKeyResult;

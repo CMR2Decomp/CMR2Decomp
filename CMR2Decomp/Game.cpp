@@ -79,7 +79,7 @@ int CGame::FUN_004057d0(void)
 }
 
 // FUNCTION: CMR2 0x004d15e0
-void __stdcall CGame::InitializeGame(Unk0049c2c0 *p1, BYTE p2)
+void CGame::InitializeGame(Unk0049c2c0 *p1, BYTE p2)
 {
     time_t srandSeed;
     char *skuValue, *skuRegion;
@@ -141,7 +141,7 @@ void __stdcall CGame::InitializeGame(Unk0049c2c0 *p1, BYTE p2)
 }
 
 // FUNCTION: CMR2 0x0049c2c0
-void __stdcall CGame::FUN_0049c2c0(Unk0049c2c0 *param1)
+void CGame::FUN_0049c2c0(Unk0049c2c0 *param1)
 {
     FuncTableEntry func;
     BYTE counter;
@@ -164,7 +164,7 @@ void __stdcall CGame::FUN_0049c2c0(Unk0049c2c0 *param1)
 }
 
 // FUNCTION: CMR2 0x0049c310
-void __stdcall CGame::FUN_0049c310(Unk0049c2c0 *param1)
+void CGame::FUN_0049c310(Unk0049c2c0 *param1)
 {
     OtherFuncTableEntry func;
     BYTE counter;
@@ -193,7 +193,7 @@ void __stdcall CGame::FUN_0049c310(Unk0049c2c0 *param1)
 }
 
 // FUNCTION: CMR2 0x0049c370
-void __stdcall CGame::FUN_0049c370(Unk0049c2c0 *param1)
+void CGame::FUN_0049c370(Unk0049c2c0 *param1)
 {
     unsigned int tVar1;
 
@@ -220,7 +220,7 @@ void __stdcall CGame::FUN_0049c370(Unk0049c2c0 *param1)
 }
 
 // FUNCTION: CMR2 0x0049c150
-void __stdcall CGame::FUN_0049c150(Unk00817d98 *param1, int param2, int param3)
+void CGame::FUN_0049c150(Unk00817d98 *param1, int param2, int param3)
 {
     param1->field0x2 = 0;
     param1->field0x1 =
@@ -228,7 +228,7 @@ void __stdcall CGame::FUN_0049c150(Unk00817d98 *param1, int param2, int param3)
 }
 
 // FUNCTION: CMR2 0x0049c190
-void __stdcall CGame::FUN_0049c190(Unk0049c2c0 *p1, BYTE count, Unk00817d98 *unk, FuncTableGroup *funcLookupTable, void *unk2)
+void CGame::FUN_0049c190(Unk0049c2c0 *p1, BYTE count, Unk00817d98 *unk, FuncTableGroup *funcLookupTable, void *unk2)
 {
     p1->count = count;
     p1->unk = unk;
@@ -241,19 +241,19 @@ BOOL CGame::FUN_004ff450() { return FALSE; }
 BOOL CGame::FUN_0041b060() { return FALSE; }
 
 // FUNCTION: CMR2 0x00501680
-void __stdcall CGame::FUN_00501680(struct Unk0049c2c0 *, BYTE) { return; }
+void CGame::FUN_00501680(struct Unk0049c2c0 *, BYTE) { return; }
 
 // FUNCTION: CMR2 0x004ea880
 BYTE CGame::FUN_004ea880(void) { return m_unk0x00516120; }
 
 // FUNCTION: CMR2 0x004083e0
-void __stdcall CGame::FUN_004083e0(BYTE param1)
+void CGame::FUN_004083e0(BYTE param1)
 {
     m_unk0x00531768 = param1;
 }
 
 // FUNCTION: CMR2 0x00406810
-void __stdcall CGame::FUN_00406810(BYTE param1)
+void CGame::FUN_00406810(BYTE param1)
 
 {
     m_unk0x0052ea59 = param1;

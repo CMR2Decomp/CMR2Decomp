@@ -34,7 +34,7 @@ unsigned int CGameInfo::GetGameRegion(void)
 }
 
 // FUNCTION: CMR2 0x00405810
-void __stdcall CGameInfo::SetGameRegion(unsigned int region)
+void CGameInfo::SetGameRegion(unsigned int region)
 {
     m_gameRegion = region;
 }
@@ -110,7 +110,7 @@ void CGameInfo::FUN_004f4b40(void)
 }
 
 // FUNCTION: CMR2 0x00405de0
-void __stdcall CGameInfo::FUN_00405de0(BYTE param1)
+void CGameInfo::FUN_00405de0(BYTE param1)
 {
     m_gameInfo.field2_0x14 = ((param1 & 1) << 0x13) | (m_gameInfo.field2_0x14 & 0xfff7ffffU);
 }
@@ -140,9 +140,11 @@ void CGameInfo::FUN_00510410(void)
     m_gameInfo.field_0x98 = 4;
     m_gameInfo.field_0x18 = (m_gameInfo.field_0x18 & 0xfff93264) | 0x40393264;
 
-    FUN_00406010(m_gameInfo.field_0xa4);
-    FUN_00406010(m_gameInfo.field_0x1368);
-    FUN_00406010(m_gameInfo.field_0x262c);
+    FUN_00406010(&m_gameInfo.field_0xa4);
+    FUN_00406010(&m_gameInfo.field_0x1368);
+    FUN_00406010(&m_gameInfo.field_0x262c);
+
+    m_gameInfo.field2_0x14 = m_gameInfo.field2_0x14 & 0x7fffffffl;
 }
 
 // FUNCTION: CMR2 0x00510570
@@ -152,11 +154,10 @@ void CGameInfo::FUN_00510570(void)
     m_gameInfo.field_0x8c = 0x68000;
     m_gameInfo.field_0x94 = 0x2d;
     m_gameInfo.field_0x90 = 0xe0000;
-    return;
 }
 
 // FUNCTION: CMR2 0x00406010
-void __stdcall CGameInfo::FUN_00406010(GameInfo0xa4 *param1)
+void CGameInfo::FUN_00406010(GameInfo0xa4 *param1)
 {
     GameInfo0xa4 *base, *otherBlock;
 

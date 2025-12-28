@@ -4,7 +4,7 @@
 class CRegKey
 {
 public:
-    static char *__stdcall GetValueFromKey(char *key);
+    static char *GetValueFromKey(char *key);
 
     // GLOBAL: CMR2 0x00520f88
     static char m_regKeyPathSoftware[9];

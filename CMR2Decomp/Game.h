@@ -3,8 +3,8 @@
 
 #include <windows.h>
 
-typedef void(__stdcall *FuncTableEntry)(struct Unk0049c2c0 *, BYTE);
-typedef void(__stdcall *OtherFuncTableEntry)(struct Unk0049c2c0 *, BYTE);
+typedef void (*FuncTableEntry)(struct Unk0049c2c0 *, BYTE);
+typedef void (*OtherFuncTableEntry)(struct Unk0049c2c0 *, BYTE);
 
 struct Unk00817d98
 {
@@ -33,18 +33,18 @@ public:
     static void SetShouldExit(void);
     static BOOL FUN_004d0780(void);
     static int FUN_004057d0(void);
-    static void __stdcall FUN_0049c2c0(Unk0049c2c0 *param1);
-    static void __stdcall FUN_0049c310(Unk0049c2c0 *param1);
-    static void __stdcall FUN_0049c370(Unk0049c2c0 *param1);
-    static void __stdcall FUN_0049c150(Unk00817d98 *param1, int param2, int param3);
-    static void __stdcall FUN_0049c190(Unk0049c2c0 *p1, BYTE count, Unk00817d98 *unk, FuncTableGroup *funcLookupTable, void *unk2);
-    static void __stdcall InitializeGame(Unk0049c2c0 *p1, BYTE p2);
+    static void FUN_0049c2c0(Unk0049c2c0 *param1);
+    static void FUN_0049c310(Unk0049c2c0 *param1);
+    static void FUN_0049c370(Unk0049c2c0 *param1);
+    static void FUN_0049c150(Unk00817d98 *param1, int param2, int param3);
+    static void FUN_0049c190(Unk0049c2c0 *p1, BYTE count, Unk00817d98 *unk, FuncTableGroup *funcLookupTable, void *unk2);
+    static void InitializeGame(Unk0049c2c0 *p1, BYTE p2);
     static BOOL FUN_004ff450();
     static BOOL FUN_0041b060();
-    static void __stdcall FUN_00501680(struct Unk0049c2c0 *, BYTE);
+    static void FUN_00501680(struct Unk0049c2c0 *, BYTE);
     static BYTE FUN_004ea880(void);
-    static void __stdcall FUN_004083e0(BYTE param1);
-    static void __stdcall FUN_00406810(BYTE param1);
+    static void FUN_004083e0(BYTE param1);
+    static void FUN_00406810(BYTE param1);
     static bool FUN_004067e0(void);
 
     // GLOBAL: CMR2 0x00663db8

@@ -130,7 +130,7 @@ BOOL CInstallInfo::ShowNoCDErrorMessage(int param1)
 }
 
 // FUNCTION: CMR2 0x040e8d0
-int __stdcall CInstallInfo::FUN_0040e8d0(void)
+int CInstallInfo::FUN_0040e8d0(void)
 {
     char *regKeyValue;
     char hdPath[MAX_PATH], cdPath[MAX_PATH], installVersion[16], *bigFileLocation;
@@ -223,7 +223,7 @@ int __stdcall CInstallInfo::FUN_0040e8d0(void)
 }
 
 // FUNCTION: CMR2 0x004aa6c0
-void __stdcall CInstallInfo::SetGameHDPath(char *filePath)
+void CInstallInfo::SetGameHDPath(char *filePath)
 {
     lstrcpyA(m_hdPath, filePath);
     m_isHDInstall = 1;
@@ -231,7 +231,7 @@ void __stdcall CInstallInfo::SetGameHDPath(char *filePath)
 }
 
 // FUNCTION: CMR2 0x004aa6e0
-void __stdcall CInstallInfo::SetGameCDPath(char *filePath)
+void CInstallInfo::SetGameCDPath(char *filePath)
 {
     lstrcpyA(m_cdPath, filePath);
     m_isCDInstall = 1;

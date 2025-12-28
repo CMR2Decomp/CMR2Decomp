@@ -59,7 +59,7 @@ class CGameInfo
 public:
     static unsigned char GetGameLanguage(void);
     static unsigned int GetGameRegion(void);
-    static void __stdcall SetGameRegion(unsigned int region);
+    static void SetGameRegion(unsigned int region);
     static unsigned char FUN_00405d80(void);
     static unsigned char FUN_00405d90(void);
     static unsigned int GetScreenWidth(void);
@@ -70,10 +70,10 @@ public:
     static void SetColourDepth(unsigned int depth);
     static char *GetGameRegionDirectory(void);
     static void FUN_004f4b40(void);
-    static void __stdcall FUN_00405de0(BYTE param1);
+    static void FUN_00405de0(BYTE param1);
     static void FUN_00510410(void);
     static void FUN_00510570(void);
-    static void __stdcall FUN_00406010(GameInfo0xa4 *param1);
+    static void FUN_00406010(GameInfo0xa4 *param1);
 
     // GLOBAL: CMR2 0x0052afa0
     static GameInfo m_gameInfo;
