@@ -3,15 +3,17 @@
 
 #include <windows.h>
 
-// 12 bytes
+// and this is actually meant to be 0x12c4 (4804) bytes in size.
 struct GameInfo0xa4
 {
     char ident[4];
     unsigned int bitMask;
     short unk1;
     BYTE unk2;
+    BYTE pad;
 };
 
+// looks like this should be 0x3958 (14680) bytes in size.
 struct GameInfo
 {
     unsigned char empty[16];
@@ -38,9 +40,9 @@ struct GameInfo
     short field_0x94;
     unsigned int field_0x98;
     unsigned int field_0x9c;
-    GameInfo0xa4 field_0xa4[15];
-    GameInfo0xa4 field_0x1368[5];
-    GameInfo0xa4 field_0x262c[3];
+    GameInfo0xa4 field_0xa4;
+    GameInfo0xa4 field_0x1368;
+    GameInfo0xa4 field_0x262c;
     BYTE field_0x38f8[22];
     char field_0x3950[21];
     char field_0x3965[23];
@@ -51,7 +53,6 @@ struct GameInfo
     int field_0x3988;
     int field_0x398c;
     int field_0x3990;
-    BYTE pad2[3500];
 };
 
 class CGameInfo
