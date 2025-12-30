@@ -14,27 +14,16 @@ struct GameInfo0xa4SubStruct12 {
 	unsigned int value;
 };
 
-struct GameInfo0xa4SubStruct14 {
-	char ident[4];
-	unsigned int flags;
-	short vals[6];
-};
-
-struct GameInfo0xa4SubStructNoIdent14 {
-	//char ident[4];
-	unsigned int flags;
-	short values[10];
-};
-
 // and this is actually meant to be 0x12c4 (4804) bytes in size.
 struct GameInfo0xa4
 {
 	GameInfo0xa4SubStruct12 firstLoop[15];
 	GameInfo0xa4SubStruct12 secondLoop[120];
-	GameInfo0xa4SubStruct8 mixedEntires[88];
-	// the rest... idk
-	GameInfo0xa4SubStructNoIdent14 thirdLoop[54];
-	//GameInfo0xa4SubStruct8 fourthLoop[9];
+	GameInfo0xa4SubStruct8 rallyStageRecordTimes[88];
+	short rallyStageRecordSplits[88][10];
+	GameInfo0xa4SubStruct12 thirdLoop[45];
+	GameInfo0xa4SubStruct8 arcadeRecordTimes[9];
+	short arcadeRecordSplits[9][6];
 };
 
 // looks like this should be 0x3958 (14680) bytes in size.
