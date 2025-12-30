@@ -3,14 +3,38 @@
 
 #include <windows.h>
 
+struct GameInfo0xa4SubStruct8 {
+	char ident[4];
+	unsigned int value;
+};
+
+struct GameInfo0xa4SubStruct12 {
+	char ident[4];
+	unsigned int flags;
+	unsigned int value;
+};
+
+struct GameInfo0xa4SubStruct14 {
+	char ident[4];
+	unsigned int flags;
+	short vals[6];
+};
+
+struct GameInfo0xa4SubStructNoIdent14 {
+	//char ident[4];
+	unsigned int flags;
+	short values[10];
+};
+
 // and this is actually meant to be 0x12c4 (4804) bytes in size.
 struct GameInfo0xa4
 {
-    char ident[4];
-    unsigned int bitMask;
-    short unk1;
-    BYTE unk2;
-    BYTE pad;
+	GameInfo0xa4SubStruct12 firstLoop[15];
+	GameInfo0xa4SubStruct12 secondLoop[120];
+	GameInfo0xa4SubStruct8 mixedEntires[88];
+	// the rest... idk
+	GameInfo0xa4SubStructNoIdent14 thirdLoop[54];
+	//GameInfo0xa4SubStruct8 fourthLoop[9];
 };
 
 // looks like this should be 0x3958 (14680) bytes in size.
@@ -33,13 +57,16 @@ struct GameInfo
     int screenColourDepth;
     unsigned int field_0x14;
     unsigned int field_0x18;
+    char graphicsCardName[80];
+    // >>> 28 byte block after graphics card name
     unsigned int field_0x1c;
     unsigned int field_0x88;
     unsigned int field_0x8c;
     unsigned int field_0x90;
-    short field_0x94;
+    unsigned int field_0x94;
     unsigned int field_0x98;
     unsigned int field_0x9c;
+    // <<< end of 28 bytes
     GameInfo0xa4 field_0xa4;
     GameInfo0xa4 field_0x1368;
     GameInfo0xa4 field_0x262c;
