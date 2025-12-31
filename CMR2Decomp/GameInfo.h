@@ -47,19 +47,20 @@ struct GameInfo
     unsigned int field_0x14;
     unsigned int field_0x18;
     char graphicsCardName[80];
-    // >>> 28 byte block after graphics card name
+    // >>> 26 byte block after graphics card name
     unsigned int field_0x1c;
     unsigned int field_0x88;
     unsigned int field_0x8c;
     unsigned int field_0x90;
-    unsigned int field_0x94;
+    short field_0x94;
     unsigned int field_0x98;
     unsigned int field_0x9c;
-    // <<< end of 28 bytes
+    // <<< end of 26 bytes
     GameInfo0xa4 field_0xa4;
     GameInfo0xa4 field_0x1368;
     GameInfo0xa4 field_0x262c;
-    BYTE field_0x38f8[22];
+    BYTE padding[6];
+    int field_0x38f8[22];
     char field_0x3950[21];
     char field_0x3965[23];
     int field_0x397c;
@@ -91,6 +92,7 @@ public:
     static void FUN_00510410(void);
     static void FUN_00510570(void);
     static void FUN_00406010(GameInfo0xa4 *param1);
+    static void FUN_00406560(void);
 
     // GLOBAL: CMR2 0x0052afa0
     static GameInfo m_gameInfo;

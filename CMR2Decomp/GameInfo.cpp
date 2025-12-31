@@ -144,7 +144,7 @@ void CGameInfo::FUN_00510410(void)
     FUN_00406010(&m_gameInfo.field_0x1368);
     FUN_00406010(&m_gameInfo.field_0x262c);
 
-    m_gameInfo.field2_0x14 = m_gameInfo.field2_0x14 & 0x7fffffffl;
+    m_gameInfo.field2_0x14 = m_gameInfo.field2_0x14 & 0x7fffffff;
 }
 
 // FUNCTION: CMR2 0x00510570
@@ -159,263 +159,316 @@ void CGameInfo::FUN_00510570(void)
 // FUNCTION: CMR2 0x00406010
 void CGameInfo::FUN_00406010(GameInfo0xa4 *param1)
 {
-  char cVar1;
-  int *puVar2;
-  int iVar3;
-  int uVar4;
-  int uVar5;
-  int *puVar6;
-  GameInfo0xa4 *pGVar7;
-  GameInfo0xa4 *puVar7;
-  int *puVar8;
-  int loop2;
-  int iVar9;
-  int loop1;
-  int someLoopLimit;
-  short (*pasVar10) [10];
-  short *psVar11;
-  int *puVar12;
-  GameInfo0xa4SubStruct12 *pGVar13;
-  GameInfo0xa4SubStruct8 *pGVar14;
-  short (*local_10) [10];
-  unsigned int *local_c;
-  int local_8;
-  int local_4;
-  GameInfo0xa4 *pGameInfo0xa4;
-  int bitMask;
-  int *bitMask2;
-  char *cmrString;
-  char *cmrString2;
-  
-  pGameInfo0xa4 = param1;
-  bitMask = (int)&param1->firstLoop[0].flags;
-  loop1 = 3;
-  do {
-    loop2 = 5;
-    bitMask2 = (int *)bitMask;
-    do {
-      uVar4 = 0xffffffff;
-      cmrString = CGameInfo::m_stringCMR;
-      do {
-        cmrString2 = cmrString;
-        if (uVar4 == 0) break;
-        uVar4 = uVar4 - 1;
-        cmrString2 = cmrString + 1;
-        cVar1 = *cmrString;
-        cmrString = cmrString2;
-      } while (cVar1 != '\0');
-      uVar4 = ~uVar4;
-      puVar6 = (int *)(cmrString2 + -uVar4);
-      puVar12 = bitMask2 + -1;
-      for (uVar5 = uVar4 >> 2; uVar5 != 0; uVar5 = uVar5 - 1) {
-        *puVar12 = *puVar6;
-        puVar6 = puVar6 + 1;
-        puVar12 = puVar12 + 1;
-      }
-      for (uVar4 = uVar4 & 3; uVar4 != 0; uVar4 = uVar4 - 1) {
-        *(char *)puVar12 = (char)*puVar6;
-        puVar6 = (int *)((int)puVar6 + 1);
-        puVar12 = (int *)((int)puVar12 + 1);
-      }
-      *bitMask2 = *bitMask2 & 0xffffc000 | 0x3c000;
-      bitMask = (unsigned int)(bitMask2 + 3);
-      loop2 = loop2 + -1;
-      *(unsigned char *)(bitMask2 + 1) = 0;
-      *(unsigned char *)((int)bitMask2 + 6) = 0;
-      bitMask2 = (int *)bitMask;
-    } while (loop2 != 0);
-    loop1 = loop1 + -1;
-  } while (loop1 != 0);
-  someLoopLimit = 0xcb;
-  local_10 = param1->rallyStageRecordSplits + 10;
-  puVar2 = (int*) & param1->secondLoop[0].flags;
-  local_c = &param1->rallyStageRecordTimes[10].value;
-  do {
-    local_8 = 3;
-    do {
-      iVar9 = 5;
-      puVar8 = puVar2;
-      do {
-        uVar4 = 0xffffffff;
-        cmrString = CGameInfo::m_stringCMR;
-        do {
-          cmrString2 = cmrString;
-          if (uVar4 == 0) break;
-          uVar4 = uVar4 - 1;
-          cmrString2 = cmrString + 1;
-          cVar1 = *cmrString;
-          cmrString = cmrString2;
-        } while (cVar1 != '\0');
-        uVar4 = ~uVar4;
-        puVar2 = puVar8 + 3;
-        puVar6 = (int *)(cmrString2 + -uVar4);
-        pGVar13 = (GameInfo0xa4SubStruct12 *)(puVar8 + -1);
-        for (uVar5 = uVar4 >> 2; uVar5 != 0; uVar5 = uVar5 - 1) {
-          *(unsigned int *)pGVar13->ident = *puVar6;
-          puVar6 = puVar6 + 1;
-          pGVar13 = (GameInfo0xa4SubStruct12 *)&pGVar13->flags;
-        }
-        for (uVar4 = uVar4 & 3; uVar4 != 0; uVar4 = uVar4 - 1) {
-          pGVar13->ident[0] = (char)*puVar6;
-          puVar6 = (int *)((int)puVar6 + 1);
-          pGVar13 = (GameInfo0xa4SubStruct12 *)(pGVar13->ident + 1);
-        }
-        *puVar8 = *puVar8 & 0xffffff80;
-        puVar8[1] = 360000;
-        iVar9 = iVar9 + -1;
-        *puVar8 = *puVar8 & 0xffff87ff | 0x780;
-        puVar8 = puVar2;
-      } while (iVar9 != 0);
-      local_8 = local_8 + -1;
-    } while (local_8 != 0);
-    iVar9 = 0;
-    do {
-      uVar4 = 0xffffffff;
-      cmrString = CGameInfo::m_stringCMR;
-      do {
-        cmrString2 = cmrString;
-        if (uVar4 == 0) break;
-        uVar4 = uVar4 - 1;
-        cmrString2 = cmrString + 1;
-        cVar1 = *cmrString;
-        cmrString = cmrString2;
-      } while (cVar1 != '\0');
-      uVar4 = ~uVar4;
-      cmrString = cmrString2 + -uVar4;
-      puVar8 = (int *)(param1->firstLoop[0].ident + (iVar9 + someLoopLimit) * 8 + -4);
-      for (uVar5 = uVar4 >> 2; uVar5 != 0; uVar5 = uVar5 - 1) {
-        *puVar8 = *(char *)cmrString;
-        cmrString = cmrString + 4;
-        puVar8 = puVar8 + 1;
-      }
-      for (uVar4 = uVar4 & 3; uVar4 != 0; uVar4 = uVar4 - 1) {
-        *(char *)puVar8 = *cmrString;
-        cmrString = cmrString + 1;
-        puVar8 = (int *)((int)puVar8 + 1);
-      }
-      uVar4 = *(unsigned int *)(param1->firstLoop[0].ident + (iVar9 + someLoopLimit) * 8);
-      puVar6 = (int *)(param1->firstLoop[0].ident + (iVar9 + someLoopLimit) * 8);
-      *puVar6 = uVar4 & 0xffffff80;
-      if (iVar9 == 10) {
-        uVar4 = uVar4 & 0xffaee000 | 0x2ee000;
-        puVar6 = (int*)local_c;
-      }
-      else {
-        uVar4 = uVar4 & 0xffddc000 | 0x5dc000;
-      }
-      iVar9 = iVar9 + 1;
-      *puVar6 = uVar4;
-    } while (iVar9 < 0xb);
-    iVar9 = 0;
-    do {
-      if (iVar9 == 10) {
-        iVar3 = 0;
-        pasVar10 = local_10;
-        do {
-          (*pasVar10)[0] = (short)iVar3 * 12000;
-          iVar3 = iVar3 + 1;
-          pasVar10 = (short (*) [10])(*pasVar10 + 1);
-        } while (iVar3 < 10);
-      }
-      else {
-        iVar3 = 0;
-        psVar11 = (short *)((int)param1 + (iVar9 + someLoopLimit) * 0x14 + -0x6c8);
-        do {
-          *psVar11 = (short)iVar3 * 6000;
-          iVar3 = iVar3 + 1;
-          psVar11 = psVar11 + 1;
-        } while (iVar3 < 10);
-      }
-      iVar9 = iVar9 + 1;
-    } while (iVar9 < 0xb);
-    someLoopLimit = someLoopLimit + 0xb;
-    local_10 = local_10 + 0xb;
-    local_c = local_c + 0x16;
-  } while (someLoopLimit < 0x123);
-  local_4 = 3;
-  puVar2 = (int*) & param1->thirdLoop[0].flags;
-  do {
+    char cVar1;
+    int *puVar2;
+    int iVar3;
+    int uVar4;
+    int uVar5;
+    int *puVar6;
+    GameInfo0xa4 *pGVar7;
+    GameInfo0xa4 *puVar7;
+    int *puVar8;
+    int loop2;
+    int iVar9;
+    int loop1;
+    int someLoopLimit;
+    short (*pasVar10)[10];
+    short *psVar11;
+    int *puVar12;
+    GameInfo0xa4SubStruct12 *pGVar13;
+    GameInfo0xa4SubStruct8 *pGVar14;
+    short (*local_10)[10];
+    unsigned int *local_c;
+    int local_8;
+    int local_4;
+    GameInfo0xa4 *pGameInfo0xa4;
+    int bitMask;
+    int *bitMask2;
+    char *cmrString;
+    char *cmrString2;
+
+    pGameInfo0xa4 = param1;
+    bitMask = (int)&param1->firstLoop[0].flags;
+    loop1 = 3;
+    do
+    {
+        loop2 = 5;
+        bitMask2 = (int *)bitMask;
+        do
+        {
+            uVar4 = 0xffffffff;
+            cmrString = CGameInfo::m_stringCMR;
+            do
+            {
+                cmrString2 = cmrString;
+                if (uVar4 == 0)
+                    break;
+                uVar4 = uVar4 - 1;
+                cmrString2 = cmrString + 1;
+                cVar1 = *cmrString;
+                cmrString = cmrString2;
+            } while (cVar1 != '\0');
+            uVar4 = ~uVar4;
+            puVar6 = (int *)(cmrString2 + -uVar4);
+            puVar12 = bitMask2 + -1;
+            for (uVar5 = uVar4 >> 2; uVar5 != 0; uVar5 = uVar5 - 1)
+            {
+                *puVar12 = *puVar6;
+                puVar6 = puVar6 + 1;
+                puVar12 = puVar12 + 1;
+            }
+            for (uVar4 = uVar4 & 3; uVar4 != 0; uVar4 = uVar4 - 1)
+            {
+                *(char *)puVar12 = (char)*puVar6;
+                puVar6 = (int *)((int)puVar6 + 1);
+                puVar12 = (int *)((int)puVar12 + 1);
+            }
+            *bitMask2 = *bitMask2 & 0xffffc000 | 0x3c000;
+            bitMask = (unsigned int)(bitMask2 + 3);
+            loop2 = loop2 + -1;
+            *(unsigned char *)(bitMask2 + 1) = 0;
+            *(unsigned char *)((int)bitMask2 + 6) = 0;
+            bitMask2 = (int *)bitMask;
+        } while (loop2 != 0);
+        loop1 = loop1 + -1;
+    } while (loop1 != 0);
+    someLoopLimit = 0xcb;
+    local_10 = param1->rallyStageRecordSplits + 10;
+    puVar2 = (int *)&param1->secondLoop[0].flags;
+    local_c = &param1->rallyStageRecordTimes[10].value;
+    do
+    {
+        local_8 = 3;
+        do
+        {
+            iVar9 = 5;
+            puVar8 = puVar2;
+            do
+            {
+                uVar4 = 0xffffffff;
+                cmrString = CGameInfo::m_stringCMR;
+                do
+                {
+                    cmrString2 = cmrString;
+                    if (uVar4 == 0)
+                        break;
+                    uVar4 = uVar4 - 1;
+                    cmrString2 = cmrString + 1;
+                    cVar1 = *cmrString;
+                    cmrString = cmrString2;
+                } while (cVar1 != '\0');
+                uVar4 = ~uVar4;
+                puVar2 = puVar8 + 3;
+                puVar6 = (int *)(cmrString2 + -uVar4);
+                pGVar13 = (GameInfo0xa4SubStruct12 *)(puVar8 + -1);
+                for (uVar5 = uVar4 >> 2; uVar5 != 0; uVar5 = uVar5 - 1)
+                {
+                    *(unsigned int *)pGVar13->ident = *puVar6;
+                    puVar6 = puVar6 + 1;
+                    pGVar13 = (GameInfo0xa4SubStruct12 *)&pGVar13->flags;
+                }
+                for (uVar4 = uVar4 & 3; uVar4 != 0; uVar4 = uVar4 - 1)
+                {
+                    pGVar13->ident[0] = (char)*puVar6;
+                    puVar6 = (int *)((int)puVar6 + 1);
+                    pGVar13 = (GameInfo0xa4SubStruct12 *)(pGVar13->ident + 1);
+                }
+                *puVar8 = *puVar8 & 0xffffff80;
+                puVar8[1] = 360000;
+                iVar9 = iVar9 + -1;
+                *puVar8 = *puVar8 & 0xffff87ff | 0x780;
+                puVar8 = puVar2;
+            } while (iVar9 != 0);
+            local_8 = local_8 + -1;
+        } while (local_8 != 0);
+        iVar9 = 0;
+        do
+        {
+            uVar4 = 0xffffffff;
+            cmrString = CGameInfo::m_stringCMR;
+            do
+            {
+                cmrString2 = cmrString;
+                if (uVar4 == 0)
+                    break;
+                uVar4 = uVar4 - 1;
+                cmrString2 = cmrString + 1;
+                cVar1 = *cmrString;
+                cmrString = cmrString2;
+            } while (cVar1 != '\0');
+            uVar4 = ~uVar4;
+            cmrString = cmrString2 + -uVar4;
+            puVar8 = (int *)(param1->firstLoop[0].ident + (iVar9 + someLoopLimit) * 8 + -4);
+            for (uVar5 = uVar4 >> 2; uVar5 != 0; uVar5 = uVar5 - 1)
+            {
+                *puVar8 = *(char *)cmrString;
+                cmrString = cmrString + 4;
+                puVar8 = puVar8 + 1;
+            }
+            for (uVar4 = uVar4 & 3; uVar4 != 0; uVar4 = uVar4 - 1)
+            {
+                *(char *)puVar8 = *cmrString;
+                cmrString = cmrString + 1;
+                puVar8 = (int *)((int)puVar8 + 1);
+            }
+            uVar4 = *(unsigned int *)(param1->firstLoop[0].ident + (iVar9 + someLoopLimit) * 8);
+            puVar6 = (int *)(param1->firstLoop[0].ident + (iVar9 + someLoopLimit) * 8);
+            *puVar6 = uVar4 & 0xffffff80;
+            if (iVar9 == 10)
+            {
+                uVar4 = uVar4 & 0xffaee000 | 0x2ee000;
+                puVar6 = (int *)local_c;
+            }
+            else
+            {
+                uVar4 = uVar4 & 0xffddc000 | 0x5dc000;
+            }
+            iVar9 = iVar9 + 1;
+            *puVar6 = uVar4;
+        } while (iVar9 < 0xb);
+        iVar9 = 0;
+        do
+        {
+            if (iVar9 == 10)
+            {
+                iVar3 = 0;
+                pasVar10 = local_10;
+                do
+                {
+                    (*pasVar10)[0] = (short)iVar3 * 12000;
+                    iVar3 = iVar3 + 1;
+                    pasVar10 = (short (*)[10])(*pasVar10 + 1);
+                } while (iVar3 < 10);
+            }
+            else
+            {
+                iVar3 = 0;
+                psVar11 = (short *)((int)param1 + (iVar9 + someLoopLimit) * 0x14 + -0x6c8);
+                do
+                {
+                    *psVar11 = (short)iVar3 * 6000;
+                    iVar3 = iVar3 + 1;
+                    psVar11 = psVar11 + 1;
+                } while (iVar3 < 10);
+            }
+            iVar9 = iVar9 + 1;
+        } while (iVar9 < 0xb);
+        someLoopLimit = someLoopLimit + 0xb;
+        local_10 = local_10 + 0xb;
+        local_c = local_c + 0x16;
+    } while (someLoopLimit < 0x123);
+    local_4 = 3;
+    puVar2 = (int *)&param1->thirdLoop[0].flags;
+    do
+    {
+        param1 = (GameInfo0xa4 *)0x3;
+        do
+        {
+            iVar9 = 5;
+            puVar8 = puVar2;
+            do
+            {
+                uVar4 = 0xffffffff;
+                cmrString = CGameInfo::m_stringCMR;
+                do
+                {
+                    cmrString2 = cmrString;
+                    if (uVar4 == 0)
+                        break;
+                    uVar4 = uVar4 - 1;
+                    cmrString2 = cmrString + 1;
+                    cVar1 = *cmrString;
+                    cmrString = cmrString2;
+                } while (cVar1 != '\0');
+                uVar4 = ~uVar4;
+                puVar2 = puVar8 + 3;
+                puVar6 = (int *)(cmrString2 + -uVar4);
+                pGVar13 = (GameInfo0xa4SubStruct12 *)(puVar8 + -1);
+                for (uVar5 = uVar4 >> 2; uVar5 != 0; uVar5 = uVar5 - 1)
+                {
+                    *(unsigned int *)pGVar13->ident = *puVar6;
+                    puVar6 = puVar6 + 1;
+                    pGVar13 = (GameInfo0xa4SubStruct12 *)&pGVar13->flags;
+                }
+                for (uVar4 = uVar4 & 3; uVar4 != 0; uVar4 = uVar4 - 1)
+                {
+                    pGVar13->ident[0] = (char)*puVar6;
+                    puVar6 = (int *)((int)puVar6 + 1);
+                    pGVar13 = (GameInfo0xa4SubStruct12 *)(pGVar13->ident + 1);
+                }
+                iVar9 = iVar9 + -1;
+                *puVar8 = *puVar8 & 0xffff0280 | 0x280;
+                puVar8 = puVar2;
+            } while (iVar9 != 0);
+            param1 = (GameInfo0xa4 *)((int)param1[-1].arcadeRecordSplits[8] + 0xb);
+        } while (param1 != NULL);
+        local_4 = local_4 + -1;
+    } while (local_4 != 0);
+    puVar6 = (int *)&pGameInfo0xa4->arcadeRecordTimes[0].value;
+    puVar7 = (GameInfo0xa4 *)pGameInfo0xa4->arcadeRecordSplits;
     param1 = (GameInfo0xa4 *)0x3;
-    do {
-      iVar9 = 5;
-      puVar8 = puVar2;
-      do {
-        uVar4 = 0xffffffff;
-        cmrString = CGameInfo::m_stringCMR;
-        do {
-          cmrString2 = cmrString;
-          if (uVar4 == 0) break;
-          uVar4 = uVar4 - 1;
-          cmrString2 = cmrString + 1;
-          cVar1 = *cmrString;
-          cmrString = cmrString2;
-        } while (cVar1 != '\0');
-        uVar4 = ~uVar4;
-        puVar2 = puVar8 + 3;
-        puVar6 = (int *)(cmrString2 + -uVar4);
-        pGVar13 = (GameInfo0xa4SubStruct12 *)(puVar8 + -1);
-        for (uVar5 = uVar4 >> 2; uVar5 != 0; uVar5 = uVar5 - 1) {
-          *(unsigned int *)pGVar13->ident = *puVar6;
-          puVar6 = puVar6 + 1;
-          pGVar13 = (GameInfo0xa4SubStruct12 *)&pGVar13->flags;
+    do
+    {
+        iVar9 = 3;
+        do
+        {
+            uVar4 = 0xffffffff;
+            cmrString = CGameInfo::m_stringCMR;
+            do
+            {
+                cmrString2 = cmrString;
+                if (uVar4 == 0)
+                    break;
+                uVar4 = uVar4 - 1;
+                cmrString2 = cmrString + 1;
+                cVar1 = *cmrString;
+                cmrString = cmrString2;
+            } while (cVar1 != '\0');
+            uVar4 = ~uVar4;
+            puVar12 = (int *)(cmrString2 + -uVar4);
+            pGVar14 = (GameInfo0xa4SubStruct8 *)(puVar6 + -1);
+            for (uVar5 = uVar4 >> 2; uVar5 != 0; uVar5 = uVar5 - 1)
+            {
+                *(unsigned int *)pGVar14->ident = *puVar12;
+                puVar12 = puVar12 + 1;
+                pGVar14 = (GameInfo0xa4SubStruct8 *)&pGVar14->value;
+            }
+            for (uVar4 = uVar4 & 3; uVar4 != 0; uVar4 = uVar4 - 1)
+            {
+                pGVar14->ident[0] = (char)*puVar12;
+                puVar12 = (int *)((int)puVar12 + 1);
+                pGVar14 = (GameInfo0xa4SubStruct8 *)(pGVar14->ident + 1);
+            }
+            iVar3 = 0;
+            *puVar6 = *puVar6 & 0xffaee000 | 0x2ee000;
+            pGVar7 = puVar7;
+            do
+            {
+                puVar7 = (GameInfo0xa4 *)(pGVar7->firstLoop[0].ident + 2);
+                *(short *)pGVar7->firstLoop[0].ident = (short)iVar3 * 6000;
+                iVar3 = iVar3 + 1;
+                pGVar7 = puVar7;
+            } while (iVar3 < 6);
+            puVar6 = puVar6 + 2;
+            iVar9 = iVar9 + -1;
+        } while (iVar9 != 0);
+        param1 = (GameInfo0xa4 *)((int)param1[-1].arcadeRecordSplits[8] + 0xb);
+        if (param1 == NULL)
+        {
+            return;
         }
-        for (uVar4 = uVar4 & 3; uVar4 != 0; uVar4 = uVar4 - 1) {
-          pGVar13->ident[0] = (char)*puVar6;
-          puVar6 = (int *)((int)puVar6 + 1);
-          pGVar13 = (GameInfo0xa4SubStruct12 *)(pGVar13->ident + 1);
-        }
-        iVar9 = iVar9 + -1;
-        *puVar8 = *puVar8 & 0xffff0280 | 0x280;
-        puVar8 = puVar2;
-      } while (iVar9 != 0);
-      param1 = (GameInfo0xa4 *)((int)param1[-1].arcadeRecordSplits[8] + 0xb);
-    } while (param1 != NULL);
-    local_4 = local_4 + -1;
-  } while (local_4 != 0);
-  puVar6 = (int*) & pGameInfo0xa4->arcadeRecordTimes[0].value;
-  puVar7 = (GameInfo0xa4 *)pGameInfo0xa4->arcadeRecordSplits;
-  param1 = (GameInfo0xa4 *)0x3;
-  do {
-    iVar9 = 3;
-    do {
-      uVar4 = 0xffffffff;
-      cmrString = CGameInfo::m_stringCMR;
-      do {
-        cmrString2 = cmrString;
-        if (uVar4 == 0) break;
-        uVar4 = uVar4 - 1;
-        cmrString2 = cmrString + 1;
-        cVar1 = *cmrString;
-        cmrString = cmrString2;
-      } while (cVar1 != '\0');
-      uVar4 = ~uVar4;
-      puVar12 = (int *)(cmrString2 + -uVar4);
-      pGVar14 = (GameInfo0xa4SubStruct8 *)(puVar6 + -1);
-      for (uVar5 = uVar4 >> 2; uVar5 != 0; uVar5 = uVar5 - 1) {
-        *(unsigned int *)pGVar14->ident = *puVar12;
-        puVar12 = puVar12 + 1;
-        pGVar14 = (GameInfo0xa4SubStruct8 *)&pGVar14->value;
-      }
-      for (uVar4 = uVar4 & 3; uVar4 != 0; uVar4 = uVar4 - 1) {
-        pGVar14->ident[0] = (char)*puVar12;
-        puVar12 = (int *)((int)puVar12 + 1);
-        pGVar14 = (GameInfo0xa4SubStruct8 *)(pGVar14->ident + 1);
-      }
-      iVar3 = 0;
-      *puVar6 = *puVar6 & 0xffaee000 | 0x2ee000;
-      pGVar7 = puVar7;
-      do {
-        puVar7 = (GameInfo0xa4 *)(pGVar7->firstLoop[0].ident + 2);
-        *(short *)pGVar7->firstLoop[0].ident = (short)iVar3 * 6000;
-        iVar3 = iVar3 + 1;
-        pGVar7 = puVar7;
-      } while (iVar3 < 6);
-      puVar6 = puVar6 + 2;
-      iVar9 = iVar9 + -1;
-    } while (iVar9 != 0);
-    param1 = (GameInfo0xa4 *)((int)param1[-1].arcadeRecordSplits[8] + 0xb);
-    if (param1 == NULL) {
-      return;
+    } while (true);
+}
+
+// FUNCTION: CMR2 0x00406560
+void CGameInfo::FUN_00406560(void)
+{
+    int iVar1 = 0x16;
+    int *puVar2 = m_gameInfo.field_0x38f8;
+
+    for (iVar1 = 0x16; iVar1 != 0; iVar1--)
+    {
+        *puVar2 = 0x3030303;
+        puVar2++;
     }
-  } while( true );
 }
