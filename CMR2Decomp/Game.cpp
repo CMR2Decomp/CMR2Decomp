@@ -35,7 +35,7 @@ FuncTableGroup CGame::m_initializeGameGroupedFuncTable[10] = {
 // FUNCTION: CMR2 0x004a9a40
 void CGame::SetShouldExit(void)
 {
-    m_shouldExit = TRUE;
+    // m_shouldExit = TRUE;
 }
 
 // FUNCTION: CMR2 0x004d0780
@@ -91,32 +91,32 @@ void CGame::InitializeGame(Unk0049c2c0 *p1, BYTE p2)
     skuValue = CRegKey::GetValueFromKey(CRegKey::m_regKeySkuType);
     skuRegion = CRegKey::m_skuEurope;
     if (strcmp(skuValue, skuRegion) == 0)
-        CGameInfo::SetGameRegion(0);
+       CGameInfo::SetGameRegion(0);
     else
     {
-        // america sku check
-        skuValue = CRegKey::GetValueFromKey(CRegKey::m_regKeySkuType);
-        skuRegion = CRegKey::m_skuAmerica;
-        if (strcmp(skuValue, skuRegion) == 0)
-            CGameInfo::SetGameRegion(1);
-        else
-        {
-            // japan sku check
-            skuValue = CRegKey::GetValueFromKey(CRegKey::m_regKeySkuType);
-            skuRegion = CRegKey::m_skuJapan;
-            if (strcmp(skuValue, skuRegion) == 0)
-                CGameInfo::SetGameRegion(2);
-            else
-            {
-                // poland sku check
-                skuValue = CRegKey::GetValueFromKey(CRegKey::m_regKeySkuType);
-                skuRegion = CRegKey::m_skuPoland;
-                if (strcmp(skuValue, skuRegion) == 0)
-                    CGameInfo::SetGameRegion(3);
-                else // otherwise die
-                    CGame::SetShouldExit();
-            }
-        }
+       // america sku check
+       skuValue = CRegKey::GetValueFromKey(CRegKey::m_regKeySkuType);
+       skuRegion = CRegKey::m_skuAmerica;
+       if (strcmp(skuValue, skuRegion) == 0)
+           CGameInfo::SetGameRegion(1);
+       else
+       {
+           // japan sku check
+           skuValue = CRegKey::GetValueFromKey(CRegKey::m_regKeySkuType);
+           skuRegion = CRegKey::m_skuJapan;
+           if (strcmp(skuValue, skuRegion) == 0)
+               CGameInfo::SetGameRegion(2);
+           else
+           {
+               // poland sku check
+               skuValue = CRegKey::GetValueFromKey(CRegKey::m_regKeySkuType);
+               skuRegion = CRegKey::m_skuPoland;
+               if (strcmp(skuValue, skuRegion) == 0)
+                   CGameInfo::SetGameRegion(3);
+               else // otherwise die
+                   CGame::SetShouldExit();
+           }
+       }
     }
 
     CGameInfo::FUN_004f4b40();
