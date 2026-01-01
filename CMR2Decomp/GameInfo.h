@@ -53,16 +53,19 @@ struct GameInfo
     unsigned int field_0x8c;
     unsigned int field_0x90;
     short field_0x94;
-    unsigned int field_0x98;
+    short field_0x98;
     unsigned int field_0x9c;
+    unsigned int field_0xa0;
     // <<< end of 26 bytes
     GameInfo0xa4 field_0xa4;
     GameInfo0xa4 field_0x1368;
     GameInfo0xa4 field_0x262c;
-    BYTE padding[6];
-    int field_0x38f8[22];
+    BYTE padding[4];
+    unsigned int field_0x38f4;
+    char field_0x38f8[88];
+    int field_0x394c;
     char field_0x3950[21];
-    char field_0x3965[23];
+    char field_0x3965[21];
     int field_0x397c;
     BYTE field_0x3980;
     BYTE pad[3];
@@ -93,6 +96,7 @@ public:
     static void FUN_00510570(void);
     static void FUN_00406010(GameInfo0xa4 *param1);
     static void FUN_00406560(void);
+    static void FUN_00406580(void);
 
     // GLOBAL: CMR2 0x0052afa0
     static GameInfo m_gameInfo;

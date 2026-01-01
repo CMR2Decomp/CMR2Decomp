@@ -463,12 +463,72 @@ void CGameInfo::FUN_00406010(GameInfo0xa4 *param1)
 // FUNCTION: CMR2 0x00406560
 void CGameInfo::FUN_00406560(void)
 {
-    int iVar1 = 0x16;
-    int *puVar2 = m_gameInfo.field_0x38f8;
+    memset(m_gameInfo.field_0x38f8, 0x03, sizeof(m_gameInfo.field_0x38f8));
+}
 
-    for (iVar1 = 0x16; iVar1 != 0; iVar1--)
-    {
-        *puVar2 = 0x3030303;
-        puVar2++;
-    }
+// FUNCTION: CMR2 0x00406580
+void CGameInfo::FUN_00406580(void) {
+    char bVar1;
+    int uVar5 = 0;
+    int uVar2 = 0;
+    char *piVar4 = m_gameInfo.field_0x38f8;
+    char *end = m_gameInfo.field_0x38f8 + sizeof(m_gameInfo.field_0x38f8);
+    int iVar3 = 0;
+    bool bVar6 = false;
+
+    do {
+        if ((piVar4 < (m_gameInfo.field_0x38f8 + 44)) && (*piVar4 & 2) != 0) {
+            *piVar4 = *piVar4 & 0xfd;
+        }
+
+        if (uVar5 < (m_gameInfo.field_0x9c >> 8 & 0xf)) {
+            iVar3 = 0;
+            do {
+                if ((piVar4[iVar3] & 2) != 0) {
+                    piVar4[iVar3] = piVar4[iVar3] & 0xfd;
+                }
+                iVar3 ++;
+            } while (iVar3 < 4);
+
+            if (uVar5 < (m_gameInfo.field_0x9c >> 0xc & 0xf)) {
+                iVar3 = 4;
+                do {
+                    if ((piVar4[iVar3] & 2) != 0) {
+                        piVar4[iVar3] = piVar4[iVar3] & 0xfd;
+                    }
+                    iVar3 ++;
+                } while (iVar3 < 8);
+            
+                if ((uVar5 < (m_gameInfo.field_0x9c >> 0x10 & 0xf)) && (m_gameInfo.field_0x9c & 1) != 0) {
+                    iVar3 = 8;
+                    do {
+                        if ((piVar4[iVar3] & 2) != 0) {
+                            piVar4[iVar3] = piVar4[iVar3] & 0xfd;
+                        }
+                        iVar3 ++;
+                    } while (iVar3 < 10);
+                }
+            } 
+        }
+
+        uVar2 = uVar5;
+        uVar2 = uVar2 & 0x80000001;
+        if (uVar2 < 0) {
+            if (((uVar2 - 1 | 0xfffffffe) + 1)) {            
+                uVar2 = 1 << (((uVar5 + 1) / 2 - 1) & 0x1f);
+
+                if (((((uVar2 & m_gameInfo.field_0xa0 & 0x1f) != 0) ||
+                    (uVar2 & m_gameInfo.field_0xa0 >> 5 & 0x1f) != 0) ||
+                    ((uVar2 & m_gameInfo.field_0xa0 >> 10 & 0x1f) != 0)) && ((piVar4[10] & 2) != 0)
+                    ) {
+                    piVar4[10] = piVar4[10] & 0xfd;
+                }
+            } else {
+                piVar4[10] = 4;
+            }
+        }
+        
+        piVar4 = piVar4 + 0xb;
+        uVar5++;
+    } while (piVar4 < end);
 }
