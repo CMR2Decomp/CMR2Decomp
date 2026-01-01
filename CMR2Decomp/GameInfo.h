@@ -113,6 +113,12 @@ public:
 
     // GLOBAL: CMR2 0x00516184
     static char m_stringCMR[4];
+
+    // GLOBAL: CMR2 0x0059f8cc
+    static unsigned int m_unk0x0059f8cc;
+
+    // GLOBAL: CMR2 0x0059f8cd
+    static BYTE m_unk0x0059f8cd;
 };
 
 #endif

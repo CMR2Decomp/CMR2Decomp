@@ -20,6 +20,8 @@ char *CGameInfo::m_gameRegionStrings[4] = {
     gameRegionEurope, gameRegionUSA, gameRegionJapan, gameRegionPoland};
 
 int CGameInfo::m_unk0x0081a754;
+unsigned int CGameInfo::m_unk0x0059f8cc;
+BYTE CGameInfo::m_unk0x0059f8cd;
 
 char CGameInfo::m_stringCMR[4] = "cmr";
 
@@ -542,5 +544,13 @@ void CGameInfo::FUN_00406580(void) {
 // TODO: is this actually gameinfo related?
 // FUNCTION: CMR2 0x0049eaf0
 void CGameInfo::FUN_0049eaf0(void) {
-    int iVar1 = CInput::CreateDInput();
+    BOOL bDidCreateInput = CInput::CreateDInput();
+    if (bDidCreateInput) {
+        m_unk0x0059f8cd = 2;
+        m_unk0x0059f8cc = 0;
+
+        // weird loop
+
+        CInput::FUN_0049f0e0();
+    }
 }
