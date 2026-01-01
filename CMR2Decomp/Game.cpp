@@ -133,6 +133,8 @@ void CGame::InitializeGame(Unk0049c2c0 *p1, BYTE p2)
         if (CInstallInfo::FUN_0040e8d0() != 0)
         {
             CGameInfo::FUN_00510410();
+            CGameInfo::FUN_00406560();
+            CGameInfo::FUN_00406580();
             CGameInfo::FUN_00405de0(0);
         }
     }

@@ -513,19 +513,24 @@ void CGameInfo::FUN_00406580(void) {
 
         uVar2 = uVar5;
         uVar2 = uVar2 & 0x80000001;
-        if (uVar2 < 0) {
-            if (((uVar2 - 1 | 0xfffffffe) + 1)) {            
-                uVar2 = 1 << (((uVar5 + 1) / 2 - 1) & 0x1f);
 
-                if (((((uVar2 & m_gameInfo.field_0xa0 & 0x1f) != 0) ||
-                    (uVar2 & m_gameInfo.field_0xa0 >> 5 & 0x1f) != 0) ||
-                    ((uVar2 & m_gameInfo.field_0xa0 >> 10 & 0x1f) != 0)) && ((piVar4[10] & 2) != 0)
-                    ) {
-                    piVar4[10] = piVar4[10] & 0xfd;
-                }
-            } else {
-                piVar4[10] = 4;
-            }
+        if (uVar2 < 0) {
+            uVar2 = uVar2 - 1 | 0xfffffffe;
+        }
+        
+        int temp = uVar2;
+        temp = uVar2++; // idk but its in the asm
+        if (temp != 0) {
+            uVar2 = 1 << (((uVar5 + 1) / 2 - 1) & 0x1f);
+
+            if (((((uVar2 & m_gameInfo.field_0xa0 & 0x1f) != 0) ||
+                (uVar2 & m_gameInfo.field_0xa0 >> 5 & 0x1f) != 0) ||
+                ((uVar2 & m_gameInfo.field_0xa0 >> 10 & 0x1f) != 0)) && ((piVar4[10] & 2) != 0)
+                ) {
+                piVar4[10] = piVar4[10] & 0xfd;
+            }            
+        } else {
+            piVar4[10] = 4;
         }
         
         piVar4 = piVar4 + 0xb;
