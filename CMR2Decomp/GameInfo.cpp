@@ -518,9 +518,8 @@ void CGameInfo::FUN_00406580(void) {
             uVar2 = uVar2 - 1 | 0xfffffffe;
         }
         
-        int temp = uVar2;
-        temp = uVar2++; // idk but its in the asm
-        if (temp != 0) {
+        uVar2++; // idk but its in the asm
+        if (uVar2) {
             uVar2 = 1 << (((uVar5 + 1) / 2 - 1) & 0x1f);
 
             if (((((uVar2 & m_gameInfo.field_0xa0 & 0x1f) != 0) ||
