@@ -1,4 +1,6 @@
 #include "GameInfo.h"
+#include "Graphics.h"
+#include "Input.h"
 #include "main.h"
 
 #include <stdio.h>
@@ -535,4 +537,10 @@ void CGameInfo::FUN_00406580(void) {
         piVar4 = piVar4 + 0xb;
         uVar5++;
     } while (piVar4 < end);
+}
+
+// TODO: is this actually gameinfo related?
+// FUNCTION: CMR2 0x0049eaf0
+void CGameInfo::FUN_0049eaf0(void) {
+    int iVar1 = CInput::CreateDInput();
 }

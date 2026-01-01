@@ -939,4 +939,8 @@ struct Graphics
 
 extern Graphics *g_pGraphics;
 
+class CGraphics {
+public:
+};
+
 #endif

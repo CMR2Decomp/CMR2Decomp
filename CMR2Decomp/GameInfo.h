@@ -97,6 +97,7 @@ public:
     static void FUN_00406010(GameInfo0xa4 *param1);
     static void FUN_00406560(void);
     static void FUN_00406580(void);
+    static void FUN_0049eaf0(void);
 
     // GLOBAL: CMR2 0x0052afa0
     static GameInfo m_gameInfo;

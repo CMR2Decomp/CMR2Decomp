@@ -2,6 +2,7 @@
 #include "Graphics.h"
 #include "Logger.h"
 #include "Game.h"
+#include "Input.h"
 
 HINSTANCE CMain::m_hInstance;
 HWND CMain::m_hWndList[1];
@@ -101,13 +102,6 @@ BOOL FUN_004a8270(void)
 	return 1;
 }
 
-// STUB: CMR2 0x0049c0a0
-int FUN_0049c0a0(void *param1, void *param2)
-{
-	// todo
-	return -1;
-}
-
 // FUNCTION: CMR2 0x004a8140
 BOOL CMain::CreateGameWindow(HINSTANCE hInstance, HWND *pHWND, LPCSTR sWindowName, WNDPROC wndProc)
 {
@@ -164,7 +158,7 @@ BOOL CMain::CreateGameWindow(HINSTANCE hInstance, HWND *pHWND, LPCSTR sWindowNam
 	UpdateWindow(hWnd);
 	SetFocus(hWnd);
 	*pHWND = hWnd;
-	FUN_0049c0a0(FUN_004a8270, NULL);
+	CInput::FUN_0049c0a0(FUN_004a8270, NULL);
 	return TRUE;
 }
 
