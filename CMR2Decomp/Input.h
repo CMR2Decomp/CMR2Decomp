@@ -58,6 +58,8 @@ public:
     static BOOL SetupKeyboard(void);
     static void SetupMouse(void);
     static void SetMouseCoopLevel(BOOL param1);
+    static BOOL GetAttachedJoysticks(void);
+    static BOOL SetupJoystick(LPCDIDEVICEINSTANCEA lpddi, LPVOID pvRef);
 };
 
 #endif

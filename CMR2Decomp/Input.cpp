@@ -229,3 +229,14 @@ void CInput::SetMouseCoopLevel(BOOL param1) {
     }
 }
 
+// FUNCTION: CMR2 0x0049f690
+BOOL CInput::GetAttachedJoysticks(void) {
+    HRESULT hr;
+    hr = m_lpDirectInput7->EnumDevices(DIDEVTYPE_JOYSTICK, SetupJoystick, m_lpDirectInput7, DIEDFL_ATTACHEDONLY);
+    return SUCCEEDED(hr);
+}
+
+// STUB: CMR2 0x0049f6d0
+BOOL CInput::SetupJoystick(LPCDIDEVICEINSTANCEA lpddi, LPVOID pvRef) {
+    return DIENUM_STOP;
+}
