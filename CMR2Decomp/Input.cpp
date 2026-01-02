@@ -1,5 +1,6 @@
 #include "Input.h"
 #include "GameInfo.h"
+#include "Graphics.h"
 #include "main.h"
 
 #include <stdio.h>
@@ -8,7 +9,7 @@
 const GUID CInput::m_dInputDevice7 = IID_IDirectInput7A;
 
 // GLOBAL: CMR2 0x0059f8c8
-IDirectInput7* CInput::m_lpDirectInput7;
+IDirectInput7A* CInput::m_lpDirectInput7;
 
 // GLOBAL: CMR2 0x00520874
 char CInput::m_strKeyboard[12] = "Keyboard";
@@ -22,11 +23,72 @@ PVOID CInput::m_keyboardDelay;
 // GLOBAL: CMR2 0x0059f8dc
 PVOID CInput::m_keyboardSpeed;
 
+// GLOBAL: CMR2 0x00511898
+REFGUID CInput::m_dinputRefGuidMouse = GUID_SysMouse;
+
+// GLOBAL: CMR2 0x005118a8
+REFGUID CInput::m_dinputRefGuidKeyboard = GUID_SysKeyboard;
+
+// GLOBAL: CMR2 0x00512e88
+LPDIRECTINPUTDEVICEA CInput::m_unk0x00512e88;
+
+// GLOBAL: CMR2 0x005117c8
+DIDATAFORMAT CInput::m_objectDataFormat;
+
+// GLOBAL: CMR2 0x0059f6a8
+LPDIRECTINPUTDEVICEA CInput::m_unk0x0059f6a8;
+
 // FUNCTION: CMR2 0x0049fd30
-BOOL CInput::CreateDInput(void) {
+BOOL CInput::DInputCreate(void) {
     DirectInputCreateEx(CMain::m_hInstance, 0x700, m_dInputDevice7, (LPVOID*)&CInput::m_lpDirectInput7, NULL);
     FUN_0049c0a0(FUN_0049fd60, NULL);
     return TRUE;
+}
+
+// FUNCTION: CMR2 0x0049fe30
+LPDIRECTINPUTDEVICEA CInput::DInputCreateDevice(REFGUID guid, LPDIRECTINPUTDEVICEA *previousDevice) {
+    LPDIRECTINPUTDEVICEA pDevice = NULL;
+    HRESULT h1, h2, h3, h4;
+    
+    h1 = m_lpDirectInput7->CreateDevice(guid, &pDevice, NULL);
+    if (SUCCEEDED(h1)) {
+        h2 = pDevice->SetDataFormat(&m_objectDataFormat);
+        
+        // release old device if it has one
+        if (previousDevice != NULL) {
+            // TODO: there seems to be an entire block missing here that sets the pointer to NULL?
+            (*previousDevice)->Release();
+        }
+      
+        if (SUCCEEDED(h2)) {
+            h3 = pDevice->Acquire();
+            if (FAILED(h3)) {
+                if (pDevice != NULL) pDevice->Release();
+                return NULL;
+            }
+            
+            if (IsEqualGUID(guid, m_dinputRefGuidKeyboard)) {
+                h4 = pDevice->SetCooperativeLevel(CMain::m_hWndList[CMain::m_hWndIx], 10);  // DISCL_BACKGROUND | DISCL_NONEXCLUSIVE
+            } else if (IsEqualGUID(guid, m_dinputRefGuidMouse)) {
+                if (g_pGraphics->isFullscreen) {
+                    h4 = pDevice->SetCooperativeLevel(CMain::m_hWndList[CMain::m_hWndIx], 5);  // DISCL_EXCLUSIVE | DISCL_FOREGROUND
+                } else {
+                    h4 = pDevice->SetCooperativeLevel(CMain::m_hWndList[CMain::m_hWndIx], 6);  // DISCL_NONEXCLUSIVE | DISCL_FOREGROUND
+                }
+            } else {
+                h4 = pDevice->SetCooperativeLevel(CMain::m_hWndList[CMain::m_hWndIx], 9);
+            }
+            
+            // if we got a cooplevel success, return it
+            if (FAILED(h4)) {
+                if (pDevice != NULL) pDevice->Release();
+                return NULL;
+            }
+
+            return pDevice;
+        }
+    }
+    return NULL;
 }
 
 // STUB: CMR2 0x0049c0a0
@@ -39,7 +101,7 @@ void CInput::FUN_0049c0a0(void *param1, void *param2) {
 void CInput::FUN_0049fd60(void) {};
 
 // FUNCTION: CMR2 0x0049f0e0
-void CInput::FUN_0049f0e0(void) {
+BOOL CInput::FUN_0049f0e0(void) {
     unsigned int uVar1;
     BOOL bVar2;
     int iVar3 = 0;
@@ -114,5 +176,11 @@ void CInput::FUN_0049f0e0(void) {
     bVar2 = SystemParametersInfoA(SPI_GETKEYBOARDSPEED, 0, &m_keyboardSpeed, 0);
     if (!bVar2) m_keyboardSpeed = (PVOID)0x1f4;
     else m_keyboardSpeed = (PVOID)(503 - ((BYTE)m_keyboardSpeed * 13));
+
+    m_unk0x0059f6a8 = DInputCreateDevice(m_dinputRefGuidKeyboard, &m_unk0x00512e88);
+    if (m_unk0x0059f6a8 != NULL)
+        return TRUE;
+
+    return FALSE;
 }
 

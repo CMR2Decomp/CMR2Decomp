@@ -544,7 +544,7 @@ void CGameInfo::FUN_00406580(void) {
 // TODO: is this actually gameinfo related?
 // FUNCTION: CMR2 0x0049eaf0
 void CGameInfo::FUN_0049eaf0(void) {
-    BOOL bDidCreateInput = CInput::CreateDInput();
+    BOOL bDidCreateInput = CInput::DInputCreate();
     if (bDidCreateInput) {
         m_unk0x0059f8cd = 2;
         m_unk0x0059f8cc = 0;

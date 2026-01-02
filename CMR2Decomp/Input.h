@@ -37,16 +37,22 @@ struct DeviceStructMaybe {
 class CInput {
 public:
     static const GUID m_dInputDevice7;
-    static IDirectInput7 *m_lpDirectInput7;
+    static IDirectInput7A *m_lpDirectInput7;
     static char m_strKeyboard[12];
     static DeviceStructMaybe m_unk0x0059ce48[2];
     static PVOID m_keyboardDelay;
     static PVOID m_keyboardSpeed;
+    static REFGUID m_dinputRefGuidKeyboard;
+    static REFGUID m_dinputRefGuidMouse;
+    static LPDIRECTINPUTDEVICEA m_unk0x00512e88;
+    static LPDIRECTINPUTDEVICEA m_unk0x0059f6a8;
+    static DIDATAFORMAT m_objectDataFormat;
 
-    static BOOL CreateDInput(void);
+    static BOOL DInputCreate(void);
+    static LPDIRECTINPUTDEVICEA DInputCreateDevice(REFGUID param1, LPDIRECTINPUTDEVICEA *existingDevice);
     static void FUN_0049c0a0(void *param1, void *param2);
     static void FUN_0049fd60(void);
-    static void FUN_0049f0e0(void);
+    static BOOL FUN_0049f0e0(void);
 };
 
 #endif
