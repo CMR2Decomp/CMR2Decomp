@@ -14,8 +14,11 @@ IDirectInput7A* CInput::m_lpDirectInput7;
 // GLOBAL: CMR2 0x00520874
 char CInput::m_strKeyboard[12] = "Keyboard";
 
+// GLOBAL: CMR2 0x0059f8cc
+unsigned int CInput::m_unk0x0059f8cc; // device count or something
+
 // GLOBAL: CMR2 0x0059ce48
-DeviceStructMaybe CInput::m_unk0x0059ce48[2];
+DeviceInfo CInput::m_availableDevices[2];
 
 // GLOBAL: CMR2 0x0059f8d4
 DWORD CInput::m_mouseGranularity;
@@ -45,6 +48,9 @@ DIDATAFORMAT CInput::m_objectDataFormat;
 LPDIRECTINPUTDEVICEA CInput::m_pDirectInputKeyboard;
 // GLOBAL: CMR2 0x0059f7c4
 LPDIRECTINPUTDEVICEA CInput::m_pDirectInputMouse;
+
+// GLOBAL: CMR2 0x00512ea0
+LPDIRECTINPUTDEVICEA CInput::m_pDirectInputJoystick;
 
 // FUNCTION: CMR2 0x0049fd30
 BOOL CInput::DInputCreate(void) {
@@ -115,47 +121,47 @@ BOOL CInput::SetupKeyboard(void) {
     int iVar3 = 0;
 
     do {
-        uVar1 = CGameInfo::m_unk0x0059f8cc & 0xff;
-        m_unk0x0059ce48[uVar1].field_0x0 = TRUE;
-        m_unk0x0059ce48[uVar1].field_0x18 = FALSE;
+        uVar1 = m_unk0x0059f8cc & 0xff;
+        m_availableDevices[uVar1].field_0x0 = TRUE;
+        m_availableDevices[uVar1].field_0x18 = FALSE;
 
-        sprintf(m_unk0x0059ce48[uVar1].field_0x7c, m_strKeyboard);
-        sprintf(m_unk0x0059ce48[CGameInfo::m_unk0x0059f8cc & 0xff].field_0x180, m_strKeyboard);
+        sprintf(m_availableDevices[uVar1].deviceInstanceName, m_strKeyboard);
+        sprintf(m_availableDevices[m_unk0x0059f8cc & 0xff].deviceProductName, m_strKeyboard);
         
-        uVar1 = CGameInfo::m_unk0x0059f8cc & 0xff;
-        m_unk0x0059ce48[uVar1].field_0x464 = FALSE;
+        uVar1 = m_unk0x0059f8cc & 0xff;
+        m_availableDevices[uVar1].unk_isJoystick = FALSE;
 
         if (!iVar3) {
-            m_unk0x0059ce48[uVar1].field_0x468 = 0xcb;
-            m_unk0x0059ce48[uVar1].field_0x469 = 0xcd;
-            m_unk0x0059ce48[uVar1].field_0x46a = 200;
-            m_unk0x0059ce48[uVar1].field_0x46b = 0xd0;
-            m_unk0x0059ce48[uVar1].field_0x46c = 0x39;
-            m_unk0x0059ce48[uVar1].field_0x46d = 0x1b;
-            m_unk0x0059ce48[uVar1].field_0x46e = 0x1a;
-            m_unk0x0059ce48[uVar1].field_0x46f = 0x2e;
-            m_unk0x0059ce48[uVar1].field_0x470 = 0x13;
+            m_availableDevices[uVar1].field_0x468 = 0xcb;
+            m_availableDevices[uVar1].field_0x469 = 0xcd;
+            m_availableDevices[uVar1].field_0x46a = 0xc8;
+            m_availableDevices[uVar1].field_0x46b = 0xd0;
+            m_availableDevices[uVar1].field_0x46c = 0x39;
+            m_availableDevices[uVar1].field_0x46d = 0x1b;
+            m_availableDevices[uVar1].field_0x46e = 0x1a;
+            m_availableDevices[uVar1].field_0x46f = 0x2e;
+            m_availableDevices[uVar1].field_0x470 = 0x13;
         } else {
-            m_unk0x0059ce48[uVar1].field_0x468 = 0x4b;
-            m_unk0x0059ce48[uVar1].field_0x469 = 0x4d;
-            m_unk0x0059ce48[uVar1].field_0x46a = 0x48;
-            m_unk0x0059ce48[uVar1].field_0x46b = 0x50;
-            m_unk0x0059ce48[uVar1].field_0x46c = 0x51;
-            m_unk0x0059ce48[uVar1].field_0x46d = 0xc9;
-            m_unk0x0059ce48[uVar1].field_0x46e = 0xd1;
-            m_unk0x0059ce48[uVar1].field_0x46f = 0x49;
-            m_unk0x0059ce48[uVar1].field_0x470 = 0x47;            
+            m_availableDevices[uVar1].field_0x468 = 0x4b;
+            m_availableDevices[uVar1].field_0x469 = 0x4d;
+            m_availableDevices[uVar1].field_0x46a = 0x48;
+            m_availableDevices[uVar1].field_0x46b = 0x50;
+            m_availableDevices[uVar1].field_0x46c = 0x51;
+            m_availableDevices[uVar1].field_0x46d = 0xc9;
+            m_availableDevices[uVar1].field_0x46e = 0xd1;
+            m_availableDevices[uVar1].field_0x46f = 0x49;
+            m_availableDevices[uVar1].field_0x470 = 0x47;            
         }
 
-        m_unk0x0059ce48[uVar1].field_0x471 = 0x0;
-        m_unk0x0059ce48[uVar1].field_0x474 = 0x3b;
-        m_unk0x0059ce48[uVar1].field_0x475 = 0x3c;
-        m_unk0x0059ce48[uVar1].field_0x476 = 0x3e;
-        m_unk0x0059ce48[uVar1].field_0x477 = 0x0;
-        m_unk0x0059ce48[uVar1].field_0x472 = 0x1;
-        m_unk0x0059ce48[uVar1].field_0x473 = 0x0;
+        m_availableDevices[uVar1].field_0x471 = 0x0;
+        m_availableDevices[uVar1].field_0x474 = 0x3b;
+        m_availableDevices[uVar1].field_0x475 = 0x3c;
+        m_availableDevices[uVar1].field_0x476 = 0x3e;
+        m_availableDevices[uVar1].field_0x477 = 0x0;
+        m_availableDevices[uVar1].field_0x472 = 0x1;
+        m_availableDevices[uVar1].field_0x473 = 0x0;
 
-        *(BYTE*)&CGameInfo::m_unk0x0059f8cc += 1;  // Directly increment the low byte
+        *(BYTE*)&m_unk0x0059f8cc += 1;  // Directly increment the low byte
         iVar3++;
     } while (iVar3 < 2);
 
@@ -236,7 +242,47 @@ BOOL CInput::GetAttachedJoysticks(void) {
     return SUCCEEDED(hr);
 }
 
-// STUB: CMR2 0x0049f6d0
+// FUNCTION: CMR2 0x0049f6d0
 BOOL CInput::SetupJoystick(LPCDIDEVICEINSTANCEA lpddi, LPVOID pvRef) {
-    return DIENUM_STOP;
+    unsigned int uVar4 = m_unk0x0059f8cc & 0xff;
+    DeviceInfo *pDeviceInfo;
+    LPDIRECTINPUTDEVICEA pDevice;
+    BYTE iVar6[4];
+    int iVar10, iVar11;
+
+    pDeviceInfo = &m_availableDevices[m_unk0x0059f8cc & 0xff];
+    if (GET_DIDEVICE_TYPE(lpddi->dwDevType) == 0x4) {
+        if (GET_DIDEVICE_SUBTYPE(lpddi->dwDevType) == 0x2) pDeviceInfo->field_0x0 = 0;
+        else pDeviceInfo->field_0x0 = 3;
+    
+        pDevice = DInputCreateDevice(lpddi->guidInstance, &m_pDirectInputJoystick);
+        if (pDevice != NULL) {
+            strncpy(pDeviceInfo->deviceInstanceName, lpddi->tszInstanceName, sizeof(pDeviceInfo->deviceInstanceName));
+            strncpy(pDeviceInfo->deviceProductName, lpddi->tszProductName, sizeof(pDeviceInfo->deviceProductName));
+        
+            pDeviceInfo->field_0x18 = m_unk0x0059f8cc >> 0x10 & 0xFF;
+
+            SetupJoystickDeviceInfo(pDeviceInfo);
+
+            iVar10 = 0;
+            iVar11 = 0;
+
+            // if (pDeviceInfo->deviceInfo.joystick.controlCount > 0) {
+            //     do {
+            //         iVar10++;
+            //         iVar11++;
+            //     } while (iVar10 < pDeviceInfo->deviceInfo.joystick.controlCount);
+            // }
+        }
+    }
+
+    return DIENUM_CONTINUE;
+}
+
+// FUNCTION: CMR2 0x0049fad0
+void CInput::SetupJoystickDeviceInfo(DeviceInfo *deviceInfo) {
+    DIPROPDWORD dipd;
+    dipd.diph.dwSize = 0x18;
+    dipd.diph.dwHeaderSize = 0x10;
+    dipd.diph.dwHow = 1;  // DIPH_BYID
 }

@@ -20,7 +20,6 @@ char *CGameInfo::m_gameRegionStrings[4] = {
     gameRegionEurope, gameRegionUSA, gameRegionJapan, gameRegionPoland};
 
 int CGameInfo::m_unk0x0081a754;
-unsigned int CGameInfo::m_unk0x0059f8cc;
 BYTE CGameInfo::m_unk0x0059f8cd;
 
 char CGameInfo::m_stringCMR[4] = "cmr";
@@ -547,7 +546,7 @@ void CGameInfo::FUN_0049eaf0(void) {
     BOOL bDidCreateInput = CInput::DInputCreate();
     if (bDidCreateInput) {
         m_unk0x0059f8cd = 2;
-        m_unk0x0059f8cc = 0;
+        CInput::m_unk0x0059f8cc = 0;
 
         // weird loop
 
