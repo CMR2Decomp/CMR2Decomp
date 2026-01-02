@@ -17,6 +17,9 @@ char CInput::m_strKeyboard[12] = "Keyboard";
 // GLOBAL: CMR2 0x0059ce48
 DeviceStructMaybe CInput::m_unk0x0059ce48[2];
 
+// GLOBAL: CMR2 0x0059f8d4
+DWORD CInput::m_mouseGranularity;
+
 // GLOBAL: CMR2 0x0059f8d8
 PVOID CInput::m_keyboardDelay;
 
@@ -30,13 +33,18 @@ REFGUID CInput::m_dinputRefGuidMouse = GUID_SysMouse;
 REFGUID CInput::m_dinputRefGuidKeyboard = GUID_SysKeyboard;
 
 // GLOBAL: CMR2 0x00512e88
-LPDIRECTINPUTDEVICEA CInput::m_unk0x00512e88;
+LPDIRECTINPUTDEVICEA CInput::m_pOldDirectInputKeyboard;
+
+// GLOBAL: CMR2 0x00512e70
+LPDIRECTINPUTDEVICEA CInput::m_pOldDirectInputMouse;
 
 // GLOBAL: CMR2 0x005117c8
 DIDATAFORMAT CInput::m_objectDataFormat;
 
 // GLOBAL: CMR2 0x0059f6a8
-LPDIRECTINPUTDEVICEA CInput::m_unk0x0059f6a8;
+LPDIRECTINPUTDEVICEA CInput::m_pDirectInputKeyboard;
+// GLOBAL: CMR2 0x0059f7c4
+LPDIRECTINPUTDEVICEA CInput::m_pDirectInputMouse;
 
 // FUNCTION: CMR2 0x0049fd30
 BOOL CInput::DInputCreate(void) {
@@ -101,7 +109,7 @@ void CInput::FUN_0049c0a0(void *param1, void *param2) {
 void CInput::FUN_0049fd60(void) {};
 
 // FUNCTION: CMR2 0x0049f0e0
-BOOL CInput::FUN_0049f0e0(void) {
+BOOL CInput::SetupKeyboard(void) {
     unsigned int uVar1;
     BOOL bVar2;
     int iVar3 = 0;
@@ -177,10 +185,37 @@ BOOL CInput::FUN_0049f0e0(void) {
     if (!bVar2) m_keyboardSpeed = (PVOID)0x1f4;
     else m_keyboardSpeed = (PVOID)(503 - ((BYTE)m_keyboardSpeed * 13));
 
-    m_unk0x0059f6a8 = DInputCreateDevice(m_dinputRefGuidKeyboard, &m_unk0x00512e88);
-    if (m_unk0x0059f6a8 != NULL)
+    m_pDirectInputKeyboard = DInputCreateDevice(m_dinputRefGuidKeyboard, &m_pOldDirectInputKeyboard);
+    if (m_pDirectInputKeyboard != NULL)
         return TRUE;
 
     return FALSE;
+}
+
+// FUNCTION: CMR2 0x0049f060
+void CInput::SetupMouse(void) {
+    HRESULT hr;
+    DIPROPDWORD diPropDword;
+    m_pDirectInputMouse = DInputCreateDevice(m_dinputRefGuidMouse, &m_pOldDirectInputMouse);
+
+    diPropDword.diph.dwSize = 0x14;
+    diPropDword.diph.dwHeaderSize = 0x10;
+    diPropDword.diph.dwObj = 0;
+    diPropDword.diph.dwHow = 0;
+    diPropDword.dwData = 0x10;
+
+    m_pDirectInputMouse->SetProperty(DIPROP_BUFFERSIZE, &diPropDword.diph);
+    m_pDirectInputMouse->Acquire();
+    hr = m_pDirectInputMouse->GetProperty(DIPROP_GRANULARITY, &diPropDword.diph);
+    if (SUCCEEDED(hr)) {
+        m_mouseGranularity = diPropDword.dwData;
+    }
+
+    FUN_0049f000(1);
+}
+
+// STUB: CMR2 0x0049f000
+void CInput::FUN_0049f000(int param1) {
+
 }
 

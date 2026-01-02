@@ -551,6 +551,6 @@ void CGameInfo::FUN_0049eaf0(void) {
 
         // weird loop
 
-        CInput::FUN_0049f0e0();
+        CInput::SetupKeyboard();
     }
 }
