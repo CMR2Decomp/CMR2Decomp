@@ -57,7 +57,7 @@ public:
     static void FUN_0049fd60(void);
     static BOOL SetupKeyboard(void);
     static void SetupMouse(void);
-    static void FUN_0049f000(int param1);
+    static void SetMouseCoopLevel(BOOL param1);
 };
 
 #endif

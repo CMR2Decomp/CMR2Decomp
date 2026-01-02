@@ -76,12 +76,12 @@ LPDIRECTINPUTDEVICEA CInput::DInputCreateDevice(REFGUID guid, LPDIRECTINPUTDEVIC
             }
             
             if (IsEqualGUID(guid, m_dinputRefGuidKeyboard)) {
-                h4 = pDevice->SetCooperativeLevel(CMain::m_hWndList[CMain::m_hWndIx], 10);  // DISCL_BACKGROUND | DISCL_NONEXCLUSIVE
+                h4 = pDevice->SetCooperativeLevel(CMain::m_hWndList[CMain::m_hWndIx], DISCL_BACKGROUND | DISCL_NONEXCLUSIVE);  // 10
             } else if (IsEqualGUID(guid, m_dinputRefGuidMouse)) {
                 if (g_pGraphics->isFullscreen) {
-                    h4 = pDevice->SetCooperativeLevel(CMain::m_hWndList[CMain::m_hWndIx], 5);  // DISCL_EXCLUSIVE | DISCL_FOREGROUND
+                    h4 = pDevice->SetCooperativeLevel(CMain::m_hWndList[CMain::m_hWndIx], DISCL_EXCLUSIVE | DISCL_FOREGROUND);  // 5
                 } else {
-                    h4 = pDevice->SetCooperativeLevel(CMain::m_hWndList[CMain::m_hWndIx], 6);  // DISCL_NONEXCLUSIVE | DISCL_FOREGROUND
+                    h4 = pDevice->SetCooperativeLevel(CMain::m_hWndList[CMain::m_hWndIx], DISCL_NONEXCLUSIVE | DISCL_FOREGROUND);  // 6
                 }
             } else {
                 h4 = pDevice->SetCooperativeLevel(CMain::m_hWndList[CMain::m_hWndIx], 9);
@@ -211,11 +211,21 @@ void CInput::SetupMouse(void) {
         m_mouseGranularity = diPropDword.dwData;
     }
 
-    FUN_0049f000(1);
+    SetMouseCoopLevel(1);
 }
 
-// STUB: CMR2 0x0049f000
-void CInput::FUN_0049f000(int param1) {
+// FUNCTION: CMR2 0x0049f000
+void CInput::SetMouseCoopLevel(BOOL param1) {
+    if (m_pDirectInputMouse != NULL) {
+        m_pDirectInputMouse->Unacquire();
 
+        if (param1 && g_pGraphics->isFullscreen) {
+            m_pDirectInputMouse->SetCooperativeLevel(CMain::m_hWndList[CMain::m_hWndIx],DISCL_EXCLUSIVE | DISCL_FOREGROUND); // 5
+        } else {
+            m_pDirectInputMouse->SetCooperativeLevel(CMain::m_hWndList[CMain::m_hWndIx], DISCL_NONEXCLUSIVE | DISCL_FOREGROUND); // 6
+        }
+
+        m_pDirectInputMouse->Acquire();
+    }
 }
 
