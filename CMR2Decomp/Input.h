@@ -6,7 +6,7 @@
 struct JoystickBinding {
     DWORD range;
     DWORD deadzone;
-    DWORD field_0x8;
+    DWORD saturation;
     DWORD field_0xc;
     BOOL field_0x10;
 };
@@ -90,6 +90,7 @@ public:
     static void SetupJoystickDeviceInfo(DeviceInfo *deviceStruct);
     static void SetJoystickAxisRange(int param1, int param2, DWORD range);
     static void SetJoystickAxisDeadzone(int deviceID, int axisID, DWORD deadzone);
+    static void SetJoystickAxisSaturation(int deviceID, int axisID, DWORD saturation);
 };
 
 #endif

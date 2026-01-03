@@ -282,6 +282,7 @@ BOOL CInput::SetupJoystick(LPCDIDEVICEINSTANCEA lpddi, LPVOID pvRef) {
                     if (joystickBinding[-1].field_0x10 != FALSE) {
                         SetJoystickAxisRange(m_unk0x0059f8cc & 0xff, axisID, joystickBinding->range);
                         SetJoystickAxisDeadzone(m_unk0x0059f8cc & 0xff, axisID, joystickBinding->deadzone);
+                        SetJoystickAxisSaturation(m_unk0x0059f8cc & 0xff, axisID, joystickBinding->saturation);
                         axisID++;
                     }
                     iVar11++;
@@ -317,7 +318,7 @@ void CInput::SetupJoystickDeviceInfo(DeviceInfo *deviceInfo) {
             bindings[-1].field_0x10 = TRUE; // esentially just deviceInfo->unk_isJoystick but it doesnt match
             bindings->deadzone = 0xc8;
             bindings->range = 0x10000;
-            bindings->field_0x8 = 0x2710;
+            bindings->saturation = 0x2710;
 
             deviceInfo->joystick.controlCount ++;
         }
@@ -361,4 +362,20 @@ void CInput::SetJoystickAxisDeadzone(int deviceID, int axisID, DWORD deadzone) {
 
     m_unk0x0059f6b0[pDeviceInfo->field_0x18]->SetProperty(DIPROP_DEADZONE, &dipd.diph);
     pDeviceInfo->joystick.bindings[axisID].deadzone = deadzone;
+}
+
+// FUNCTION: CMR2 0x0049ef10
+void CInput::SetJoystickAxisSaturation(int deviceID, int axisID, DWORD saturation) {
+    USHORT * unk0x00511400;
+    DeviceInfo * pDeviceInfo = &m_availableDevices[deviceID];
+
+    DIPROPDWORD dipd;
+    dipd.diph.dwSize = 0x14;
+    dipd.diph.dwHeaderSize = 0x10;
+    dipd.diph.dwHow = DIPH_BYOFFSET;
+    dipd.dwData = saturation;
+    dipd.diph.dwObj = m_unk0x00511400[axisID];
+
+    m_unk0x0059f6b0[pDeviceInfo->field_0x18]->SetProperty(DIPROP_SATURATION, &dipd.diph);
+    pDeviceInfo->joystick.bindings[axisID].saturation = saturation;
 }
