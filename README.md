@@ -13,7 +13,7 @@ If you really want to compile with MSVC locally then as mentioned below you can 
 When running this from the root directory of this repository via `cmd.exe`, the compiler flags we are using are as follows:
 
 ```
-call "<msvc600_dir>/VC98/bin/cl.exe" CMR2Decomp/*.cpp /Fe"build/CMR2.exe" /O2 /DNDEBUG /Zi /Gz /MD /link user32.lib gdi32.lib advapi32.lib /DEBUG /PDB:"build\CMR2.pdb" /SUBSYSTEM:WINDOWS
+call "<msvc600_dir>/VC98/bin/cl.exe" CMR2Decomp/*.cpp /Fe"build/CMR2.exe" /O2 /DNDEBUG /Zi /Gz /MD /link user32.lib gdi32.lib advapi32.lib third_party/dx7sdk-7001/lib/dxguid.lib third_party/dx7sdk-7001/lib/dinput.lib /DEBUG /PDB:"build\CMR2.pdb" /SUBSYSTEM:WINDOWS
 ```
 
 ## GitHub Workflows
