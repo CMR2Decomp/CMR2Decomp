@@ -4,7 +4,11 @@
 #include "../third_party/dx7sdk-7001/include/dinput.h"
 
 struct JoystickBinding {
-    BYTE padding[20];
+    DWORD field_0x0;
+    DWORD field_0x4;
+    DWORD field_0x8;
+    DWORD field_0xc;
+    BOOL field_0x10;
 };
 
 struct JoystickInfo {
@@ -50,22 +54,6 @@ struct DeviceInfo {
         KeyboardInfo keyboard;
         JoystickInfo joystick;
     };
-    // BYTE field_0x468;
-    // BYTE field_0x469;
-    // BYTE field_0x46a;
-    // BYTE field_0x46b;
-    // BYTE field_0x46c;
-    // BYTE field_0x46d;
-    // BYTE field_0x46e;
-    // BYTE field_0x46f;
-    // BYTE field_0x470;
-    // BYTE field_0x471;
-    // BYTE field_0x472;
-    // BYTE field_0x473;
-    // BYTE field_0x474;
-    // BYTE field_0x475;
-    // BYTE field_0x476;
-    // BYTE field_0x477;
     BYTE pad5[16];
 };
 
@@ -87,6 +75,8 @@ public:
     static LPDIRECTINPUTDEVICEA m_pDirectInputMouse;
     static DIDATAFORMAT m_objectDataFormat;
     static LPDIRECTINPUTDEVICEA m_pDirectInputJoystick;
+    static USHORT m_unk0x00511400[8];
+    static LPDIRECTINPUTDEVICEA m_unk0x0059f6b0[4];
 
     static BOOL DInputCreate(void);
     static LPDIRECTINPUTDEVICEA DInputCreateDevice(REFGUID param1, LPDIRECTINPUTDEVICEA *existingDevice);

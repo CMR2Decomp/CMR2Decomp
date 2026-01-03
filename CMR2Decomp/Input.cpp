@@ -52,6 +52,12 @@ LPDIRECTINPUTDEVICEA CInput::m_pDirectInputMouse;
 // GLOBAL: CMR2 0x00512ea0
 LPDIRECTINPUTDEVICEA CInput::m_pDirectInputJoystick;
 
+// GLOBAL: CMR2 0x00511400
+USHORT CInput::m_unk0x00511400[8];
+
+// GLOBAL: CMR2 0x0059f6b0
+LPDIRECTINPUTDEVICEA CInput::m_unk0x0059f6b0[4];
+
 // FUNCTION: CMR2 0x0049fd30
 BOOL CInput::DInputCreate(void) {
     DirectInputCreateEx(CMain::m_hInstance, 0x700, m_dInputDevice7, (LPVOID*)&CInput::m_lpDirectInput7, NULL);
@@ -257,6 +263,8 @@ BOOL CInput::SetupJoystick(LPCDIDEVICEINSTANCEA lpddi, LPVOID pvRef) {
         else pDeviceInfo->field_0x0 = 3;
     
         pDevice = DInputCreateDevice(lpddi->guidInstance, &m_pDirectInputJoystick);
+        m_unk0x0059f6b0[m_unk0x0059f8cc >> 0x10 & 0xff] = pDevice;
+
         if (pDevice != NULL) {
             strncpy(pDeviceInfo->deviceInstanceName, lpddi->tszInstanceName, sizeof(pDeviceInfo->deviceInstanceName));
             strncpy(pDeviceInfo->deviceProductName, lpddi->tszProductName, sizeof(pDeviceInfo->deviceProductName));
@@ -287,10 +295,38 @@ BOOL CInput::SetupJoystick(LPCDIDEVICEINSTANCEA lpddi, LPVOID pvRef) {
 
 // FUNCTION: CMR2 0x0049fad0
 void CInput::SetupJoystickDeviceInfo(DeviceInfo *deviceInfo) {
+    HRESULT hr;
+    USHORT * unk0x00511400;
+    JoystickBinding * bindings;
+
     DIPROPDWORD dipd;
     dipd.diph.dwSize = 0x18;
     dipd.diph.dwHeaderSize = 0x10;
-    dipd.diph.dwHow = 1;  // DIPH_BYID
+    dipd.diph.dwHow = DIPH_BYOFFSET;
+
+    deviceInfo->joystick.controlCount = 0;
+    unk0x00511400 = m_unk0x00511400;
+    bindings = deviceInfo->joystick.bindings;
+
+    do {
+        dipd.diph.dwObj = *unk0x00511400;
+        hr = m_unk0x0059f6b0[deviceInfo->field_0x18]->GetProperty(DIPROP_RANGE, &dipd.diph);
+
+        if (SUCCEEDED(hr)) {
+            bindings[-1].field_0x10 = TRUE;
+            bindings->field_0x4 = 0xc8;
+            bindings->field_0x0 = 0x10000;
+            bindings->field_0x8 = 0x2710;
+
+            deviceInfo->joystick.controlCount ++;
+        }
+        else {
+            bindings[-1].field_0x10 = FALSE;
+        }
+
+        unk0x00511400++;
+        bindings++;
+    } while ((int)unk0x00511400 < (int)(m_unk0x00511400 + 16));
 }
 
 // STUB: CMR2 0x0049ee10
