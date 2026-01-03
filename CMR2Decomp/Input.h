@@ -4,7 +4,7 @@
 #include "../third_party/dx7sdk-7001/include/dinput.h"
 
 struct JoystickBinding {
-    DWORD field_0x0;
+    DWORD range;
     DWORD field_0x4;
     DWORD field_0x8;
     DWORD field_0xc;
@@ -88,7 +88,7 @@ public:
     static BOOL GetAttachedJoysticks(void);
     static BOOL SetupJoystick(LPCDIDEVICEINSTANCEA lpddi, LPVOID pvRef);
     static void SetupJoystickDeviceInfo(DeviceInfo *deviceStruct);
-    static void FUN_0049ee10(BYTE param1, int param2, JoystickBinding*param3);
+    static void SetJoystickAxisRange(int param1, int param2, DWORD range);
 };
 
 #endif

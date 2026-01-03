@@ -551,5 +551,7 @@ void CGameInfo::FUN_0049eaf0(void) {
         // weird loop
 
         CInput::SetupKeyboard();
+        CInput::SetupMouse();
+        CInput::GetAttachedJoysticks();
     }
 }

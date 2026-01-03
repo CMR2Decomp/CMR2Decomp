@@ -279,8 +279,8 @@ BOOL CInput::SetupJoystick(LPCDIDEVICEINSTANCEA lpddi, LPVOID pvRef) {
             if (pDeviceInfo->joystick.controlCount > 0) {
                 joystickBinding = pDeviceInfo->joystick.bindings;
                 do {
-                    if (pDeviceInfo->unk_isJoystick) {
-                        FUN_0049ee10(m_unk0x0059f8cc & 0xff, iVar10, joystickBinding);
+                    if (joystickBinding[-1].field_0x10 != FALSE) {
+                        SetJoystickAxisRange(m_unk0x0059f8cc & 0xff, iVar10, joystickBinding->range);
                         iVar10++;
                     }
                     iVar11++;
@@ -313,9 +313,9 @@ void CInput::SetupJoystickDeviceInfo(DeviceInfo *deviceInfo) {
         hr = m_unk0x0059f6b0[deviceInfo->field_0x18]->GetProperty(DIPROP_RANGE, &dipd.diph);
 
         if (SUCCEEDED(hr)) {
-            bindings[-1].field_0x10 = TRUE;
+            bindings[-1].field_0x10 = TRUE; // esentially just deviceInfo->unk_isJoystick but it doesnt match
             bindings->field_0x4 = 0xc8;
-            bindings->field_0x0 = 0x10000;
+            bindings->range = 0x10000;
             bindings->field_0x8 = 0x2710;
 
             deviceInfo->joystick.controlCount ++;
@@ -329,7 +329,19 @@ void CInput::SetupJoystickDeviceInfo(DeviceInfo *deviceInfo) {
     } while ((int)unk0x00511400 < (int)(m_unk0x00511400 + 16));
 }
 
-// STUB: CMR2 0x0049ee10
-void CInput::FUN_0049ee10(BYTE param1, int param2, JoystickBinding *param3) {
+// FUNCTION: CMR2 0x0049ee10
+void CInput::SetJoystickAxisRange(int deviceID, int axisID, DWORD range) {
+    USHORT * unk0x00511400;
+    DeviceInfo * pDeviceInfo = &m_availableDevices[deviceID];
 
+    DIPROPRANGE dipd;
+    dipd.diph.dwSize = 0x18;
+    dipd.diph.dwHeaderSize = 0x10;
+    dipd.diph.dwHow = DIPH_BYOFFSET;
+    dipd.lMax = range;
+    dipd.lMin = -range;
+    dipd.diph.dwObj = m_unk0x00511400[axisID];
+
+    m_unk0x0059f6b0[pDeviceInfo->field_0x18]->SetProperty(DIPROP_RANGE, &dipd.diph);
+    pDeviceInfo->joystick.bindings[axisID].range = range;
 }
