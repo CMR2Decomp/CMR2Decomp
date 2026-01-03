@@ -39,13 +39,20 @@ struct KeyboardInfo {
 struct DeviceInfo {
     int field_0x0;
     BOOL field_0x4;
-    BYTE field_0x8;
-    BYTE pad[15];
+    DWORD field_0x8;
+    BYTE pad[6];
+    DWORD field_0x14;
     BOOL field_0x18;
-    BYTE pad2[96];
+    DWORD field_0x1c;
+    BYTE pad2[92];
     char deviceInstanceName[MAX_PATH];
     char deviceProductName[MAX_PATH];
-    BYTE pad4[480];
+    CHAR field_0x284[8][20];
+    BYTE pad4[240];
+    CHAR field_0x414[20];
+    CHAR field_0x425[20];
+    CHAR field_0x436[20];
+    CHAR field_0x447[20];
     BOOL unk_isJoystick; // not 100% sure on this
     // this makes sense in terms of joystick related stuff
     // but does break matching on SetupKeyboard due to it doing eax + <OFFSET> instead
@@ -54,7 +61,7 @@ struct DeviceInfo {
         KeyboardInfo keyboard;
         JoystickInfo joystick;
     };
-    BYTE pad5[16];
+    BYTE pad6[16];
 };
 
 class CInput {
@@ -77,6 +84,10 @@ public:
     static LPDIRECTINPUTDEVICEA m_pDirectInputJoystick;
     static USHORT m_unk0x00511400[8];
     static LPDIRECTINPUTDEVICEA m_unk0x0059f6b0[4];
+    static CHAR m_strD[4];
+    static CHAR m_strU[4];
+    static CHAR m_strR[4];
+    static CHAR m_strL[4];
 
     static BOOL DInputCreate(void);
     static LPDIRECTINPUTDEVICEA DInputCreateDevice(REFGUID param1, LPDIRECTINPUTDEVICEA *existingDevice);
@@ -91,6 +102,7 @@ public:
     static void SetJoystickAxisRange(int param1, int param2, DWORD range);
     static void SetJoystickAxisDeadzone(int deviceID, int axisID, DWORD deadzone);
     static void SetJoystickAxisSaturation(int deviceID, int axisID, DWORD saturation);
+    static BOOL FUN_004aae20(int deviceID, LPDIRECTINPUTDEVICEA pDevice);
 };
 
 #endif

@@ -58,6 +58,15 @@ USHORT CInput::m_unk0x00511400[8];
 // GLOBAL: CMR2 0x0059f6b0
 LPDIRECTINPUTDEVICEA CInput::m_unk0x0059f6b0[4];
 
+// GLOBAL: CMR2 0x00520880
+CHAR CInput::m_strD[4] = " D";
+// GLOBAL: CMR2 0x00520884
+CHAR CInput::m_strU[4] = " U";
+// GLOBAL: CMR2 0x00520888
+CHAR CInput::m_strR[4] = " R";
+// GLOBAL: CMR2 0x0052088C
+CHAR CInput::m_strL[4] = " L";
+
 // FUNCTION: CMR2 0x0049fd30
 BOOL CInput::DInputCreate(void) {
     DirectInputCreateEx(CMain::m_hInstance, 0x700, m_dInputDevice7, (LPVOID*)&CInput::m_lpDirectInput7, NULL);
@@ -128,7 +137,7 @@ BOOL CInput::SetupKeyboard(void) {
 
     do {
         uVar1 = m_unk0x0059f8cc & 0xff;
-        m_availableDevices[uVar1].field_0x0 = TRUE;
+        m_availableDevices[uVar1].field_0x0 = 1;
         m_availableDevices[uVar1].field_0x18 = FALSE;
 
         sprintf(m_availableDevices[uVar1].deviceInstanceName, m_strKeyboard);
@@ -250,31 +259,36 @@ BOOL CInput::GetAttachedJoysticks(void) {
 
 // FUNCTION: CMR2 0x0049f6d0
 BOOL CInput::SetupJoystick(LPCDIDEVICEINSTANCEA lpddi, LPVOID pvRef) {
-    unsigned int uVar4 = m_unk0x0059f8cc & 0xff;
+    HRESULT hr;
+    unsigned int uVar2;
     DeviceInfo *pDeviceInfo;
     LPDIRECTINPUTDEVICEA pDevice;
     BYTE iVar6[4];
-    int axisID, iVar11;
+    int iVar10, axisID, iVar11;
     JoystickBinding * joystickBinding;
+    DIPROPDWORD dipd;
+    DIDEVCAPS devCaps;
+    DIDEVICEOBJECTINSTANCEA didoi;
 
+    uVar2 = m_unk0x0059f8cc & 0xff;
     pDeviceInfo = &m_availableDevices[m_unk0x0059f8cc & 0xff];
-    if (GET_DIDEVICE_TYPE(lpddi->dwDevType) == 0x4) {
-        if (GET_DIDEVICE_SUBTYPE(lpddi->dwDevType) == 0x2) pDeviceInfo->field_0x0 = 0;
+    if (GET_DIDEVICE_TYPE(lpddi->dwDevType) == DIDEVTYPE_JOYSTICK) {
+        if (GET_DIDEVICE_SUBTYPE(lpddi->dwDevType) == DIDEVTYPE_MOUSE) pDeviceInfo->field_0x0 = 0;
         else pDeviceInfo->field_0x0 = 3;
     
         pDevice = DInputCreateDevice(lpddi->guidInstance, &m_pDirectInputJoystick);
         m_unk0x0059f6b0[m_unk0x0059f8cc >> 0x10 & 0xff] = pDevice;
 
         if (pDevice != NULL) {
-            strncpy(pDeviceInfo->deviceInstanceName, lpddi->tszInstanceName, sizeof(pDeviceInfo->deviceInstanceName));
-            strncpy(pDeviceInfo->deviceProductName, lpddi->tszProductName, sizeof(pDeviceInfo->deviceProductName));
+            strncpy(m_availableDevices[uVar2].deviceInstanceName, lpddi->tszInstanceName, sizeof(m_availableDevices[uVar2].deviceInstanceName));
+            strncpy(m_availableDevices[uVar2].deviceProductName, lpddi->tszProductName, sizeof(m_availableDevices[uVar2].deviceProductName));
         
             pDeviceInfo->field_0x18 = m_unk0x0059f8cc >> 0x10 & 0xFF;
 
             SetupJoystickDeviceInfo(pDeviceInfo);
 
+            iVar10 = 0;
             axisID = 0;
-            iVar11 = 0;
 
             if (pDeviceInfo->joystick.controlCount > 0) {
                 joystickBinding = pDeviceInfo->joystick.bindings;
@@ -283,11 +297,89 @@ BOOL CInput::SetupJoystick(LPCDIDEVICEINSTANCEA lpddi, LPVOID pvRef) {
                         SetJoystickAxisRange(m_unk0x0059f8cc & 0xff, axisID, joystickBinding->range);
                         SetJoystickAxisDeadzone(m_unk0x0059f8cc & 0xff, axisID, joystickBinding->deadzone);
                         SetJoystickAxisSaturation(m_unk0x0059f8cc & 0xff, axisID, joystickBinding->saturation);
-                        axisID++;
+                        iVar10++;
                     }
-                    iVar11++;
-                    joystickBinding += 5;
-                } while (axisID < pDeviceInfo->joystick.controlCount);
+
+                    axisID++;
+                    joystickBinding ++;
+                } while (axisID < pDeviceInfo->field_0x8);
+            }
+
+            devCaps.dwSize = 0x2c;
+            hr = m_unk0x0059f6b0[m_unk0x0059f8cc >> 0x10 & 0xff]->GetCapabilities(&devCaps);
+            
+            if (SUCCEEDED(hr)) {
+                if ((devCaps.dwFlags & DIDC_FORCEFEEDBACK)) {
+                    m_availableDevices[m_unk0x0059f8cc >> 0x10 & 0xff].unk_isJoystick = TRUE;
+                    
+                    dipd.diph.dwSize = 0x14;
+                    dipd.diph.dwHeaderSize = 0x10;
+                    dipd.diph.dwHow = DIPH_DEVICE;
+                    dipd.dwData = 0;
+
+                    m_unk0x0059f6b0[m_unk0x0059f8cc >> 0x10 & 0xFF]->SetProperty(DIPROP_AUTOCENTER, &dipd.diph);
+                    FUN_004aae20(m_unk0x0059f8cc & 0xff, m_unk0x0059f6b0[m_unk0x0059f8cc >> 0x10 & 0xff]);
+
+                } else {
+                    m_availableDevices[m_unk0x0059f8cc >> 0x10 & 0xff].unk_isJoystick = FALSE;
+                }
+
+                iVar10 = 0;
+                didoi.dwSize = 0x13c;
+                m_availableDevices[uVar2].field_0x14 = 0;
+
+                if (devCaps.dwAxes > 0) {
+                    
+                    do {
+                        hr = m_unk0x0059f6b0[m_unk0x0059f8cc >> 0x10 & 0xFF]->GetObjectInfo(&didoi, iVar10 + 0x30, DIPH_BYOFFSET);
+                        
+                        if (SUCCEEDED(hr)) {
+                            strncpy(m_availableDevices[uVar2].field_0x284[iVar10], didoi.tszName, 20);
+                            m_availableDevices[uVar2].field_0x14++;
+                        }
+                        iVar10++;
+                    } while (iVar10 < devCaps.dwAxes);
+                }
+
+                if (devCaps.dwAxes > 0) {
+                    iVar10 = 0;
+                    iVar11 = 0x20;
+
+                    do {
+                        if (iVar11 > 0x20) break;
+                        hr = m_unk0x0059f6b0[m_unk0x0059f8cc >> 0x10 & 0xFF]->GetObjectInfo(&didoi, iVar11, DIPH_BYOFFSET);
+                        
+                        if (SUCCEEDED(hr)) {
+                            strncpy(m_availableDevices[uVar2].field_0x414, didoi.tszName, 0x11);
+                            strcat(m_availableDevices[uVar2].field_0x414, m_strL);
+                            
+                            strncpy(m_availableDevices[uVar2].field_0x425, didoi.tszName, 0x11);
+                            strcat(m_availableDevices[uVar2].field_0x425, m_strR);
+                            
+                            strncpy(m_availableDevices[uVar2].field_0x436, didoi.tszName, 0x11);
+                            strcat(m_availableDevices[uVar2].field_0x436, m_strU);
+                            
+                            strncpy(m_availableDevices[uVar2].field_0x447, didoi.tszName, 0x11);
+                            strcat(m_availableDevices[uVar2].field_0x447, m_strD);
+
+                            m_availableDevices[uVar2].field_0x14++;
+                        }
+                        iVar10++;
+                        iVar11 += 4;
+                    } while (iVar10 < devCaps.dwAxes);
+                }
+
+                iVar10 = 0;
+
+                if (m_availableDevices[uVar2].field_0x14 > 0) {
+                    DWORD * unk_0x1c = &m_availableDevices[uVar2].field_0x1c;
+                    do {
+                        BYTE bVar6 = iVar10;
+                        iVar10 ++;
+                        *unk_0x1c = 1 << (bVar6 & 0xFF);
+                        unk_0x1c++;
+                    } while ((int)unk_0x1c < (int)&m_availableDevices[uVar2].field_0x14);
+                }
             }
         }
     }
@@ -378,4 +470,9 @@ void CInput::SetJoystickAxisSaturation(int deviceID, int axisID, DWORD saturatio
 
     m_unk0x0059f6b0[pDeviceInfo->field_0x18]->SetProperty(DIPROP_SATURATION, &dipd.diph);
     pDeviceInfo->joystick.bindings[axisID].saturation = saturation;
+}
+
+// STUB: CMR2 0x004aae20
+BOOL CInput::FUN_004aae20(int deviceID, LPDIRECTINPUTDEVICEA pDevice) {
+    return TRUE;
 }
