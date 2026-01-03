@@ -3,9 +3,14 @@
 
 #include "../third_party/dx7sdk-7001/include/dinput.h"
 
+struct JoystickBinding {
+    BYTE padding[20];
+};
+
 struct JoystickInfo {
-    DWORD controlCount;
-    DWORD joystickBindings[16];
+    DWORD controlCount; // or button count?
+    DWORD field_0x4;
+    JoystickBinding bindings[7];
 };
 
 struct KeyboardInfo {
@@ -34,31 +39,34 @@ struct DeviceInfo {
     BYTE pad[15];
     BOOL field_0x18;
     BYTE pad2[96];
-    char deviceInstanceName[260]; // device name?
-    char deviceProductName[260]; // device name again?
+    char deviceInstanceName[MAX_PATH];
+    char deviceProductName[MAX_PATH];
     BYTE pad4[480];
-    BOOL unk_isJoystick;
-    // union {
-    //     JoystickInfo joystick;
-    //     KeyboardInfo keyboard;
-    // } deviceInfo;
-    BYTE field_0x468;
-    BYTE field_0x469;
-    BYTE field_0x46a;
-    BYTE field_0x46b;
-    BYTE field_0x46c;
-    BYTE field_0x46d;
-    BYTE field_0x46e;
-    BYTE field_0x46f;
-    BYTE field_0x470;
-    BYTE field_0x471;
-    BYTE field_0x472;
-    BYTE field_0x473;
-    BYTE field_0x474;
-    BYTE field_0x475;
-    BYTE field_0x476;
-    BYTE field_0x477;
-    BYTE pad5[148];
+    BOOL unk_isJoystick; // not 100% sure on this
+    // this makes sense in terms of joystick related stuff
+    // but does break matching on SetupKeyboard due to it doing eax + <OFFSET> instead
+    // of matching completely to eax + CInput::m_availableDevices[0].field_0x46d
+    union {
+        KeyboardInfo keyboard;
+        JoystickInfo joystick;
+    };
+    // BYTE field_0x468;
+    // BYTE field_0x469;
+    // BYTE field_0x46a;
+    // BYTE field_0x46b;
+    // BYTE field_0x46c;
+    // BYTE field_0x46d;
+    // BYTE field_0x46e;
+    // BYTE field_0x46f;
+    // BYTE field_0x470;
+    // BYTE field_0x471;
+    // BYTE field_0x472;
+    // BYTE field_0x473;
+    // BYTE field_0x474;
+    // BYTE field_0x475;
+    // BYTE field_0x476;
+    // BYTE field_0x477;
+    BYTE pad5[16];
 };
 
 class CInput {
@@ -90,6 +98,7 @@ public:
     static BOOL GetAttachedJoysticks(void);
     static BOOL SetupJoystick(LPCDIDEVICEINSTANCEA lpddi, LPVOID pvRef);
     static void SetupJoystickDeviceInfo(DeviceInfo *deviceStruct);
+    static void FUN_0049ee10(BYTE param1, int param2, JoystickBinding*param3);
 };
 
 #endif

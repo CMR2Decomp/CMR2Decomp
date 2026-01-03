@@ -132,34 +132,34 @@ BOOL CInput::SetupKeyboard(void) {
         m_availableDevices[uVar1].unk_isJoystick = FALSE;
 
         if (!iVar3) {
-            m_availableDevices[uVar1].field_0x468 = 0xcb;
-            m_availableDevices[uVar1].field_0x469 = 0xcd;
-            m_availableDevices[uVar1].field_0x46a = 0xc8;
-            m_availableDevices[uVar1].field_0x46b = 0xd0;
-            m_availableDevices[uVar1].field_0x46c = 0x39;
-            m_availableDevices[uVar1].field_0x46d = 0x1b;
-            m_availableDevices[uVar1].field_0x46e = 0x1a;
-            m_availableDevices[uVar1].field_0x46f = 0x2e;
-            m_availableDevices[uVar1].field_0x470 = 0x13;
+            m_availableDevices[uVar1].keyboard.field_0x468 = 0xcb;
+            m_availableDevices[uVar1].keyboard.field_0x469 = 0xcd;
+            m_availableDevices[uVar1].keyboard.field_0x46a = 0xc8;
+            m_availableDevices[uVar1].keyboard.field_0x46b = 0xd0;
+            m_availableDevices[uVar1].keyboard.field_0x46c = 0x39;
+            m_availableDevices[uVar1].keyboard.field_0x46d = 0x1b;
+            m_availableDevices[uVar1].keyboard.field_0x46e = 0x1a;
+            m_availableDevices[uVar1].keyboard.field_0x46f = 0x2e;
+            m_availableDevices[uVar1].keyboard.field_0x470 = 0x13;
         } else {
-            m_availableDevices[uVar1].field_0x468 = 0x4b;
-            m_availableDevices[uVar1].field_0x469 = 0x4d;
-            m_availableDevices[uVar1].field_0x46a = 0x48;
-            m_availableDevices[uVar1].field_0x46b = 0x50;
-            m_availableDevices[uVar1].field_0x46c = 0x51;
-            m_availableDevices[uVar1].field_0x46d = 0xc9;
-            m_availableDevices[uVar1].field_0x46e = 0xd1;
-            m_availableDevices[uVar1].field_0x46f = 0x49;
-            m_availableDevices[uVar1].field_0x470 = 0x47;            
+            m_availableDevices[uVar1].keyboard.field_0x468 = 0x4b;
+            m_availableDevices[uVar1].keyboard.field_0x469 = 0x4d;
+            m_availableDevices[uVar1].keyboard.field_0x46a = 0x48;
+            m_availableDevices[uVar1].keyboard.field_0x46b = 0x50;
+            m_availableDevices[uVar1].keyboard.field_0x46c = 0x51;
+            m_availableDevices[uVar1].keyboard.field_0x46d = 0xc9;
+            m_availableDevices[uVar1].keyboard.field_0x46e = 0xd1;
+            m_availableDevices[uVar1].keyboard.field_0x46f = 0x49;
+            m_availableDevices[uVar1].keyboard.field_0x470 = 0x47;            
         }
 
-        m_availableDevices[uVar1].field_0x471 = 0x0;
-        m_availableDevices[uVar1].field_0x474 = 0x3b;
-        m_availableDevices[uVar1].field_0x475 = 0x3c;
-        m_availableDevices[uVar1].field_0x476 = 0x3e;
-        m_availableDevices[uVar1].field_0x477 = 0x0;
-        m_availableDevices[uVar1].field_0x472 = 0x1;
-        m_availableDevices[uVar1].field_0x473 = 0x0;
+        m_availableDevices[uVar1].keyboard.field_0x471 = 0x0;
+        m_availableDevices[uVar1].keyboard.field_0x474 = 0x3b;
+        m_availableDevices[uVar1].keyboard.field_0x475 = 0x3c;
+        m_availableDevices[uVar1].keyboard.field_0x476 = 0x3e;
+        m_availableDevices[uVar1].keyboard.field_0x477 = 0x0;
+        m_availableDevices[uVar1].keyboard.field_0x472 = 0x1;
+        m_availableDevices[uVar1].keyboard.field_0x473 = 0x0;
 
         *(BYTE*)&m_unk0x0059f8cc += 1;  // Directly increment the low byte
         iVar3++;
@@ -249,6 +249,7 @@ BOOL CInput::SetupJoystick(LPCDIDEVICEINSTANCEA lpddi, LPVOID pvRef) {
     LPDIRECTINPUTDEVICEA pDevice;
     BYTE iVar6[4];
     int iVar10, iVar11;
+    JoystickBinding * joystickBinding;
 
     pDeviceInfo = &m_availableDevices[m_unk0x0059f8cc & 0xff];
     if (GET_DIDEVICE_TYPE(lpddi->dwDevType) == 0x4) {
@@ -267,12 +268,17 @@ BOOL CInput::SetupJoystick(LPCDIDEVICEINSTANCEA lpddi, LPVOID pvRef) {
             iVar10 = 0;
             iVar11 = 0;
 
-            // if (pDeviceInfo->deviceInfo.joystick.controlCount > 0) {
-            //     do {
-            //         iVar10++;
-            //         iVar11++;
-            //     } while (iVar10 < pDeviceInfo->deviceInfo.joystick.controlCount);
-            // }
+            if (pDeviceInfo->joystick.controlCount > 0) {
+                joystickBinding = pDeviceInfo->joystick.bindings;
+                do {
+                    if (pDeviceInfo->unk_isJoystick) {
+                        FUN_0049ee10(m_unk0x0059f8cc & 0xff, iVar10, joystickBinding);
+                        iVar10++;
+                    }
+                    iVar11++;
+                    joystickBinding += 5;
+                } while (iVar10 < pDeviceInfo->joystick.controlCount);
+            }
         }
     }
 
@@ -285,4 +291,9 @@ void CInput::SetupJoystickDeviceInfo(DeviceInfo *deviceInfo) {
     dipd.diph.dwSize = 0x18;
     dipd.diph.dwHeaderSize = 0x10;
     dipd.diph.dwHow = 1;  // DIPH_BYID
+}
+
+// STUB: CMR2 0x0049ee10
+void CInput::FUN_0049ee10(BYTE param1, int param2, JoystickBinding *param3) {
+
 }
