@@ -5,7 +5,7 @@
 
 struct JoystickBinding {
     DWORD range;
-    DWORD field_0x4;
+    DWORD deadzone;
     DWORD field_0x8;
     DWORD field_0xc;
     BOOL field_0x10;
@@ -89,6 +89,7 @@ public:
     static BOOL SetupJoystick(LPCDIDEVICEINSTANCEA lpddi, LPVOID pvRef);
     static void SetupJoystickDeviceInfo(DeviceInfo *deviceStruct);
     static void SetJoystickAxisRange(int param1, int param2, DWORD range);
+    static void SetJoystickAxisDeadzone(int deviceID, int axisID, DWORD deadzone);
 };
 
 #endif
