@@ -82,7 +82,7 @@ void* CInput::m_unk0x005939a0;
 // FUNCTION: CMR2 0x0049fd30
 BOOL CInput::DInputCreate(void) {
     DirectInputCreateEx(CMain::m_hInstance, 0x700, m_dInputDevice7, (LPVOID*)&CInput::m_lpDirectInput7, NULL);
-    FUN_0049c0a0(FUN_0049fd60, NULL);
+    FUN_0049c0a0(DInputRelease, NULL);
     return TRUE;
 }
 
@@ -162,9 +162,9 @@ int CInput::FUN_0049c0a0(void *param1, void *param2) {
 }
 
 // FUNCTION: CMR2 0x0049fd60
-BOOL CInput::FUN_0049fd60(void) {
-    FUN_0049fd90();
-    
+BOOL CInput::DInputRelease(void) {
+    DInputReleaseDevices();
+
     if (m_lpDirectInput7 != NULL) {
         ULONG result = m_lpDirectInput7->Release();
         if (result == 0)
@@ -174,9 +174,61 @@ BOOL CInput::FUN_0049fd60(void) {
     return TRUE;
 };
 
-// STUB: CMR2 0x0049fd90
-void CInput::FUN_0049fd90(void) {
+// FUNCTION: CMR2 0x0049fd90
+void CInput::DInputReleaseDevices(void) {
+    HRESULT hr;
+    ULONG result;
+    int iVar2 = 0;
 
+    if (m_pDirectInputKeyboard != NULL) {
+        m_pDirectInputKeyboard->Unacquire();
+        if (m_pDirectInputKeyboard != NULL) {
+            result = m_pDirectInputKeyboard->Release();
+            if (result == 0) m_pDirectInputKeyboard = NULL;
+        }
+    }
+
+    if (m_pDirectInputMouse != NULL) {
+        m_pDirectInputMouse->Unacquire();
+        if (m_pDirectInputMouse != NULL) {
+            result = m_pDirectInputMouse->Release();
+            if (result == 0) m_pDirectInputMouse = NULL;
+        }
+    }
+
+    FUN_0049ef90();
+    
+    iVar2 = 0;
+    LPDIRECTINPUTDEVICEA *pDevices = m_unk0x0059f6b0;
+
+    do {
+        if (pDevices[iVar2] != NULL) {
+            hr = pDevices[iVar2]->Unacquire();
+            if (SUCCEEDED(hr) && iVar2 < m_unk0x0059f8cc.field_0x3) {
+                pDevices[iVar2] = pDevices[iVar2];
+                if (pDevices[iVar2] != NULL) {
+                    result = pDevices[iVar2]->Release();
+                    if (result == 0)
+                        pDevices[iVar2] = NULL;
+                }
+            }
+        }
+
+        iVar2++;
+    } while (pDevices < pDevices + 4);
+}
+
+// FUNCTION: CMR2 0x0049ef90
+int CInput::FUN_0049ef90(void) {
+  m_unk0x0059f8cc.field_0x3 = 0;
+  m_lpDirectInput7->EnumDevices(DIDEVTYPE_JOYSTICK, FUN_0049f6b0, NULL, DIEDFL_ATTACHEDONLY);
+  return m_unk0x0059f8cc.field_0x1 + m_unk0x0059f8cc.field_0x3;
+}
+
+// FUNCTION: CMR2 0x0049f6b0
+BOOL CInput::FUN_0049f6b0(LPCDIDEVICEINSTANCEA lpddi, LPVOID pvRef) {
+    m_unk0x0059f8cc.field_0x3++;
+    return TRUE;
 }
 
 // FUNCTION: CMR2 0x0049f0e0

@@ -554,7 +554,7 @@ DWORD CGameInfo::SetupInputs(void) {
             *(pField18 - 6) = initVal;  // -24 bytes = field_0x0
             *pField18 = initVal;         // field_0x18
             pField18 = (int*)((BYTE*)pField18 + 0x50C);
-        } while ((int)pField18 < 0x59f6c0);
+        } while (pField18 < &CInput::m_availableDevices[8].field_0x18); // TODO: is this correct?
         
         CInput::SetupKeyboard();
         CInput::SetupMouse();

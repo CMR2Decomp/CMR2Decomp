@@ -111,7 +111,9 @@ public:
     static BOOL DInputCreate(void);
     static LPDIRECTINPUTDEVICEA DInputCreateDevice(REFGUID param1, LPDIRECTINPUTDEVICEA *existingDevice);
     static int FUN_0049c0a0(void *param1, void *param2);
-    static BOOL FUN_0049fd60(void);
+    static BOOL DInputRelease(void);
+    static int FUN_0049ef90();
+    static BOOL FUN_0049f6b0(LPCDIDEVICEINSTANCEA lpddi, LPVOID pvRef);
     static BOOL SetupKeyboard(void);
     static void SetupMouse(void);
     static void SetMouseCoopLevel(BOOL param1);
@@ -126,7 +128,7 @@ public:
     static void SetForceFeedbackAutocenter(DWORD param1, int deviceID);
     static void ResetForceFeedbackEffects(void);
     static BOOL ResetForceFeedbackEffectsAlt(void);
-    static void FUN_0049fd90(void);
+    static void DInputReleaseDevices(void);
 };
 
 #endif
