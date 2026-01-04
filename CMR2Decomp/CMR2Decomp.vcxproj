@@ -87,7 +87,7 @@
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
@@ -101,7 +101,7 @@
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
@@ -132,20 +132,44 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AIHelper.cpp" />
+    <ClCompile Include="FileBuffer.cpp" />
+    <ClCompile Include="Frontend.cpp" />
+    <ClCompile Include="Game.cpp" />
+    <ClCompile Include="GameInfo.cpp" />
+    <ClCompile Include="GenericFileLoader.cpp" />
+    <ClCompile Include="Graphics.cpp" />
+    <ClCompile Include="InstallInfo.cpp" />
+    <ClCompile Include="Logger.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="RallyData.cpp" />
     <ClCompile Include="RallyTiming.cpp" />
+    <ClCompile Include="RegKey.cpp" />
     <ClCompile Include="Stage.cpp" />
     <ClCompile Include="StageSplitData.cpp" />
     <ClCompile Include="StageTiming.cpp" />
+    <ClCompile Include="StageUI.cpp" />
     <ClCompile Include="TimingUtils.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AIHelper.h" />
+    <ClInclude Include="BFL.h" />
+    <ClInclude Include="FileBuffer.h" />
+    <ClInclude Include="Frontend.h" />
+    <ClInclude Include="Game.h" />
+    <ClInclude Include="GameInfo.h" />
+    <ClInclude Include="GenericFileLoader.h" />
+    <ClInclude Include="Graphics.h" />
+    <ClInclude Include="InstallInfo.h" />
+    <ClInclude Include="Logger.h" />
+    <ClInclude Include="main.h" />
     <ClInclude Include="RallyData.h" />
     <ClInclude Include="RallyTiming.h" />
+    <ClInclude Include="RegKey.h" />
     <ClInclude Include="Stage.h" />
     <ClInclude Include="StageSplitData.h" />
     <ClInclude Include="StageTiming.h" />
+    <ClInclude Include="StageUI.h" />
     <ClInclude Include="TimingUtils.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -11,16 +11,21 @@ public:
     static LRESULT MessageHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
     static void FUN_0049c130(void);
 
+    // GLOBAL: CMR2 0x00663db0
+    static HINSTANCE m_hInstance;    
+
     // GLOBAL: CMR2 0x00663c84
     static HWND m_hWndList[1];
     // GLOBAL: CMR2 0x00663dac
     static int m_hWndIx;
-    // GLOBAL: CMR2 0x00663c70
-    static int m_unk0x00663c70;
+
+    // GLOBAL: CMR2 0x00663c68
+    static MSG m_win32Msg;
+
+    // GLOBAL: CMR2 0x0052ea5c
+    static char m_logFileBlankLine[1];
 
 private:
-    // GLOBAL: CMR2 0x00663db0
-    static HINSTANCE m_hInstance;
     // GLOBAL: CMR2 0x00511430
     static char m_gameName[20];
     // GLOBAL: CMR2 0x00520c74
@@ -29,8 +34,7 @@ private:
     static char m_logFileHeader1[29];
     // GLOBAL: CMR2 0x00520c34
     static char m_logFileAsterisks[29];
-    // GLOBAL: CMR2 0x0052ea5c
-    static char m_logFileBlankLine[1];
+
     // GLOBAL: CMR2 0x00520bf4
     static char m_logFileFinishedNormally[30];
     // GLOBAL: CMR2 0x00520bf0

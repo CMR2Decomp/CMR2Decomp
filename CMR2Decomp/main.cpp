@@ -1,6 +1,8 @@
 #include "main.h"
 #include "Graphics.h"
 #include "Logger.h"
+#include "Game.h"
+#include "Input.h"
 
 HINSTANCE CMain::m_hInstance;
 HWND CMain::m_hWndList[1];
@@ -13,7 +15,8 @@ char CMain::m_logFileAsterisks[29] = "****************************";
 char CMain::m_logFileBlankLine[1] = "";
 char CMain::m_logFileFinishedNormally[30] = "* Program finished normally *";
 BOOL CMain::m_isShowingCursor = TRUE;
-int CMain::m_unk0x00663c70 = 0;
+
+MSG CMain::m_win32Msg;
 
 // GLOBAL: CMR2 0x00520b94
 char m_lpszMenuName[5] = "menu";
@@ -28,6 +31,8 @@ int WinMain(HINSTANCE instance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nS
 unsigned char CMain::Initialize(HINSTANCE hInstance, unsigned char param2, LPSTR param3)
 {
 	HWND hWnd;
+	BOOL isMessageAvailable;
+
 	hWnd = FindWindowA(m_gameName, m_gameName);
 	if (hWnd != NULL)
 		return 0;
@@ -41,10 +46,29 @@ unsigned char CMain::Initialize(HINSTANCE hInstance, unsigned char param2, LPSTR
 	CreateGameWindow(hInstance, &m_hWndList[m_hWndIx], m_gameName, MessageHandler);
 
 	MSG msg;
-	while (GetMessageA(&msg, NULL, 0, 0))
+	while (!CGame::m_shouldExit)
 	{
-		TranslateMessage(&msg);
-		DispatchMessageA(&msg);
+		if (!CGame::m_isActive)
+			isMessageAvailable = PeekMessageA(&m_win32Msg, NULL, 0, 0, 1);
+		else
+			isMessageAvailable = GetMessageA(&m_win32Msg, NULL, 0, 0);
+
+		if ((m_win32Msg.message == WM_ACTIVATEAPP) || (isMessageAvailable == 0))
+		{
+			if (!CGame::m_isActive)
+			{
+				CGame::FUN_004b7a40();
+				CGame::FUN_004d0780();
+			}
+		}
+		else
+		{
+			if (m_win32Msg.message == WM_QUIT)
+				break;
+
+			TranslateMessage(&m_win32Msg);
+			DispatchMessageA(&m_win32Msg);
+		}
 
 		if (g_pGraphics->isFullscreen == FALSE)
 		{
@@ -68,7 +92,7 @@ unsigned char CMain::Initialize(HINSTANCE hInstance, unsigned char param2, LPSTR
 	CLogger::LogToFile(m_logFileAsterisks);
 	CLogger::CloseLogFile();
 
-	return m_unk0x00663c70;
+	return m_win32Msg.wParam;
 }
 
 // STUB: CMR2 0x004a8270
@@ -76,13 +100,6 @@ BOOL FUN_004a8270(void)
 {
 	// todo
 	return 1;
-}
-
-// STUB: CMR2 0x0049c0a0
-int FUN_0049c0a0(void *param1, void *param2)
-{
-	// todo
-	return -1;
 }
 
 // FUNCTION: CMR2 0x004a8140
@@ -141,7 +158,7 @@ BOOL CMain::CreateGameWindow(HINSTANCE hInstance, HWND *pHWND, LPCSTR sWindowNam
 	UpdateWindow(hWnd);
 	SetFocus(hWnd);
 	*pHWND = hWnd;
-	FUN_0049c0a0(FUN_004a8270, NULL);
+	CInput::FUN_0049c0a0(FUN_004a8270, NULL);
 	return TRUE;
 }
 
