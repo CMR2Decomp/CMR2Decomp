@@ -490,7 +490,7 @@ BOOL CInput::FUN_004aae20(int deviceID, LPDIRECTINPUTDEVICE7 pDevice) {
     pGraphics = g_pGraphics;
     if (m_forceFeedbackDevices[deviceID].field_0x0 == 0) {
         m_forceFeedbackDevices[deviceID].device = (LPDIRECTINPUTDEVICE7A)pDevice;
-        if (!pGraphics->isFullscreen) {
+        if (pGraphics->isFullscreen) {
             hr = pDevice->SendForceFeedbackCommand(DISFFC_STOPALL);
             FUN_004ab5f0(hr);
         }
@@ -502,7 +502,7 @@ BOOL CInput::FUN_004aae20(int deviceID, LPDIRECTINPUTDEVICE7 pDevice) {
 
     if (m_unk0x00666ee8 == FALSE) {
         m_unk0x00666ee8 = TRUE;
-        FUN_0049c0a0(NULL, NULL);
+        FUN_0049c0a0(FUN_004aaea0, NULL);
     }
 
     return TRUE;
@@ -528,6 +528,9 @@ void CInput::SetForceFeedbackAutocenter(DWORD param1, int deviceID) {
     }
 }
 
+// 96.55% match, only concern is this
+// 0x4aaf35	-cmp edi, 0x666ed4
+//          +cmp edi, CInput::m_dinputRefGuidKeyboard (DATA) (Input.cpp:557) <-- why  are you that
 // FUNCTION: CMR2 0x004aaf00
 void CInput::ResetForceFeedbackEffects(void) {
     LPDIRECTINPUTEFFECT* pEffects = m_forceFeedbackDevices[0].effects;
@@ -555,4 +558,9 @@ void CInput::ResetForceFeedbackEffects(void) {
         
         pEffects = (LPDIRECTINPUTEFFECT*)((BYTE*)pEffects + 0x34);
     } while ((int)pEffects < (int)&m_forceFeedbackDevices[8]);
+}
+
+// STUB: CMR2 0x004aaea0
+void CInput::FUN_004aaea0(void * param1, void *param2) {
+
 }
