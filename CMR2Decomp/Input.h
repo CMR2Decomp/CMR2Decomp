@@ -76,8 +76,7 @@ struct ForceFeedbackDevice {
     LPDIRECTINPUTDEVICE7A device; // +0x4
     BYTE field_0x8;              // +0x8 (flag cleared at end)
     BYTE padding1[3];            // +0x9-0xB
-    IUnknown* effects[10];       // +0xC (10 effect pointers)
-    BYTE padding2[4];
+    LPDIRECTINPUTEFFECT effects[10];       // +0xC (10 effect pointers)
 };
 
 class CInput {
@@ -123,7 +122,7 @@ public:
     static BOOL FUN_004aae20(int deviceID, LPDIRECTINPUTDEVICE7 pDevice);
     static bool FUN_004ab5f0(HRESULT hr);
     static void SetForceFeedbackAutocenter(DWORD param1, int deviceID);
-    static void FUN_004aaf00(void);
+    static void ResetForceFeedbackEffects(void);
 };
 
 #endif

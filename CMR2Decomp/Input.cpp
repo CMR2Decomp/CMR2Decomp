@@ -489,7 +489,7 @@ BOOL CInput::FUN_004aae20(int deviceID, LPDIRECTINPUTDEVICE7 pDevice) {
 
     pGraphics = g_pGraphics;
     if (m_forceFeedbackDevices[deviceID].field_0x0 == 0) {
-        m_forceFeedbackDevices[deviceID].device = pDevice;
+        m_forceFeedbackDevices[deviceID].device = (LPDIRECTINPUTDEVICE7A)pDevice;
         if (!pGraphics->isFullscreen) {
             hr = pDevice->SendForceFeedbackCommand(DISFFC_STOPALL);
             FUN_004ab5f0(hr);
@@ -497,7 +497,7 @@ BOOL CInput::FUN_004aae20(int deviceID, LPDIRECTINPUTDEVICE7 pDevice) {
 
         SetForceFeedbackAutocenter(0, deviceID);
         m_forceFeedbackDevices[deviceID].field_0x0 = TRUE;
-        FUN_004aaf00();
+        ResetForceFeedbackEffects();
     }
 
     if (m_unk0x00666ee8 == FALSE) {
@@ -529,7 +529,30 @@ void CInput::SetForceFeedbackAutocenter(DWORD param1, int deviceID) {
 }
 
 // FUNCTION: CMR2 0x004aaf00
-void CInput::FUN_004aaf00(void) {
-
+void CInput::ResetForceFeedbackEffects(void) {
+    LPDIRECTINPUTEFFECT* pEffects = m_forceFeedbackDevices[0].effects;
+    
+    do {
+        ForceFeedbackDevice* pDevice = (ForceFeedbackDevice*)((BYTE*)pEffects - 0xC);
+        
+        if (pDevice->field_0x0 != FALSE) {
+            LPDIRECTINPUTEFFECT* pEffect = pEffects;
+            int count = 10;
+            
+            do {
+                if (*pEffect != NULL) {
+                    ULONG refcount = (*pEffect)->Release();
+                    if (refcount == 0) {
+                        *pEffect = NULL;
+                    }
+                }
+                pEffect++;
+                count--;
+            } while (count != 0);
+            
+            pDevice->field_0x8 = 0;
+        }
+        
+        pEffects = (LPDIRECTINPUTEFFECT*)((BYTE*)pEffects + 0x34);
+    } while ((int)pEffects < (int)&m_forceFeedbackDevices[8]);
 }
-
