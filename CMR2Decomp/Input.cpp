@@ -161,9 +161,23 @@ int CInput::FUN_0049c0a0(void *param1, void *param2) {
     return m_unk0x00593ba0++;
 }
 
-// release?
-// STUB: CMR2 0x0049fd60
-void CInput::FUN_0049fd60(void) {};
+// FUNCTION: CMR2 0x0049fd60
+BOOL CInput::FUN_0049fd60(void) {
+    FUN_0049fd90();
+    
+    if (m_lpDirectInput7 != NULL) {
+        ULONG result = m_lpDirectInput7->Release();
+        if (result == 0)
+            m_lpDirectInput7 = NULL;
+    }
+
+    return TRUE;
+};
+
+// STUB: CMR2 0x0049fd90
+void CInput::FUN_0049fd90(void) {
+
+}
 
 // FUNCTION: CMR2 0x0049f0e0
 BOOL CInput::SetupKeyboard(void) {
@@ -293,6 +307,8 @@ BOOL CInput::GetAttachedJoysticks(void) {
     return SUCCEEDED(hr);
 }
 
+// this is only a 53.83% match but im pretty sure im doing it all right
+// just the subtype block is getting optimized out or something weird
 // FUNCTION: CMR2 0x0049f6d0
 BOOL CInput::SetupJoystick(LPCDIDEVICEINSTANCEA lpddi, LPVOID pvRef) {
     HRESULT hr;
@@ -309,6 +325,7 @@ BOOL CInput::SetupJoystick(LPCDIDEVICEINSTANCEA lpddi, LPVOID pvRef) {
     uVar2 = m_unk0x0059f8cc.field_0x0;
     pDeviceInfo = &m_availableDevices[m_unk0x0059f8cc.field_0x0];
     if (GET_DIDEVICE_TYPE(lpddi->dwDevType) == DIDEVTYPE_JOYSTICK) {
+        // for some reason this block is getting skipped over...
         if (GET_DIDEVICE_SUBTYPE(lpddi->dwDevType) == DIDEVTYPE_MOUSE) pDeviceInfo->field_0x0 = 0;
         else pDeviceInfo->field_0x0 = 3;
     
