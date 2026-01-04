@@ -546,7 +546,9 @@ void CGameInfo::FUN_0049eaf0(void) {
     BOOL bDidCreateInput = CInput::DInputCreate();
     if (bDidCreateInput) {
         m_unk0x0059f8cd = 2;
-        CInput::m_unk0x0059f8cc = 0;
+        CInput::m_unk0x0059f8cc.field_0x1 = 0;
+        CInput::m_unk0x0059f8cc.field_0x2 = 0x2;
+        CInput::m_unk0x0059f8cc.field_0x3 = 0;
 
         // weird loop
 

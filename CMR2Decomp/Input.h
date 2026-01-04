@@ -37,7 +37,7 @@ struct KeyboardInfo {
 };
 
 struct DeviceInfo {
-    int field_0x0;
+    DWORD field_0x0;
     BOOL field_0x4;
     DWORD field_0x8;
     BYTE pad[6];
@@ -64,11 +64,27 @@ struct DeviceInfo {
     BYTE pad6[16];
 };
 
+struct Unk0x0059f8cc {
+    BYTE field_0x1;
+    BYTE field_0x2;
+    BYTE field_0x3;
+    BYTE field_0x4;
+};
+
+struct ForceFeedbackDevice {
+    BOOL field_0x0;              // +0x0 (active flag)
+    LPDIRECTINPUTDEVICE7A device; // +0x4
+    BYTE field_0x8;              // +0x8 (flag cleared at end)
+    BYTE padding1[3];            // +0x9-0xB
+    IUnknown* effects[10];       // +0xC (10 effect pointers)
+    BYTE padding2[4];
+};
+
 class CInput {
 public:
     static const GUID m_dInputDevice7;
     static IDirectInput7A *m_lpDirectInput7;
-    static unsigned int m_unk0x0059f8cc;    
+    static Unk0x0059f8cc m_unk0x0059f8cc;
     static char m_strKeyboard[12];
     static DeviceInfo m_availableDevices[2];
     static PVOID m_keyboardDelay;
@@ -88,6 +104,8 @@ public:
     static CHAR m_strU[4];
     static CHAR m_strR[4];
     static CHAR m_strL[4];
+    static ForceFeedbackDevice m_forceFeedbackDevices[8];
+    static BOOL m_unk0x00666ee8;
 
     static BOOL DInputCreate(void);
     static LPDIRECTINPUTDEVICEA DInputCreateDevice(REFGUID param1, LPDIRECTINPUTDEVICEA *existingDevice);
@@ -102,7 +120,10 @@ public:
     static void SetJoystickAxisRange(int param1, int param2, DWORD range);
     static void SetJoystickAxisDeadzone(int deviceID, int axisID, DWORD deadzone);
     static void SetJoystickAxisSaturation(int deviceID, int axisID, DWORD saturation);
-    static BOOL FUN_004aae20(int deviceID, LPDIRECTINPUTDEVICEA pDevice);
+    static BOOL FUN_004aae20(int deviceID, LPDIRECTINPUTDEVICE7 pDevice);
+    static bool FUN_004ab5f0(HRESULT hr);
+    static void SetForceFeedbackAutocenter(DWORD param1, int deviceID);
+    static void FUN_004aaf00(void);
 };
 
 #endif
