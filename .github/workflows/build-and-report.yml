@@ -170,9 +170,11 @@ jobs:
               const isStub = fn.matching <= STUB_THRESHOLD;
               const isPerfect = currPct === 100;
 
+              const prevPct = prev ? prev.matching * 100 : null;
+
               // 🎉 Newly perfect (improved OR brand-new)
-              if (isPerfect && !isStub) {
-                const prevPct = prev ? prev.matching * 100 : null;
+              // Only include if brand-new OR previously < 100%
+              if (isPerfect && !isStub && (prevPct === null || prevPct < 100)) {
                 newlyPerfect.push({
                   fn,
                   prevPct: prevPct !== null ? prevPct : null
@@ -181,7 +183,6 @@ jobs:
 
               // 🚨 Below 80% (exclude stubs)
               if (!isStub && currPct < LOW_ACCURACY_THRESHOLD) {
-                const prevPct = prev ? prev.matching * 100 : null;
                 lowAccuracy.push({
                   fn,
                   currPct,
@@ -194,8 +195,6 @@ jobs:
                 if (isStub) stubbed.push({ fn, reason: 'new stub' });
                 continue;
               }
-
-              const prevPct = prev.matching * 100;
 
               if (currPct > prevPct + 0.01) {
                 increased.push({ fn, prevPct, currPct });
