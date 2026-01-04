@@ -14,6 +14,7 @@ concurrency:
 
 permissions:
   contents: write
+  pull-requests: write
 
 jobs:
   fetch-deps:
@@ -41,7 +42,7 @@ jobs:
         run: |
           mkdir build
           call .\msvc600\VC98\bin\VCVARS32.BAT x86
-          call .\msvc600\VC98\bin\cl.exe .\CMR2Decomp\*.cpp /Fe"build/CMR2.exe" /O2 /DNDEBUG /Zi /Gz /MD /link user32.lib gdi32.lib advapi32.lib third_party/dx7sdk-7001/lib/dxguid.lib third_party/dx7sdk-7001/lib/dinput.lib /DEBUG /PDB:"build\CMR2.pdb" /SUBSYSTEM:WINDOWS
+          call .\msvc600\VC98\bin\cl.exe .\CMR2Decomp\*.cpp /Fe"build/CMR2.exe" /O2 /DNDEBUG /Zi /Gz /MD /link user32.lib gdi32.lib /DEBUG /PDB:"build\CMR2.pdb" /SUBSYSTEM:WINDOWS
 
       - name: Upload Build
         uses: actions/upload-artifact@main
@@ -82,34 +83,12 @@ jobs:
         run: |
           pip install git+https://github.com/isledecomp/reccmp
 
-      # - name: Restore cached reccmp install
-      #   id: cache-reccmp-install
-      #   uses: actions/cache/restore@v4
-      #   with:
-      #     enableCrossOsArchive: true
-      #     path: reccmp-python-package
-      #     key: reccmp-python-package
-
-      # - name: Install reccmp python package
-      #   if: ${{ !steps.cache-reccmp-install.outputs.cache-hit }}
-      #   run: |
-      #     pip install git+https://github.com/isledecomp/reccmp
-
-      # - name: Cache reccmp install
-      #   if: ${{ !steps.cache-reccmp-install.outputs.cache-hit }}
-      #   uses: actions/cache/save@v4
-      #   with:
-      #     enableCrossOsArchive: true
-      #     path: reccmp-python-package
-      #     key: reccmp-python-package
-
       - name: Detect binary
         run: |
           reccmp-project detect --what original   --search-path cmr2bin
           reccmp-project detect --what recompiled --search-path build
 
       - name: Compare Accuracy to main
-        if: github.ref != 'refs/heads/main' # Only runs on pull requests
         shell: bash
         env:
           RELEASE_URL: https://raw.githubusercontent.com/CMR2Decomp/CMR2Decomp/refs/heads/main/CMR2PROGRESS/
@@ -136,12 +115,263 @@ jobs:
         run: |
           reccmp-datacmp --target CMR2
 
+      - name: Upsert PR Accuracy Report
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+
+            const TAG = '<!-- CMR2-ACCURACY-REPORT -->';
+            const STUB_THRESHOLD = 0.001;
+            const LOW_ACCURACY_THRESHOLD = 80;
+
+            function load(path) {
+              if (!fs.existsSync(path)) {
+                console.log("file doesn't exist.");
+                return null;
+              }
+              return JSON.parse(fs.readFileSync(path, 'utf8'));
+            }
+
+            const currentRaw = load('CMR2PROGRESS/summary.json');
+            if (!currentRaw) {
+              core.setFailed('summary.json not found');
+              return;
+            }
+
+            const previousRaw = load('summary-old.json');
+
+            const current = currentRaw?.data || [];
+            const previous = previousRaw?.data || [];
+
+            if (!current.length) {
+              console.log('No functions found in summary.json, skipping PR comment.');
+              return;
+            }
+
+            const currMap = new Map();
+            current.forEach(fn => currMap.set(fn.address, fn));
+
+            const prevMap = new Map();
+            if (previous) previous.forEach(fn => prevMap.set(fn.address, fn));
+
+            const increased = [];
+            const decreased = [];
+            const added = [];
+            const gone = [];
+            const stubbed = [];
+            const lowAccuracy = [];
+
+            let total = 0;
+            let matched = 0;
+            let fullMatch = 0;
+
+            for (const fn of current) {
+              total++;
+              matched += fn.matching;
+
+              if (!fn.diff || fn.diff.length === 0) fullMatch++;
+
+              const currPct = fn.matching * 100;
+              const prev = prevMap.get(fn.address);
+
+              // ---- Stub detection ----
+              const isStub = fn.matching <= STUB_THRESHOLD;
+
+              // ---- Low accuracy (exclude pure stubs) ----
+              if (!isStub && currPct < LOW_ACCURACY_THRESHOLD) {
+                const prevPct = prev ? prev.matching * 100 : null;
+                const delta = prevPct !== null ? currPct - prevPct : null;
+
+                lowAccuracy.push({
+                  fn,
+                  currPct,
+                  delta
+                });
+              }
+
+              if (!prev) {
+                added.push(fn);
+                if (isStub) {
+                  stubbed.push({ fn, reason: 'new stub' });
+                }
+                continue;
+              }
+
+              const prevPct = prev.matching * 100;
+
+              if (currPct > prevPct + 0.01) {
+                increased.push({ fn, prevPct, currPct });
+              } else if (currPct < prevPct - 0.01) {
+                decreased.push({ fn, prevPct, currPct });
+              }
+
+              if (prev.matching > STUB_THRESHOLD && isStub) {
+                stubbed.push({ fn, reason: 'regressed to stub' });
+              }
+            }
+
+            for (const [addr, fn] of prevMap) {
+              if (!currMap.has(addr)) gone.push(fn);
+            }
+
+            const effective = ((matched / total) * 100).toFixed(2);
+            const fullMatchPct = ((fullMatch / total) * 100).toFixed(2);
+
+            function deltaTable(rows) {
+              if (!rows.length) return '_None_';
+              return [
+                '| Address | Function | Before | After |',
+                '|--------:|----------|--------|-------|',
+                ...rows.map(r =>
+                  `| \`${r.fn.address}\` | ${r.fn.name} | ${r.prevPct.toFixed(2)}% | **${r.currPct.toFixed(2)}%** |`
+                )
+              ].join('\n');
+            }
+
+            function simpleTable(rows) {
+              if (!rows.length) return '_None_';
+              return [
+                '| Address | Function | Accuracy |',
+                '|--------:|----------|----------|',
+                ...rows.map(f =>
+                  `| \`${f.address}\` | ${f.name} | ${(f.matching * 100).toFixed(2)}% |`
+                )
+              ].join('\n');
+            }
+
+            function lowAccuracyTable(rows) {
+              if (!rows.length) return '_None_';
+
+              return [
+                '| Address | Function | Accuracy | Δ Since Last PR |',
+                '|--------:|----------|----------|----------------|',
+                ...rows
+                  .sort((a, b) => a.currPct - b.currPct)
+                  .map(r => {
+                    const delta =
+                      r.delta === null
+                        ? '—'
+                        : `${r.delta > 0 ? '+' : ''}${r.delta.toFixed(2)}%`;
+
+                    return `| \`${r.fn.address}\` | ${r.fn.name} | **${r.currPct.toFixed(2)}%** | ${delta} |`;
+                  })
+              ].join('\n');
+            }
+
+            const goneTable = gone.length
+              ? [
+                  '| Address | Function | Previous Accuracy |',
+                  '|--------:|----------|-------------------|',
+                  ...gone.map(f =>
+                    `| \`${f.address}\` | ${f.name} | ${(f.matching * 100).toFixed(2)}% |`
+                  )
+                ].join('\n')
+              : '_None_';
+
+            const stubTable = stubbed.length
+              ? [
+                  '| Address | Function | Reason |',
+                  '|--------:|----------|--------|',
+                  ...stubbed.map(s =>
+                    `| \`${s.fn.address}\` | ${s.fn.name} | ${s.reason} |`
+                  )
+                ].join('\n')
+              : '_None_';
+
+            // ---- Timestamp ----
+            const now = new Date();
+            function pad(n) { return n < 10 ? '0' + n : n; }
+            const timestamp =
+              now.getUTCFullYear() + '-' +
+              pad(now.getUTCMonth() + 1) + '-' +
+              pad(now.getUTCDate()) + ' ' +
+              pad(now.getUTCHours()) + ':' +
+              pad(now.getUTCMinutes()) + ':' +
+              pad(now.getUTCSeconds()) + ' UTC';
+
+            const body = [
+              TAG,
+              '',
+              '## 📊 CMR2 Accuracy Report',
+              '',
+              `**Functions:** ${total}  `,
+              `**Effective Accuracy:** **${effective}%**  `,
+              `**Fully Matching:** ${fullMatch} (${fullMatchPct}%)`,
+              '',
+              '---',
+              '',
+              '### ✅ Increased',
+              deltaTable(increased),
+              '',
+              '---',
+              '',
+              '### ⚠️ Decreased',
+              deltaTable(decreased),
+              '',
+              '---',
+              '',
+              '### 🚨 Functions Below 80% Accuracy (Non-Stubs)',
+              lowAccuracyTable(lowAccuracy),
+              '',
+              '---',
+              '',
+              '### ➕ Added',
+              simpleTable(added),
+              '',
+              '---',
+              '',
+              '### 🧱 Stubbed',
+              stubTable,
+              '',
+              '---',
+              '',
+              '### ❌ Gone',
+              goneTable,
+              '',
+              `_Last updated by CMR2Decomp Bot on ${timestamp}_`
+            ].join('\n');
+
+            const { owner, repo } = context.repo;
+            const issue_number = context.issue.number;
+
+            const comments = await github.paginate(
+              github.rest.issues.listComments,
+              { owner, repo, issue_number }
+            );
+
+            const existing = comments.find(c => c.body.includes(TAG));
+
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner,
+                repo,
+                comment_id: existing.id,
+                body
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner,
+                repo,
+                issue_number,
+                body
+              });
+            }
+
       - name: Commit Accuracy Reports
-        if: github.ref != 'refs/heads/main' # Only runs on the 'main' branch
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         shell: bash
         run: |
-          git config user.name github-actions
-          git config user.email github-actions@github.com
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+
           git add index.html CMR2PROGRESS/summary.json
-          git commit -m "chore: update accuracy reports"
+
+          if git diff --cached --quiet; then
+            echo "No accuracy report changes to commit"
+            exit 0
+          fi
+
+          git commit -m "chore: update accuracy reports [skip ci]"
           git push
