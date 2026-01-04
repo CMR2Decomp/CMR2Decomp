@@ -128,10 +128,7 @@ jobs:
             const LOW_ACCURACY_THRESHOLD = 80;
 
             function load(path) {
-              if (!fs.existsSync(path)) {
-                console.log("file doesn't exist.");
-                return null;
-              }
+              if (!fs.existsSync(path)) return null;
               return JSON.parse(fs.readFileSync(path, 'utf8'));
             }
 
@@ -146,16 +143,10 @@ jobs:
             const current = currentRaw?.data || [];
             const previous = previousRaw?.data || [];
 
-            if (!current.length) {
-              console.log('No functions found in summary.json, skipping PR comment.');
-              return;
-            }
+            if (!current.length) return;
 
-            const currMap = new Map();
-            current.forEach(fn => currMap.set(fn.address, fn));
-
-            const prevMap = new Map();
-            if (previous) previous.forEach(fn => prevMap.set(fn.address, fn));
+            const currMap = new Map(current.map(f => [f.address, f]));
+            const prevMap = new Map((previous || []).map(f => [f.address, f]));
 
             const increased = [];
             const decreased = [];
@@ -163,6 +154,7 @@ jobs:
             const gone = [];
             const stubbed = [];
             const lowAccuracy = [];
+            const newlyPerfect = [];
 
             let total = 0;
             let matched = 0;
@@ -176,27 +168,27 @@ jobs:
 
               const currPct = fn.matching * 100;
               const prev = prevMap.get(fn.address);
-
-              // ---- Stub detection ----
               const isStub = fn.matching <= STUB_THRESHOLD;
+              const isPerfect = currPct === 100;
 
-              // ---- Low accuracy (exclude pure stubs) ----
+              // 🎉 Newly perfect
+              if (isPerfect && prev && prev.matching * 100 < 100 && !isStub) {
+                newlyPerfect.push({ fn, prevPct: prev.matching * 100 });
+              }
+
+              // 🚨 Below 80% (exclude pure stubs)
               if (!isStub && currPct < LOW_ACCURACY_THRESHOLD) {
                 const prevPct = prev ? prev.matching * 100 : null;
-                const delta = prevPct !== null ? currPct - prevPct : null;
-
                 lowAccuracy.push({
                   fn,
                   currPct,
-                  delta
+                  delta: prevPct !== null ? currPct - prevPct : null
                 });
               }
 
               if (!prev) {
                 added.push(fn);
-                if (isStub) {
-                  stubbed.push({ fn, reason: 'new stub' });
-                }
+                if (isStub) stubbed.push({ fn, reason: 'new stub' });
                 continue;
               }
 
@@ -220,13 +212,21 @@ jobs:
             const effective = ((matched / total) * 100).toFixed(2);
             const fullMatchPct = ((fullMatch / total) * 100).toFixed(2);
 
+            function formatName(fn) {
+              return fn.matching * 100 === 100 ? `🏆 ${fn.name}` : fn.name;
+            }
+
+            function formatAccuracy(pct) {
+              return pct === 100 ? '**100.00% ✓**' : `${pct.toFixed(2)}%`;
+            }
+
             function deltaTable(rows) {
               if (!rows.length) return '_None_';
               return [
                 '| Address | Function | Before | After |',
                 '|--------:|----------|--------|-------|',
                 ...rows.map(r =>
-                  `| \`${r.fn.address}\` | ${r.fn.name} | ${r.prevPct.toFixed(2)}% | **${r.currPct.toFixed(2)}%** |`
+                  `| \`${r.fn.address}\` | ${formatName(r.fn)} | ${r.prevPct.toFixed(2)}% | ${formatAccuracy(r.currPct)} |`
                 )
               ].join('\n');
             }
@@ -237,14 +237,24 @@ jobs:
                 '| Address | Function | Accuracy |',
                 '|--------:|----------|----------|',
                 ...rows.map(f =>
-                  `| \`${f.address}\` | ${f.name} | ${(f.matching * 100).toFixed(2)}% |`
+                  `| \`${f.address}\` | ${formatName(f)} | ${formatAccuracy(f.matching * 100)} |`
+                )
+              ].join('\n');
+            }
+
+            function newlyPerfectTable(rows) {
+              if (!rows.length) return '_None_';
+              return [
+                '| Address | Function | Before | Now |',
+                '|--------:|----------|--------|-----|',
+                ...rows.map(r =>
+                  `| \`${r.fn.address}\` | 🏆 ${r.fn.name} | ${r.prevPct.toFixed(2)}% | **100.00% ✓** |`
                 )
               ].join('\n');
             }
 
             function lowAccuracyTable(rows) {
               if (!rows.length) return '_None_';
-
               return [
                 '| Address | Function | Accuracy | Δ Since Last PR |',
                 '|--------:|----------|----------|----------------|',
@@ -255,7 +265,6 @@ jobs:
                       r.delta === null
                         ? '—'
                         : `${r.delta > 0 ? '+' : ''}${r.delta.toFixed(2)}%`;
-
                     return `| \`${r.fn.address}\` | ${r.fn.name} | **${r.currPct.toFixed(2)}%** | ${delta} |`;
                   })
               ].join('\n');
@@ -281,16 +290,7 @@ jobs:
                 ].join('\n')
               : '_None_';
 
-            // ---- Timestamp ----
-            const now = new Date();
-            function pad(n) { return n < 10 ? '0' + n : n; }
-            const timestamp =
-              now.getUTCFullYear() + '-' +
-              pad(now.getUTCMonth() + 1) + '-' +
-              pad(now.getUTCDate()) + ' ' +
-              pad(now.getUTCHours()) + ':' +
-              pad(now.getUTCMinutes()) + ':' +
-              pad(now.getUTCSeconds()) + ' UTC';
+            const timestamp = new Date().toISOString().replace('T', ' ').replace(/\..+/, ' UTC');
 
             const body = [
               TAG,
@@ -303,8 +303,13 @@ jobs:
               '',
               '---',
               '',
-              '### ✅ Increased',
-              deltaTable(increased),
+              '### 🎉 Newly Perfect Since Last PR',
+              newlyPerfectTable(newlyPerfect),
+              '',
+              '---',
+              '',
+              '### 🚨 Functions Below 80% Accuracy (Non-Stubs)',
+              lowAccuracyTable(lowAccuracy),
               '',
               '---',
               '',
@@ -313,8 +318,8 @@ jobs:
               '',
               '---',
               '',
-              '### 🚨 Functions Below 80% Accuracy (Non-Stubs)',
-              lowAccuracyTable(lowAccuracy),
+              '### ✅ Increased',
+              deltaTable(increased),
               '',
               '---',
               '',
@@ -345,19 +350,9 @@ jobs:
             const existing = comments.find(c => c.body.includes(TAG));
 
             if (existing) {
-              await github.rest.issues.updateComment({
-                owner,
-                repo,
-                comment_id: existing.id,
-                body
-              });
+              await github.rest.issues.updateComment({ owner, repo, comment_id: existing.id, body });
             } else {
-              await github.rest.issues.createComment({
-                owner,
-                repo,
-                issue_number,
-                body
-              });
+              await github.rest.issues.createComment({ owner, repo, issue_number, body });
             }
 
       - name: Commit Accuracy Reports

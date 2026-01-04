@@ -88,6 +88,7 @@ void CGame::InitializeGame(Unk0049c2c0 *p1, BYTE p2)
 {
     time_t srandSeed;
     char *skuValue, *skuRegion;
+    bool didLoadGameInfo = false;
 
     srandSeed = time(NULL);
     srand(srandSeed);
@@ -141,6 +142,7 @@ void CGame::InitializeGame(Unk0049c2c0 *p1, BYTE p2)
             CGameInfo::FUN_00406560();
             CGameInfo::FUN_00406580();
             CGameInfo::SetupInputs();
+            didLoadGameInfo = CGameInfo::LoadGameInfo();
             CGameInfo::FUN_00405de0(0);
         }
     }

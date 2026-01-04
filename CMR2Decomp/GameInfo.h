@@ -98,6 +98,7 @@ public:
     static void FUN_00406560(void);
     static void FUN_00406580(void);
     static DWORD SetupInputs(void);
+    static bool LoadGameInfo(void);
 
     // GLOBAL: CMR2 0x0052afa0
     static GameInfo m_gameInfo;
@@ -113,6 +114,9 @@ public:
 
     // GLOBAL: CMR2 0x00516184
     static char m_stringCMR[4];
+
+    // GLOBAL: CMR2 0x005250dc
+    static char m_stringGameInfoRCF[32];
 };
 
 #endif

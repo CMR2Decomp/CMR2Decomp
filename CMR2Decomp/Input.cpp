@@ -36,21 +36,21 @@ REFGUID CInput::m_dinputRefGuidMouse = GUID_SysMouse;
 REFGUID CInput::m_dinputRefGuidKeyboard = GUID_SysKeyboard;
 
 // GLOBAL: CMR2 0x00512e88
-LPDIRECTINPUTDEVICEA CInput::m_pOldDirectInputKeyboard;
+LPDIRECTINPUTDEVICEA CInput::m_pOldDirectInputKeyboard = NULL;
 
 // GLOBAL: CMR2 0x00512e70
-LPDIRECTINPUTDEVICEA CInput::m_pOldDirectInputMouse;
+LPDIRECTINPUTDEVICEA CInput::m_pOldDirectInputMouse = NULL;
 
 // GLOBAL: CMR2 0x005117c8
 DIDATAFORMAT CInput::m_objectDataFormat;
 
 // GLOBAL: CMR2 0x0059f6a8
-LPDIRECTINPUTDEVICEA CInput::m_pDirectInputKeyboard;
+LPDIRECTINPUTDEVICEA CInput::m_pDirectInputKeyboard = NULL;
 // GLOBAL: CMR2 0x0059f7c4
-LPDIRECTINPUTDEVICEA CInput::m_pDirectInputMouse;
+LPDIRECTINPUTDEVICEA CInput::m_pDirectInputMouse = NULL;
 
 // GLOBAL: CMR2 0x00512ea0
-LPDIRECTINPUTDEVICEA CInput::m_pDirectInputJoystick;
+LPDIRECTINPUTDEVICEA CInput::m_pDirectInputJoystick = NULL;
 
 // GLOBAL: CMR2 0x00511400
 USHORT CInput::m_unk0x00511400[8];

@@ -22,6 +22,7 @@ char *CGameInfo::m_gameRegionStrings[4] = {
 int CGameInfo::m_unk0x0081a754;
 
 char CGameInfo::m_stringCMR[4] = "cmr";
+char CGameInfo::m_stringGameInfoRCF[32] = "%s\\Configuration\\GameInfo.rcf";
 
 // FUNCTION: CMR2 0x004057f0
 unsigned char CGameInfo::GetGameLanguage(void)
@@ -562,4 +563,9 @@ DWORD CGameInfo::SetupInputs(void) {
     }
 
     return CInput::m_unk0x0059f8cc.field_0x0 & 0xFF;
+}
+
+// FUNCTION: CMR2 0x004ea5e0
+bool CGameInfo::LoadGameInfo(void) {
+    return true;
 }
