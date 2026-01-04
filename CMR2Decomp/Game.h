@@ -46,6 +46,7 @@ public:
     static void FUN_004083e0(BYTE param1);
     static void FUN_00406810(BYTE param1);
     static bool FUN_004067e0(void);
+    static void FUN_004b7a40(void);
 
     // GLOBAL: CMR2 0x00663db8
     static BOOL m_shouldExit;

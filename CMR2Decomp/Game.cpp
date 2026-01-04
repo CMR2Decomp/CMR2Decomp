@@ -38,6 +38,11 @@ void CGame::SetShouldExit(void)
     // m_shouldExit = TRUE;
 }
 
+// STUB: CMR2 0x004b7a40
+void CGame::FUN_004b7a40(void) {
+
+}
+
 // FUNCTION: CMR2 0x004d0780
 BOOL CGame::FUN_004d0780(void)
 {

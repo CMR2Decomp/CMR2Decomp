@@ -57,7 +57,7 @@ unsigned char CMain::Initialize(HINSTANCE hInstance, unsigned char param2, LPSTR
 		{
 			if (!CGame::m_isActive)
 			{
-				// 	FUN_004b7a40();
+				CGame::FUN_004b7a40();
 				CGame::FUN_004d0780();
 			}
 		}
