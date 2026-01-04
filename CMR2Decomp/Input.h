@@ -123,7 +123,7 @@ public:
     static bool FUN_004ab5f0(HRESULT hr);
     static void SetForceFeedbackAutocenter(DWORD param1, int deviceID);
     static void ResetForceFeedbackEffects(void);
-    static void FUN_004aaea0(void * param1, void *param2);
+    static BOOL ResetForceFeedbackEffectsAlt(void);
 };
 
 #endif

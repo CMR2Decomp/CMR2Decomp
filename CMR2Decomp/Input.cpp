@@ -502,7 +502,7 @@ BOOL CInput::FUN_004aae20(int deviceID, LPDIRECTINPUTDEVICE7 pDevice) {
 
     if (m_unk0x00666ee8 == FALSE) {
         m_unk0x00666ee8 = TRUE;
-        FUN_0049c0a0(FUN_004aaea0, NULL);
+        FUN_0049c0a0(ResetForceFeedbackEffectsAlt, NULL);
     }
 
     return TRUE;
@@ -530,7 +530,7 @@ void CInput::SetForceFeedbackAutocenter(DWORD param1, int deviceID) {
 
 // 96.55% match, only concern is this
 // 0x4aaf35	-cmp edi, 0x666ed4
-//          +cmp edi, CInput::m_dinputRefGuidKeyboard (DATA) (Input.cpp:557) <-- why  are you that
+//          +cmp edi, CInput::m_dinputRefGuidKeyboard (DATA) (Input.cpp:560) <-- why  are you that
 // FUNCTION: CMR2 0x004aaf00
 void CInput::ResetForceFeedbackEffects(void) {
     LPDIRECTINPUTEFFECT* pEffects = m_forceFeedbackDevices[0].effects;
@@ -557,10 +557,37 @@ void CInput::ResetForceFeedbackEffects(void) {
         }
         
         pEffects = (LPDIRECTINPUTEFFECT*)((BYTE*)pEffects + 0x34);
-    } while ((int)pEffects < (int)&m_forceFeedbackDevices[8]);
+    } while ((int)pEffects < (int)&m_forceFeedbackDevices[8]+16);
 }
 
-// STUB: CMR2 0x004aaea0
-void CInput::FUN_004aaea0(void * param1, void *param2) {
-
+// 96.77% match, only concern is this
+// 0x4aaeda	-cmp edi, 0x666ec8
+// 	        +cmp edi, CInput::m_dinputRefGuidKeyboard (DATA) (Input.cpp:587)  <-- why  are you that
+// FUNCTION: CMR2 0x004aaea0
+BOOL CInput::ResetForceFeedbackEffectsAlt(void) {
+    ForceFeedbackDevice* pDevice = m_forceFeedbackDevices;
+    
+    do {
+        if (pDevice->field_0x0 != FALSE) {
+            LPDIRECTINPUTEFFECT* pEffect = pDevice->effects;
+            int count = 10;
+            
+            do {
+                if (*pEffect != NULL) {
+                    ULONG refcount = (*pEffect)->Release();
+                    if (refcount == 0) {
+                        *pEffect = NULL;
+                    }
+                }
+                pEffect++;
+                count--;
+            } while (count != 0);
+            
+            pDevice->field_0x8 = 0;
+            pDevice->field_0x0 = 0;
+        }
+        pDevice++;
+    } while ((int)pDevice < (int)&m_forceFeedbackDevices[8]);
+    m_unk0x00666ee8 = FALSE;
+    return TRUE;
 }
