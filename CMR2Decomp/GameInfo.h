@@ -97,7 +97,7 @@ public:
     static void FUN_00406010(GameInfo0xa4 *param1);
     static void FUN_00406560(void);
     static void FUN_00406580(void);
-    static void FUN_0049eaf0(void);
+    static DWORD SetupInputs(void);
 
     // GLOBAL: CMR2 0x0052afa0
     static GameInfo m_gameInfo;
@@ -113,9 +113,6 @@ public:
 
     // GLOBAL: CMR2 0x00516184
     static char m_stringCMR[4];
-
-    // GLOBAL: CMR2 0x0059f8cd
-    static BYTE m_unk0x0059f8cd;
 };
 
 #endif

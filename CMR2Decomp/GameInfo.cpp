@@ -20,7 +20,6 @@ char *CGameInfo::m_gameRegionStrings[4] = {
     gameRegionEurope, gameRegionUSA, gameRegionJapan, gameRegionPoland};
 
 int CGameInfo::m_unk0x0081a754;
-BYTE CGameInfo::m_unk0x0059f8cd;
 
 char CGameInfo::m_stringCMR[4] = "cmr";
 
@@ -542,18 +541,25 @@ void CGameInfo::FUN_00406580(void) {
 
 // TODO: is this actually gameinfo related?
 // FUNCTION: CMR2 0x0049eaf0
-void CGameInfo::FUN_0049eaf0(void) {
-    BOOL bDidCreateInput = CInput::DInputCreate();
-    if (bDidCreateInput) {
-        m_unk0x0059f8cd = 2;
-        CInput::m_unk0x0059f8cc.field_0x1 = 0;
-        CInput::m_unk0x0059f8cc.field_0x2 = 0x2;
-        CInput::m_unk0x0059f8cc.field_0x3 = 0;
-
-        // weird loop
-
+DWORD CGameInfo::SetupInputs(void) {
+    if (CInput::DInputCreate()) {
+        CInput::m_unk0x0059f8cc.field_0x0 = 0;
+        CInput::m_unk0x0059f8cc.field_0x1 = 2;
+        CInput::m_unk0x0059f8cc.field_0x2 = 0;
+        
+        int* pField18 = &CInput::m_availableDevices[0].field_0x18;
+        int initVal = -1;
+        
+        do {
+            *(pField18 - 6) = initVal;  // -24 bytes = field_0x0
+            *pField18 = initVal;         // field_0x18
+            pField18 = (int*)((BYTE*)pField18 + 0x50C);
+        } while ((int)pField18 < 0x59f6c0);
+        
         CInput::SetupKeyboard();
         CInput::SetupMouse();
         CInput::GetAttachedJoysticks();
     }
+
+    return CInput::m_unk0x0059f8cc.field_0x0 & 0xFF;
 }

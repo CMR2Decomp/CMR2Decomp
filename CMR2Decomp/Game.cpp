@@ -135,7 +135,7 @@ void CGame::InitializeGame(Unk0049c2c0 *p1, BYTE p2)
             CGameInfo::FUN_00510410();
             CGameInfo::FUN_00406560();
             CGameInfo::FUN_00406580();
-            CGameInfo::FUN_0049eaf0();
+            CGameInfo::SetupInputs();
             CGameInfo::FUN_00405de0(0);
         }
     }

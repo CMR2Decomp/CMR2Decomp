@@ -42,7 +42,7 @@ struct DeviceInfo {
     DWORD field_0x8;
     BYTE pad[6];
     int field_0x14;
-    BOOL field_0x18;
+    int field_0x18;
     int field_0x1c;
     BYTE pad2[92];
     char deviceInstanceName[MAX_PATH];
@@ -65,10 +65,10 @@ struct DeviceInfo {
 };
 
 struct Unk0x0059f8cc {
+    BYTE field_0x0;
     BYTE field_0x1;
     BYTE field_0x2;
     BYTE field_0x3;
-    BYTE field_0x4;
 };
 
 struct ForceFeedbackDevice {
@@ -85,7 +85,7 @@ public:
     static IDirectInput7A *m_lpDirectInput7;
     static Unk0x0059f8cc m_unk0x0059f8cc;
     static char m_strKeyboard[12];
-    static DeviceInfo m_availableDevices[2];
+    static DeviceInfo m_availableDevices[8];
     static PVOID m_keyboardDelay;
     static DWORD m_mouseGranularity;
     static PVOID m_keyboardSpeed;
