@@ -346,7 +346,7 @@ BOOL CInput::SetupJoystick(LPCDIDEVICEINSTANCEA lpddi, LPVOID pvRef) {
                     iVar11 = 0x20;
 
                     do {
-                        if (iVar11 > 0x20) break;
+                        if (0x20 < iVar11) break;
                         hr = m_unk0x0059f6b0[m_unk0x0059f8cc >> 0x10 & 0xFF]->GetObjectInfo(&didoi, iVar11, DIPH_BYOFFSET);
                         
                         if (SUCCEEDED(hr)) {
@@ -372,14 +372,15 @@ BOOL CInput::SetupJoystick(LPCDIDEVICEINSTANCEA lpddi, LPVOID pvRef) {
                 iVar10 = 0;
 
                 if (m_availableDevices[uVar2].field_0x14 > 0) {
-                    DWORD * unk_0x1c = &m_availableDevices[uVar2].field_0x1c;
+                    int * pUnk0x1c = &m_availableDevices[uVar2].field_0x1c;
                     do {
-                        BYTE bVar6 = iVar10;
-                        iVar10 ++;
-                        *unk_0x1c = 1 << (bVar6 & 0xFF);
-                        unk_0x1c++;
-                    } while ((int)unk_0x1c < (int)&m_availableDevices[uVar2].field_0x14);
+                        *pUnk0x1c++ = 1u << iVar10;
+                        iVar10++;
+                    } while (iVar10 < m_availableDevices[uVar2].field_0x14);
                 }
+
+                m_unk0x0059f6b0[m_unk0x0059f8cc >> 0x10 & 0xFF]->Acquire();
+                m_unk0x0059f8cc++;
             }
         }
     }

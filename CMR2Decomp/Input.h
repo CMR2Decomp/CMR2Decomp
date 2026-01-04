@@ -41,9 +41,9 @@ struct DeviceInfo {
     BOOL field_0x4;
     DWORD field_0x8;
     BYTE pad[6];
-    DWORD field_0x14;
+    int field_0x14;
     BOOL field_0x18;
-    DWORD field_0x1c;
+    int field_0x1c;
     BYTE pad2[92];
     char deviceInstanceName[MAX_PATH];
     char deviceProductName[MAX_PATH];
