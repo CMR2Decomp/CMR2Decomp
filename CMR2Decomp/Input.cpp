@@ -73,6 +73,12 @@ ForceFeedbackDevice CInput::m_forceFeedbackDevices[8];
 // GLOBAL: CMR2 0x00666ee8
 BOOL CInput::m_unk0x00666ee8 = FALSE;
 
+// GLOBAL: CMR2 0x00593ba0;
+int CInput::m_unk0x00593ba0;
+
+// GLOBAL: CMR2 0x005939a0;
+void* CInput::m_unk0x005939a0;
+
 // FUNCTION: CMR2 0x0049fd30
 BOOL CInput::DInputCreate(void) {
     DirectInputCreateEx(CMain::m_hInstance, 0x700, m_dInputDevice7, (LPVOID*)&CInput::m_lpDirectInput7, NULL);
@@ -126,9 +132,33 @@ LPDIRECTINPUTDEVICEA CInput::DInputCreateDevice(REFGUID guid, LPDIRECTINPUTDEVIC
     return NULL;
 }
 
-// STUB: CMR2 0x0049c0a0
-void CInput::FUN_0049c0a0(void *param1, void *param2) {
-    return;
+// FUNCTION: CMR2 0x0049c0a0
+int CInput::FUN_0049c0a0(void *param1, void *param2) {
+    int iVar2;
+    void **piVar3;
+
+    if (param1 == NULL)
+        return -1;
+
+    iVar2 = 0;
+    if (m_unk0x00593ba0 > 0) {
+        piVar3 = &m_unk0x005939a0;
+        while (1) {
+            if (param1 == *piVar3)
+                return iVar2;
+    
+            iVar2++;
+            piVar3++;
+            
+            if (iVar2 >= m_unk0x00593ba0) break;
+        }
+    }
+
+    if (m_unk0x00593ba0 >= 0x40)
+        return -1;
+
+    (&m_unk0x005939a0)[m_unk0x00593ba0] = param1;
+    return m_unk0x00593ba0++;
 }
 
 // release?

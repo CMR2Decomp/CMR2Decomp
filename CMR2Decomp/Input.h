@@ -105,10 +105,12 @@ public:
     static CHAR m_strL[4];
     static ForceFeedbackDevice m_forceFeedbackDevices[8];
     static BOOL m_unk0x00666ee8;
+    static int m_unk0x00593ba0;
+    static void* m_unk0x005939a0;
 
     static BOOL DInputCreate(void);
     static LPDIRECTINPUTDEVICEA DInputCreateDevice(REFGUID param1, LPDIRECTINPUTDEVICEA *existingDevice);
-    static void FUN_0049c0a0(void *param1, void *param2);
+    static int FUN_0049c0a0(void *param1, void *param2);
     static void FUN_0049fd60(void);
     static BOOL SetupKeyboard(void);
     static void SetupMouse(void);
