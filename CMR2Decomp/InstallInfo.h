@@ -12,6 +12,8 @@ public:
     static int FUN_0040e8d0(void);
     static void SetGameHDPath(char *filePath);
     static void SetGameCDPath(char *filePath);
+    static char *GetGameHDPath(void);
+    static char *GetGameCDPath(void);    
 
 private:
     // GLOBAL: CMR2 0x00520ef0
@@ -47,16 +49,15 @@ private:
     // GLOBAL: CMR2 0x00520ca0
     static char *m_noCDMessages[7][2];
 
-    // guess
     // GLOBAL: CMR2 0x006640f0
     static char m_hdPath[MAX_PATH];
     // GLOBAL: CMR2 0x00664604
-    static int m_isHDInstall;
+    static BOOL m_isHDInstall;
 
     // GLOBAL: CMR2 0x00664400
     static char m_cdPath[MAX_PATH];
     // GLOBAL: CMR2 0x00664608
-    static int m_isCDInstall;
+    static BOOL m_isCDInstall;
 
     // all the directories for assets
     // GLOBAL: CMR2 0x005361a8

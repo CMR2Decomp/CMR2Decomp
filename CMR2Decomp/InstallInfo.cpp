@@ -30,10 +30,10 @@ char *CInstallInfo::m_noCDMessages[7][2] = {
     {m_noCDBodyAmerican, m_noCDHeaderAmerican}};
 
 char CInstallInfo::m_hdPath[MAX_PATH];
-int CInstallInfo::m_isHDInstall = 0;
+BOOL CInstallInfo::m_isHDInstall = FALSE;
 
 char CInstallInfo::m_cdPath[MAX_PATH];
-int CInstallInfo::m_isCDInstall = 0;
+BOOL CInstallInfo::m_isCDInstall = FALSE;
 
 // asset directories
 char CInstallInfo::m_tracksDir[MAX_PATH] = "";
@@ -226,7 +226,7 @@ int CInstallInfo::FUN_0040e8d0(void)
 void CInstallInfo::SetGameHDPath(char *filePath)
 {
     lstrcpyA(m_hdPath, filePath);
-    m_isHDInstall = 1;
+    m_isHDInstall = TRUE;
     return;
 }
 
@@ -234,6 +234,17 @@ void CInstallInfo::SetGameHDPath(char *filePath)
 void CInstallInfo::SetGameCDPath(char *filePath)
 {
     lstrcpyA(m_cdPath, filePath);
-    m_isCDInstall = 1;
+    m_isCDInstall = TRUE;
     return;
+}
+
+
+// FUNCTION: CMR2 0x004aa700
+char* CInstallInfo::GetGameHDPath(void) {
+    return m_isHDInstall ? m_hdPath : NULL;
+}
+
+// FUNCTION: CMR2 0x004aa710
+char* CInstallInfo::GetGameCDPath(void) {
+    return m_isCDInstall ? m_cdPath : NULL;
 }
