@@ -1,6 +1,10 @@
 #include "GameInfo.h"
 #include "Graphics.h"
 #include "Input.h"
+#include "Frontend.h"
+#include "InstallInfo.h"
+#include "FileBuffer.h"
+#include "GenericFileLoader.h"
 #include "main.h"
 
 #include <stdio.h>
@@ -19,15 +23,17 @@ unsigned int CGameInfo::m_gameRegion;
 char *CGameInfo::m_gameRegionStrings[4] = {
     gameRegionEurope, gameRegionUSA, gameRegionJapan, gameRegionPoland};
 
+BYTE CGameInfo::m_unk0x00817574;
 int CGameInfo::m_unk0x0081a754;
 
 char CGameInfo::m_stringCMR[4] = "cmr";
 char CGameInfo::m_stringGameInfoRCF[32] = "%s\\Configuration\\GameInfo.rcf";
 
+
 // FUNCTION: CMR2 0x004057f0
 unsigned char CGameInfo::GetGameLanguage(void)
 {
-    return m_gameInfo.field2_0x14 & 7;
+    return m_gameInfo.field_0x14 & 7;
 }
 
 // FUNCTION: CMR2 0x00405800
@@ -568,5 +574,85 @@ DWORD CGameInfo::SetupInputs(void) {
 
 // FUNCTION: CMR2 0x004ea5e0
 bool CGameInfo::LoadGameInfo(void) {
+    char *hdPath;
+    GameInfo *fileBuffer;
+    size_t fileSize;
+    int iVar4;
+    unsigned int flag, graphicsOptions, uVar6;
+
+    hdPath = CInstallInfo::GetGameHDPath();
+    sprintf(CFrontend::m_stringDest, m_stringGameInfoRCF, hdPath);
+
+    fileBuffer = (GameInfo*)CFileBuffer::GetGenericFileBuffer(CFrontend::m_stringDest, TRUE);
+    if (fileBuffer == NULL)
+        return false;
+
+    // make sure file size is valid and that it has the magic number
+    fileSize = CGenericFileLoader::GetGenericFileSize();
+    if (fileSize != 0x399c || fileBuffer->magicNumber != 0x11) {
+        CFileBuffer::FreeGenericFileBuffer(fileBuffer);
+        return false;
+    }
+
+    memcpy(&m_gameInfo, fileBuffer, sizeof(GameInfo));
+
+    g_pGraphics->resX = m_gameInfo.screenWidth;
+    g_pGraphics->resY = m_gameInfo.screenHeight;
+    g_pGraphics->depth = m_gameInfo.screenColourDepth;
+
+    g_pGraphics->isFullscreen = IsFullscreen() & 0xff;
+
+    graphicsOptions = m_gameInfo.unknownGraphicsOptions & 6;
+
+
+    if (graphicsOptions == 2) {
+        g_pGraphics->field913_0x3bc |= 0x8;  // OR with 0x8
+    } else if (graphicsOptions == 4) {
+        g_pGraphics->field913_0x3bc |= 0x8;
+        g_pGraphics->field913_0x3bc |= 0x10;
+    } else if (graphicsOptions == 6) {
+        g_pGraphics->field913_0x3bc |= 0x8;
+        g_pGraphics->field913_0x3bc &= ~0x10;  // Clear bit 4
+        g_pGraphics->field913_0x3bc |= 0x80;   // Set bit 7
+    }
+
+    g_pGraphics->field917_0x3c0 = FUN_00405ca0();
+    
+    if (m_gameInfo.unknownGraphicsOptions & (1 << 27))
+        g_pGraphics->field913_0x3bc |= 0x04;
+    else
+        g_pGraphics->field913_0x3bc &= 0xFB;
+    
+    uVar6 = FUN_00406410(0x11);
+    if (uVar6 != 0)
+        FUN_004eac50(0x11);
+
+    FUN_004d0590(0);
+    CFileBuffer::FreeGenericFileBuffer(fileBuffer);
+    
     return true;
+}
+
+// FUNCTION: CMR2 0x00405b20
+unsigned int CGameInfo::IsFullscreen(void) {
+    return m_gameInfo.unknownGraphicsOptions & 1;
+}
+
+// FUNCTION: CMR2 0x00405ca0
+unsigned int CGameInfo::FUN_00405ca0(void)
+{
+  return m_gameInfo.unknownGraphicsOptions >> 0x15 & 0xf;
+}
+
+int CGameInfo::FUN_00406410(BYTE param1) {
+    return 0;
+}
+
+int CGameInfo::FUN_004eac50(BYTE param1) {
+    return 0;
+}
+
+// FUNCTION: CMR2 0x004d0590
+void CGameInfo::FUN_004d0590(BYTE param1) {
+    m_unk0x00817574 = param1;
 }

@@ -38,9 +38,9 @@ struct GameInfo
     int screenWidth;
     int screenHeight;
     int screenColourDepth;
-    int isFullscreen;
-    unsigned int field_0x34; // badly named and in the wrong place
-    unsigned int field_0x38; // badly named and in the wrong place
+    unsigned int unknownGraphicsOptions; // first byte is fullscreen
+    unsigned int field_0x34;
+    unsigned int field_0x38;
     char graphicsCardName[76];
     unsigned int field_0x88;
     unsigned int field_0x8c;
@@ -94,6 +94,11 @@ public:
     static void FUN_00406580(void);
     static DWORD SetupInputs(void);
     static bool LoadGameInfo(void);
+    static unsigned int IsFullscreen(void);
+    static unsigned int FUN_00405ca0(void);
+    static int FUN_00406410(BYTE param1);
+    static int FUN_004eac50(BYTE param1);
+    static void FUN_004d0590(BYTE param1);
 
     // GLOBAL: CMR2 0x0052afa0
     static GameInfo m_gameInfo;
@@ -103,6 +108,9 @@ public:
 
     // GLOBAL: CMR2 0x00516124
     static char *m_gameRegionStrings[4];
+
+    // GLOBAL: CMR2 0x00817574
+    static BYTE m_unk0x00817574;    
 
     // GLOBAL: CMR2 0x0081a754
     static int m_unk0x0081a754;

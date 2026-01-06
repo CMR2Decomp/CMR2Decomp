@@ -919,10 +919,7 @@ struct Graphics
     unsigned char field910_0x3b3;
     IDirectDraw7 **pDD;
     IDirectDraw7 **pDD7;
-    unsigned char field913_0x3bc;
-    unsigned char field914_0x3bd;
-    unsigned char field915_0x3be;
-    unsigned char field916_0x3bf;
+    unsigned int field913_0x3bc;
     unsigned char field917_0x3c0;
     unsigned char field918_0x3c1;
     unsigned char field919_0x3c2;
