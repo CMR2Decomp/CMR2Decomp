@@ -51,12 +51,12 @@ char *CGameInfo::GetGameRegionDirectory(void)
 // FUNCTION: CMR2 0x00405d80
 unsigned char CGameInfo::FUN_00405d80(void)
 {
-    return m_gameInfo.field2_0x14 >> 3 & 0x7f;
+    return m_gameInfo.field_0x14 >> 3 & 0x7f;
 }
 
 unsigned char CGameInfo::FUN_00405d90(void)
 {
-    return m_gameInfo.field2_0x14 >> 10 & 7;
+    return m_gameInfo.field_0x14 >> 10 & 7;
 }
 
 // FUNCTION: CMR2 0x00405c10
@@ -115,7 +115,7 @@ void CGameInfo::FUN_004f4b40(void)
 // FUNCTION: CMR2 0x00405de0
 void CGameInfo::FUN_00405de0(BYTE param1)
 {
-    m_gameInfo.field2_0x14 = ((param1 & 1) << 0x13) | (m_gameInfo.field2_0x14 & 0xfff7ffffU);
+    m_gameInfo.field_0x14 = ((param1 & 1) << 0x13) | (m_gameInfo.field_0x14 & 0xfff7ffffU);
 }
 
 // FUNCTION: CMR2 0x00510410
@@ -136,18 +136,19 @@ void CGameInfo::FUN_00510410(void)
     m_gameInfo.field_0x397c = 10;
     m_gameInfo.field_0x3984 = 6;
     m_gameInfo.field_0x3988 = 3;
-    m_gameInfo.field_0x398c = 30;
+    m_gameInfo.field_0x398c = 0x1e;
 
     FUN_00510570();
 
     m_gameInfo.field_0x98 = 4;
+    m_gameInfo.field_0x9a = 0;
     m_gameInfo.field_0x18 = (m_gameInfo.field_0x18 & 0xfff93264) | 0x40393264;
 
     FUN_00406010(&m_gameInfo.field_0xa4);
     FUN_00406010(&m_gameInfo.field_0x1368);
     FUN_00406010(&m_gameInfo.field_0x262c);
 
-    m_gameInfo.field2_0x14 = m_gameInfo.field2_0x14 & 0x7fffffff;
+    m_gameInfo.field_0x14 = m_gameInfo.field_0x14 & 0x7fffffff;
 }
 
 // FUNCTION: CMR2 0x00510570
