@@ -2,7 +2,7 @@
 #include "FileBuffer.h"
 
 GenericFile CGenericFileLoader::m_genericFile;
-DWORD CGenericFileLoader::m_unk0x00663fe8;
+DWORD CGenericFileLoader::m_fileSize;
 
 // FUNCTION: CMR2 0x004a9d70
 bool CGenericFileLoader::FUN_004a9d70(GenericFile *file, char *fileName)
@@ -31,5 +31,5 @@ bool CGenericFileLoader::FUN_004a9c30(char *fileName, GenericFile *param_2)
 // FUNCTION: CMR2 0x004aa590
 int CGenericFileLoader::GetGenericFileSize(void)
 {
-    return m_unk0x00663fe8;
+    return m_fileSize;
 }
