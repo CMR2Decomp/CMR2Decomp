@@ -115,7 +115,7 @@ void *CFileBuffer::GetGenericFileBuffer(char *fileName, BOOL isLocalFile)
             return NULL;
 
         lpBuffer = AllocateLockedBuffer(pFileHeaderOut.archiveSize);
-        CGenericFileLoader::m_unk0x00663fe8 = pFileHeaderOut.archiveSize;
+        CGenericFileLoader::m_fileSize = pFileHeaderOut.archiveSize;
         FUN_004be660(unk0x004bdee0, lpBuffer, pFileHeaderOut.archiveSize);
         bIsBFL = true;
     }
@@ -144,7 +144,7 @@ void *CFileBuffer::GetGenericFileBuffer(char *fileName, BOOL isLocalFile)
         }
 
         fileSize = GetFileSize(hFile, NULL);
-        CGenericFileLoader::m_unk0x00663fe8 = fileSize;
+        CGenericFileLoader::m_fileSize = fileSize;
 
         if (fileSize == INVALID_FILE_SIZE)
             return NULL;
