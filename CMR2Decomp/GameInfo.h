@@ -96,7 +96,7 @@ public:
     static bool LoadGameInfo(void);
     static unsigned int IsFullscreen(void);
     static int FUN_00405ca0(void);
-    static int FUN_00406410(BYTE param1);
+    static BYTE FUN_00406410(BYTE param1);
     static int FUN_004eac50(BYTE param1);
     static void FUN_004d0590(BYTE param1);
 
