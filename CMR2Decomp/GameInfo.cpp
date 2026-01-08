@@ -601,38 +601,52 @@ bool CGameInfo::LoadGameInfo(void) {
     g_pGraphics->depth = m_gameInfo.screenColourDepth;
 
     g_pGraphics->isFullscreen = IsFullscreen() & 0xff;
-    graphicsOptions = m_gameInfo.unknownGraphicsOptions & 6;
 
-    if (graphicsOptions == 2) {
-        graphicsOptions = g_pGraphics->field913_0x3bc | 8;
-    } else {    
-        if (graphicsOptions == 4) {
-            graphicsOptions = g_pGraphics->field913_0x3bc | 8;
-            g_pGraphics->field913_0x3bc = graphicsOptions;
+    switch (m_gameInfo.unknownGraphicsOptions & 6) {
+        case 2:
+            g_pGraphics->field913_0x3bc |= 8;
+            g_pGraphics->field913_0x3bc &= 0xffffffef;
+            g_pGraphics->field913_0x3bc &= 0xffffff7f;
+        break;
+        
+        case 4:
+            g_pGraphics->field913_0x3bc |= 8;
+            g_pGraphics->field913_0x3bc |= 0x10;
+            g_pGraphics->field913_0x3bc &= 0xffffff7f;
+        
+        case 6:
+            g_pGraphics->field913_0x3bc |= 8;
+            g_pGraphics->field913_0x3bc &= 0xffffffef;
+            g_pGraphics->field913_0x3bc |= 0x80;
+        break;
 
-            graphicsOptions = g_pGraphics->field913_0x3bc | 0x10;
-        }
-
-        if (graphicsOptions == 6) {
-            graphicsOptions = g_pGraphics->field913_0x3bc | 8;
-            g_pGraphics->field913_0x3bc = graphicsOptions;
-
-            graphicsOptions = g_pGraphics->field913_0x3bc & 0xffffffef;
-            g_pGraphics->field913_0x3bc = graphicsOptions;            
-
-            graphicsOptions = g_pGraphics->field913_0x3bc | 0x80;
-            g_pGraphics->field913_0x3bc = graphicsOptions;
-        } else {
-            graphicsOptions = g_pGraphics->field913_0x3bc & 0xffffff7f;
-            g_pGraphics->field913_0x3bc = graphicsOptions;
-        }
-
-        g_pGraphics->field913_0x3bc = graphicsOptions;
-        g_pGraphics->field913_0x3bc = ((g_pGraphics->field913_0x3bc << 2) & 0xffffffbf) | 8;
+        default:
+            g_pGraphics->field913_0x3bc &= 0xfffffff7;
+            g_pGraphics->field913_0x3bc &= 0xffffffef;
+        break;
     }
-    
-    g_pGraphics->field913_0x3bc = graphicsOptions;
-    graphicsOptions = g_pGraphics->field913_0x3bc & 0xfffffffd;
+
+    g_pGraphics->field913_0x3bc = (m_gameInfo.unknownGraphicsOptions & 0x8) << 2 | g_pGraphics->field913_0x3bc & 0xffffffdf;
+    g_pGraphics->field913_0x3bc = (m_gameInfo.unknownGraphicsOptions & 0x10) << 2 | g_pGraphics->field913_0x3bc & 0xffffffbf;
+
+    switch (m_gameInfo.unknownGraphicsOptions & 0xc0000) {
+        case 0x40000:
+            g_pGraphics->field913_0x3bc |= 1;
+            g_pGraphics->field913_0x3bc &= 0xfffffffd;
+        break;
+ 
+        case 0x80000:
+            g_pGraphics->field913_0x3bc &= 0xfffffffe;
+            g_pGraphics->field913_0x3bc |= 2;
+
+        default:
+            g_pGraphics->field913_0x3bc &= 0xfffffffe;
+            g_pGraphics->field913_0x3bc &= 0xfffffffd;
+        break;
+    }
+
+    g_pGraphics->field917_0x3c0 = FUN_00405ca0();
+    g_pGraphics->field913_0x3bc = (m_gameInfo.unknownGraphicsOptions >> 0x1b & 4) | g_pGraphics->field913_0x3bc & 0xfffffffb;
 
     temp_field0x3bc = FUN_00406410(0x11);
     if (temp_field0x3bc != 0)
@@ -640,8 +654,8 @@ bool CGameInfo::LoadGameInfo(void) {
 
     FUN_004d0590(0);
     CFileBuffer::FreeGenericFileBuffer(fileBuffer);
-    
-    return true;
+
+return true;
 }
 
 // FUNCTION: CMR2 0x00405b20
@@ -650,9 +664,9 @@ unsigned int CGameInfo::IsFullscreen(void) {
 }
 
 // FUNCTION: CMR2 0x00405ca0
-unsigned int CGameInfo::FUN_00405ca0(void)
+int CGameInfo::FUN_00405ca0(void)
 {
-  return m_gameInfo.unknownGraphicsOptions >> 0x15 & 0xf;
+  return (int)(m_gameInfo.unknownGraphicsOptions >> 0x15 & 0xf);
 }
 
 int CGameInfo::FUN_00406410(BYTE param1) {
