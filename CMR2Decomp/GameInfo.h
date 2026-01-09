@@ -54,7 +54,7 @@ struct GameInfo
     GameInfo0xa4 field_0xa4;
     GameInfo0xa4 field_0x1368;
     GameInfo0xa4 field_0x262c;
-    BYTE field_0x38f0_padding[4];
+    unsigned int field_0x38f0;
     unsigned int field_0x38f4;
     char field_0x38f8[88];
     char field_0x3950[21];
@@ -96,7 +96,7 @@ public:
     static bool LoadGameInfo(void);
     static unsigned int IsFullscreen(void);
     static int FUN_00405ca0(void);
-    static BYTE FUN_00406410(BYTE param1);
+    static bool FUN_00406410(int param1);
     static int FUN_004eac50(BYTE param1);
     static void FUN_004d0590(BYTE param1);
 

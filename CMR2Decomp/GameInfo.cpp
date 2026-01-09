@@ -631,6 +631,11 @@ bool CGameInfo::LoadGameInfo(void) {
     g_pGraphics->field913_0x3bc = (m_gameInfo.unknownGraphicsOptions & 0x10) << 2 | g_pGraphics->field913_0x3bc & 0xffffffbf;
 
     switch (m_gameInfo.unknownGraphicsOptions & 0xc0000) {
+        default:
+            g_pGraphics->field913_0x3bc &= 0xfffffffe;
+            g_pGraphics->field913_0x3bc &= 0xfffffffd;
+        break;
+        
         case 0x40000:
             g_pGraphics->field913_0x3bc |= 1;
             g_pGraphics->field913_0x3bc &= 0xfffffffd;
@@ -641,10 +646,6 @@ bool CGameInfo::LoadGameInfo(void) {
             g_pGraphics->field913_0x3bc |= 2;
         break;
 
-        default:
-            g_pGraphics->field913_0x3bc &= 0xfffffffe;
-            g_pGraphics->field913_0x3bc &= 0xfffffffd;
-        break;
     }
 
     g_pGraphics->field917_0x3c0 = FUN_00405ca0();
@@ -670,8 +671,10 @@ int CGameInfo::FUN_00405ca0(void)
   return (int)(m_gameInfo.unknownGraphicsOptions >> 0x15 & 0xf);
 }
 
-BYTE CGameInfo::FUN_00406410(BYTE param1) {
-    return 0;
+// FUNCTION: CMR2 0x00406410
+bool CGameInfo::FUN_00406410(int param1) {
+    bool response = m_gameInfo.field_0x38f0 & (1 << param1);
+    return response;
 }
 
 int CGameInfo::FUN_004eac50(BYTE param1) {
