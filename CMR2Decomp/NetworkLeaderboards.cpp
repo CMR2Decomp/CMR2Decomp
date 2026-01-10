@@ -31,7 +31,7 @@ bool CNetworkLeaderboards::LoadLeaderboards(void) {
     NetworkLeaderboardsFile* leaderboards;
 
     sprintf(fileLocation, m_strNetworkLeaderboardsDir, CRegKey::GetValueFromKey(CRegKey::m_rkv_gameHDPath));
-    leaderboards = (NetworkLeaderboardsFile*)(((GenericFile*)CFileBuffer::GetGenericFileBuffer(fileLocation, TRUE))->buffer);
+    leaderboards = (NetworkLeaderboardsFile*)CFileBuffer::GetGenericFileBuffer(fileLocation, TRUE);
     if (leaderboards != NULL) {
         if (CGenericFileLoader::GetGenericFileSize() == 0x2088) {
             m_leaderboardId = leaderboards->leaderboardID;
