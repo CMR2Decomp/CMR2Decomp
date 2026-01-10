@@ -4,25 +4,32 @@
 #include "GenericFileLoader.h"
 
 struct NetworkLeaderboard {
-    BYTE isLoaded;
-    BYTE pad[259];
+    BOOL isLoaded;
+    char name[4];
+    int wins;
+    BYTE pad[248];
 };
 
-struct NetworkLeaderboards {
+struct NetworkLeaderboardsFile {
     int leaderboardID;
     int totalLeaderboards;
     NetworkLeaderboard leaderboards[32];
 };
 
 class CNetworkLeaderboards {
+public:
     static void Reset(void);
+    static bool LoadLeaderboards(void);
 
+private:
     // GLOBAL: CMR2 0x00516a0c
-    static GenericFile* m_leaderboardsFile;
+    static int m_leaderboardId;
     // GLOBAL: CMR2 0x00535b88
-    static BOOL m_hasLoaded;
+    static int m_totalLeaderboards;
     // GLOBAL: CMR2 0x00533a08
-    static NetworkLeaderboards m_leaderboards;
+    static NetworkLeaderboard m_leaderboards[32];
+    // GLOBAL: CMR2 0x00516a10
+    static char m_strNetworkLeaderboardsDir[40];
 };
 
 #endif
