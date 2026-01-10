@@ -1,6 +1,10 @@
 #include "GameInfo.h"
 #include "Graphics.h"
 #include "Input.h"
+#include "Frontend.h"
+#include "InstallInfo.h"
+#include "FileBuffer.h"
+#include "GenericFileLoader.h"
 #include "main.h"
 
 #include <stdio.h>
@@ -19,15 +23,17 @@ unsigned int CGameInfo::m_gameRegion;
 char *CGameInfo::m_gameRegionStrings[4] = {
     gameRegionEurope, gameRegionUSA, gameRegionJapan, gameRegionPoland};
 
+BYTE CGameInfo::m_unk0x00817574;
 int CGameInfo::m_unk0x0081a754;
 
 char CGameInfo::m_stringCMR[4] = "cmr";
 char CGameInfo::m_stringGameInfoRCF[32] = "%s\\Configuration\\GameInfo.rcf";
 
+
 // FUNCTION: CMR2 0x004057f0
 unsigned char CGameInfo::GetGameLanguage(void)
 {
-    return m_gameInfo.field2_0x14 & 7;
+    return m_gameInfo.field_0x14 & 7;
 }
 
 // FUNCTION: CMR2 0x00405800
@@ -51,12 +57,12 @@ char *CGameInfo::GetGameRegionDirectory(void)
 // FUNCTION: CMR2 0x00405d80
 unsigned char CGameInfo::FUN_00405d80(void)
 {
-    return m_gameInfo.field2_0x14 >> 3 & 0x7f;
+    return m_gameInfo.field_0x14 >> 3 & 0x7f;
 }
 
 unsigned char CGameInfo::FUN_00405d90(void)
 {
-    return m_gameInfo.field2_0x14 >> 10 & 7;
+    return m_gameInfo.field_0x14 >> 10 & 7;
 }
 
 // FUNCTION: CMR2 0x00405c10
@@ -115,7 +121,7 @@ void CGameInfo::FUN_004f4b40(void)
 // FUNCTION: CMR2 0x00405de0
 void CGameInfo::FUN_00405de0(BYTE param1)
 {
-    m_gameInfo.field2_0x14 = ((param1 & 1) << 0x13) | (m_gameInfo.field2_0x14 & 0xfff7ffffU);
+    m_gameInfo.field_0x14 = ((param1 & 1) << 0x13) | (m_gameInfo.field_0x14 & 0xfff7ffffU);
 }
 
 // FUNCTION: CMR2 0x00510410
@@ -136,18 +142,19 @@ void CGameInfo::FUN_00510410(void)
     m_gameInfo.field_0x397c = 10;
     m_gameInfo.field_0x3984 = 6;
     m_gameInfo.field_0x3988 = 3;
-    m_gameInfo.field_0x398c = 30;
+    m_gameInfo.field_0x398c = 0x1e;
 
     FUN_00510570();
 
     m_gameInfo.field_0x98 = 4;
+    m_gameInfo.field_0x9a = 0;
     m_gameInfo.field_0x18 = (m_gameInfo.field_0x18 & 0xfff93264) | 0x40393264;
 
     FUN_00406010(&m_gameInfo.field_0xa4);
     FUN_00406010(&m_gameInfo.field_0x1368);
     FUN_00406010(&m_gameInfo.field_0x262c);
 
-    m_gameInfo.field2_0x14 = m_gameInfo.field2_0x14 & 0x7fffffff;
+    m_gameInfo.field_0x14 = m_gameInfo.field_0x14 & 0x7fffffff;
 }
 
 // FUNCTION: CMR2 0x00510570
@@ -567,5 +574,117 @@ DWORD CGameInfo::SetupInputs(void) {
 
 // FUNCTION: CMR2 0x004ea5e0
 bool CGameInfo::LoadGameInfo(void) {
+    char *hdPath;
+    GameInfo *fileBuffer;
+    size_t fileSize;
+    int iVar4;
+    unsigned int graphicsOptions, temp_field0x3bc;
+
+    hdPath = CInstallInfo::GetGameHDPath();
+    sprintf(CFrontend::m_stringDest, m_stringGameInfoRCF, hdPath);
+
+    fileBuffer = (GameInfo*)CFileBuffer::GetGenericFileBuffer(CFrontend::m_stringDest, TRUE);
+    if (fileBuffer == NULL)
+        return false;
+
+    // make sure file size is valid and that it has the magic number
+    fileSize = CGenericFileLoader::GetGenericFileSize();
+    if (fileSize != 0x399c || fileBuffer->magicNumber != 0x11) {
+        CFileBuffer::FreeGenericFileBuffer(fileBuffer);
+        return false;
+    }
+
+    memcpy(&m_gameInfo, fileBuffer, sizeof(GameInfo));
+
+    g_pGraphics->resX = m_gameInfo.screenWidth;
+    g_pGraphics->resY = m_gameInfo.screenHeight;
+    g_pGraphics->depth = m_gameInfo.screenColourDepth;
+
+    g_pGraphics->isFullscreen = IsFullscreen() & 0xff;
+
+    switch (m_gameInfo.unknownGraphicsOptions & 6) {
+        case 2:
+            g_pGraphics->field913_0x3bc |= 8;
+            g_pGraphics->field913_0x3bc &= 0xffffffef;
+            g_pGraphics->field913_0x3bc &= 0xffffff7f;
+        break;
+
+        case 4:
+            g_pGraphics->field913_0x3bc |= 8;
+            g_pGraphics->field913_0x3bc |= 0x10;
+            g_pGraphics->field913_0x3bc &= 0xffffff7f;
+        break;
+        
+        case 6:
+            g_pGraphics->field913_0x3bc |= 8;
+            g_pGraphics->field913_0x3bc &= 0xffffffef;
+            g_pGraphics->field913_0x3bc |= 0x80;
+        break;
+
+        default:
+            g_pGraphics->field913_0x3bc &= 0xfffffff7;
+            g_pGraphics->field913_0x3bc &= 0xffffffef;
+        break;        
+    }
+
+    g_pGraphics->field913_0x3bc = (m_gameInfo.unknownGraphicsOptions & 0x8) << 2 | g_pGraphics->field913_0x3bc & 0xffffffdf;
+    g_pGraphics->field913_0x3bc = (m_gameInfo.unknownGraphicsOptions & 0x10) << 2 | g_pGraphics->field913_0x3bc & 0xffffffbf;
+
+    switch (m_gameInfo.unknownGraphicsOptions & 0xc0000) {
+        default:
+            g_pGraphics->field913_0x3bc &= 0xfffffffe;
+            g_pGraphics->field913_0x3bc &= 0xfffffffd;
+        break;
+        
+        case 0x40000:
+            g_pGraphics->field913_0x3bc |= 1;
+            g_pGraphics->field913_0x3bc &= 0xfffffffd;
+        break;
+
+        case 0x80000:
+            g_pGraphics->field913_0x3bc &= 0xfffffffe;
+            g_pGraphics->field913_0x3bc |= 2;
+        break;
+
+    }
+
+    g_pGraphics->field917_0x3c0 = FUN_00405ca0();
+    g_pGraphics->field913_0x3bc = (m_gameInfo.unknownGraphicsOptions >> 0x1b & 4) | g_pGraphics->field913_0x3bc & 0xfffffffb;
+
+    if (FUN_00406410(0x11) != 0)
+        FUN_004eac50(0x11);
+
+    FUN_004d0590(0);
+    CFileBuffer::FreeGenericFileBuffer(fileBuffer);
+
     return true;
+}
+
+// FUNCTION: CMR2 0x00405b20
+unsigned int CGameInfo::IsFullscreen(void) {
+    return m_gameInfo.unknownGraphicsOptions & 1;
+}
+
+// FUNCTION: CMR2 0x00405ca0
+int CGameInfo::FUN_00405ca0(void)
+{
+  return (int)(m_gameInfo.unknownGraphicsOptions >> 0x15 & 0xf);
+}
+
+// FUNCTION: CMR2 0x00406410
+bool CGameInfo::FUN_00406410(int param1) {
+    bool response = m_gameInfo.field_0x38f0 & (1 << param1);
+    return response;
+}
+
+// FUNCTION: CMR2 0x004eac50
+bool CGameInfo::FUN_004eac50(int param1) {
+    bool response = FUN_00406410(param1);
+    m_gameInfo.field_0x38f0 = m_gameInfo.field_0x38f0 ^ 1 << param1;
+    return !response;
+}
+
+// FUNCTION: CMR2 0x004d0590
+void CGameInfo::FUN_004d0590(BYTE param1) {
+    m_unk0x00817574 = param1;
 }

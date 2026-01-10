@@ -16,7 +16,7 @@ public:
     // GLOBAL: CMR2 0x00818250
     static GenericFile m_genericFile;
     // GLOBAL: CMR2 0x00663fe8
-    static DWORD m_unk0x00663fe8;
+    static DWORD m_fileSize;
 
     // TODO: should this not be a static class? seems silly to pass this in like this
     static bool FUN_004a9d70(GenericFile *file, char *fileName);
