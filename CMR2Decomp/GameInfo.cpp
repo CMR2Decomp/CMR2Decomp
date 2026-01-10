@@ -677,8 +677,11 @@ bool CGameInfo::FUN_00406410(int param1) {
     return response;
 }
 
-int CGameInfo::FUN_004eac50(BYTE param1) {
-    return 0;
+// FUNCTION: CMR2 0x004eac50
+bool CGameInfo::FUN_004eac50(int param1) {
+    bool response = FUN_00406410(param1);
+    m_gameInfo.field_0x38f0 = m_gameInfo.field_0x38f0 ^ 1 << param1;
+    return !response;
 }
 
 // FUNCTION: CMR2 0x004d0590

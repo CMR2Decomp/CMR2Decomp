@@ -97,7 +97,7 @@ public:
     static unsigned int IsFullscreen(void);
     static int FUN_00405ca0(void);
     static bool FUN_00406410(int param1);
-    static int FUN_004eac50(BYTE param1);
+    static bool FUN_004eac50(int param1);
     static void FUN_004d0590(BYTE param1);
 
     // GLOBAL: CMR2 0x0052afa0
