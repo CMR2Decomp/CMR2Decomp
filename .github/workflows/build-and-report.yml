@@ -156,7 +156,7 @@ jobs:
             const lowAccuracy = [];
             const newlyPerfect = [];
 
-            let total = current.length; // total functions = current.length
+            let total = current.length;
             let matched = 0;
             let fullMatch = 0;
 
@@ -167,21 +167,25 @@ jobs:
 
               const currPct = fn.matching * 100;
               const prev = prevMap.get(fn.address);
+              const prevPct = prev ? prev.matching * 100 : null;
               const isStub = fn.matching <= STUB_THRESHOLD;
               const isPerfect = currPct === 100;
 
-              const prevPct = prev ? prev.matching * 100 : null;
+              // ➕ Added (record early so it doesn't get skipped)
+              if (!prev) {
+                added.push(fn);
+                if (isStub) stubbed.push({ fn, reason: 'new stub' });
+              }
 
-              // 🎉 Newly perfect (improved OR brand-new)
-              // Only include if brand-new OR previously < 100%
+              // 🎉 Newly perfect (brand-new OR improved to 100%)
               if (isPerfect && !isStub && (prevPct === null || prevPct < 100)) {
                 newlyPerfect.push({
                   fn,
-                  prevPct: prevPct !== null ? prevPct : null
+                  prevPct
                 });
               }
 
-              // 🚨 Below 80% (exclude stubs)
+              // 🚨 Below 80% (exclude stubs, include new functions)
               if (!isStub && currPct < LOW_ACCURACY_THRESHOLD) {
                 lowAccuracy.push({
                   fn,
@@ -190,23 +194,23 @@ jobs:
                 });
               }
 
-              if (!prev) {
-                added.push(fn);
-                if (isStub) stubbed.push({ fn, reason: 'new stub' });
-                continue;
-              }
+              // Stop here for brand-new functions (no deltas possible)
+              if (!prev) continue;
 
+              // Δ comparisons
               if (currPct > prevPct + 0.01) {
                 increased.push({ fn, prevPct, currPct });
               } else if (currPct < prevPct - 0.01) {
                 decreased.push({ fn, prevPct, currPct });
               }
 
+              // 🧱 Regressed to stub
               if (prev.matching > STUB_THRESHOLD && isStub) {
                 stubbed.push({ fn, reason: 'regressed to stub' });
               }
             }
 
+            // ❌ Gone
             for (const [addr, fn] of prevMap) {
               if (!currMap.has(addr)) gone.push(fn);
             }
