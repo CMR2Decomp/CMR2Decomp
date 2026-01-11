@@ -2,6 +2,9 @@
 #include "GameInfo.h"
 #include "Graphics.h"
 #include "main.h"
+#include "InstallInfo.h"
+#include "Frontend.h"
+#include "FileBuffer.h"
 
 #include <stdio.h>
 
@@ -76,8 +79,13 @@ BOOL CInput::m_unk0x00666ee8 = FALSE;
 // GLOBAL: CMR2 0x00593ba0;
 int CInput::m_unk0x00593ba0;
 
-// GLOBAL: CMR2 0x005939a0;
+// GLOBAL: CMR2 0x005939a0
 void* CInput::m_unk0x005939a0;
+
+char CInput::m_strControllerInfoDir[32] = "%s\\Configuration\\Controller.rcf";
+BOOL CInput::m_hasLoadedControllerInfo;
+ControllerInfo CInput::m_controllerInfo;
+unsigned int CInput::m_unk0x005168f4;
 
 // FUNCTION: CMR2 0x0049fd30
 BOOL CInput::DInputCreate(void) {
@@ -689,4 +697,31 @@ BOOL CInput::ResetForceFeedbackEffectsAlt(void) {
     } while ((int)pDevice < (int)&m_forceFeedbackDevices[8]);
     m_unk0x00666ee8 = FALSE;
     return TRUE;
+}
+
+// FUNCTION: CMR2 0x0040bf70
+void CInput::LoadControllerInfo(void) {
+    ControllerInfo *fileBuffer;
+
+    m_hasLoadedControllerInfo = 0;
+    sprintf(CFrontend::m_stringDest, m_strControllerInfoDir, CInstallInfo::GetGameHDPath());
+
+    fileBuffer = (ControllerInfo*)CFileBuffer::GetGenericFileBuffer(CFrontend::m_stringDest, TRUE);
+    if (fileBuffer != NULL) {
+        if (CGenericFileLoader::GetGenericFileSize() == 0x11a4) {
+            memcpy(&m_controllerInfo, fileBuffer, sizeof(m_controllerInfo));
+
+            m_unk0x005168f4 = ((unsigned int*)fileBuffer)[0x468];  // Read the last 4 bytes
+            CFileBuffer::FreeGenericFileBuffer(fileBuffer);
+            m_hasLoadedControllerInfo = TRUE;
+
+            FUN_0040be90(0);
+            FUN_0040be90(1);
+        }
+    }
+}
+
+// STUB: CMR2 0x0040be90
+void CInput::FUN_0040be90(unsigned int param1) {
+
 }

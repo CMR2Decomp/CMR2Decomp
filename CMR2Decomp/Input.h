@@ -79,6 +79,10 @@ struct ForceFeedbackDevice {
     LPDIRECTINPUTEFFECT effects[10];       // +0xC (10 effect pointers)
 };
 
+struct ControllerInfo {
+    BYTE pad[0x11A0];
+};
+
 class CInput {
 public:
     static const GUID m_dInputDevice7;
@@ -108,6 +112,18 @@ public:
     static int m_unk0x00593ba0;
     static void* m_unk0x005939a0;
 
+    // GLOBAL: CMR2 0x00516908
+    static char m_strControllerInfoDir[32];
+
+    // GLOBAL: CMR2 0x005334f0
+    static BOOL m_hasLoadedControllerInfo;
+
+    // GLOBAL: CMR2 0x00532250
+    static ControllerInfo m_controllerInfo;
+
+    // GLOBAL: CMR2 0x005168f4
+    static unsigned int m_unk0x005168f4;
+
     static BOOL DInputCreate(void);
     static LPDIRECTINPUTDEVICEA DInputCreateDevice(REFGUID param1, LPDIRECTINPUTDEVICEA *existingDevice);
     static int FUN_0049c0a0(void *param1, void *param2);
@@ -129,6 +145,8 @@ public:
     static void ResetForceFeedbackEffects(void);
     static BOOL ResetForceFeedbackEffectsAlt(void);
     static void DInputReleaseDevices(void);
+    static void LoadControllerInfo(void);
+    static void FUN_0040be90(unsigned int param1);
 };
 
 #endif
