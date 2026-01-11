@@ -3,17 +3,23 @@
 
 #include "GenericFileLoader.h"
 
-struct NetworkLeaderboard {
-    BOOL isLoaded;
+#define MAX_LEADERBOARDS 32
+#define MAX_LEADERBOARD_PLAYERS 32
+
+struct NetworkLeaderboardEntry {
     char name[4];
     int wins;
-    BYTE pad[248];
+};
+
+struct NetworkLeaderboard {
+    BOOL isLoaded;
+    NetworkLeaderboardEntry entries[MAX_LEADERBOARD_PLAYERS];
 };
 
 struct NetworkLeaderboardsFile {
     int leaderboardID;
     int totalLeaderboards;
-    NetworkLeaderboard leaderboards[32];
+    NetworkLeaderboard leaderboards[MAX_LEADERBOARDS];
 };
 
 class CNetworkLeaderboards {
