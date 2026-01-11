@@ -2,7 +2,7 @@
 #include "GameInfo.h"
 #include "Input.h"
 #include "RegKey.h"
-#include "Main.h"
+#include "main.h"
 
 // GLOBAL: CMR2 0x00660830
 Graphics g_graphics;
@@ -52,4 +52,38 @@ bool CGraphics::InitializeDirectX(void) {
     MessageBoxA(CMain::m_hWndList[CMain::m_hWndIx], m_strSettingConfigurationToDefault, CMain::m_logFileBlankLine, MB_TOPMOST | MB_TASKMODAL);
 
     return true;
+}
+
+// FUNCTION: CMR2 0x00405990
+void CGraphics::SetDefaults(void) {
+    CGameInfo::m_gameInfo.unknownGraphicsOptions |= 0x40000000;
+    CGameInfo::m_gameInfo.screenWidth = 0x280;
+    g_pGraphics->resX = 0x280;
+    CGameInfo::m_gameInfo.screenHeight = 0x1e0;
+    g_pGraphics->resY = 0x1e0;
+    CGameInfo::m_gameInfo.screenColourDepth = 0x10;
+    g_pGraphics->depth = 0x10;
+    CGameInfo::m_gameInfo.unknownGraphicsOptions |= 1;
+    g_pGraphics->isFullscreen = 1;
+    CGameInfo::m_gameInfo.unknownGraphicsOptions &= 0xfffffff9;
+    g_pGraphics->field913_0x3bc &= 0xfffffff7;
+    g_pGraphics->field913_0x3bc &= 0xffffffef;
+    g_pGraphics->field913_0x3bc &= 0xffffff7f;
+    CGameInfo::m_gameInfo.unknownGraphicsOptions &= 0xfffffff7;
+    g_pGraphics->field913_0x3bc &= 0xffffffdf;
+    CGameInfo::m_gameInfo.unknownGraphicsOptions &= 0xffffffef;
+    g_pGraphics->field913_0x3bc &= 0xffffffbf;
+    CGameInfo::m_gameInfo.unknownGraphicsOptions &= 0xfff3e01f;
+    g_pGraphics->field913_0x3bc &= 0xfffffffe;
+    g_pGraphics->field913_0x3bc &= 0xfffffffd;
+
+    unsigned int unknownGraphicsOptions = CGameInfo::m_gameInfo.unknownGraphicsOptions;
+    CGameInfo::m_gameInfo.unknownGraphicsOptions = (unknownGraphicsOptions & 0xfe3fffff) | 0x200000;
+    
+    g_pGraphics->field917_0x3c0 = 1;
+    
+    CGameInfo::m_gameInfo.field_0x34 =  (CGameInfo::m_gameInfo.field_0x34 & 0xfffffffe) | 2;
+    CGameInfo::m_gameInfo.unknownGraphicsOptions = (unknownGraphicsOptions & 0xcbffffff) | 0xa000000;
+    
+    g_pGraphics->field913_0x3bc &= 0xfffffffb;
 }

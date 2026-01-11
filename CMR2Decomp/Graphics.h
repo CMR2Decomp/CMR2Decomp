@@ -936,6 +936,7 @@ extern Graphics *g_pGraphics;
 class CGraphics {
 public:
     static bool InitializeDirectX(void);
+    static void SetDefaults(void);
 
 private:
     // GLOBAL: CMR2 0x005114a8
