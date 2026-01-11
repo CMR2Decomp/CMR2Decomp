@@ -4,6 +4,7 @@
 #include "GameInfo.h"
 #include "InstallInfo.h"
 #include "NetworkLeaderboards.h"
+#include "Graphics.h"
 
 #include <time.h>
 
@@ -147,7 +148,7 @@ void CGame::InitializeGame(Unk0049c2c0 *p1, BYTE p2)
             CNetworkLeaderboards::Reset();
             CNetworkLeaderboards::LoadLeaderboards();
             CGameInfo::FUN_00405de0(0);
-            // initializedx
+            CGraphics::InitializeDirectX();
         }
     }
 

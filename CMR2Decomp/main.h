@@ -23,7 +23,7 @@ public:
     static MSG m_win32Msg;
 
     // GLOBAL: CMR2 0x0052ea5c
-    static char m_logFileBlankLine[1];
+    static char m_logFileBlankLine[1]; // TODO: better name?
 
 private:
     // GLOBAL: CMR2 0x00511430

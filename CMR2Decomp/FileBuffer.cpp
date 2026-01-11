@@ -73,10 +73,10 @@ void *CFileBuffer::GetGenericFileBuffer(char *fileName, BOOL isLocalFile)
             if (g_pGraphics)
             {
                 // flip gdi surface
-                pDD7 = *g_pGraphics->pDD7;
-                if (pDD7 != NULL)
+                // pDD7 = *g_pGraphics->pDD7;
+                if (g_pGraphics->pDD7 != NULL)
                 {
-                    pDD7->FlipToGDISurface();
+                    g_pGraphics->pDD7->FlipToGDISurface();
                     ShowCursor(TRUE);
 
                     do
@@ -95,7 +95,7 @@ void *CFileBuffer::GetGenericFileBuffer(char *fileName, BOOL isLocalFile)
     if (g_pGraphics)
     {
         if (g_pGraphics->pDD7)
-            (*g_pGraphics->pDD7)->FlipToGDISurface();
+            g_pGraphics->pDD7->FlipToGDISurface();
     }
 
     // make sure file exists
@@ -128,7 +128,7 @@ void *CFileBuffer::GetGenericFileBuffer(char *fileName, BOOL isLocalFile)
         if (hFile == INVALID_HANDLE_VALUE)
         {
             if (g_pGraphics && g_pGraphics->pDD7)
-                (*g_pGraphics->pDD7)->FlipToGDISurface();
+                g_pGraphics->pDD7->FlipToGDISurface();
 
             fileAttributes = GetFileAttributesA(_fileName);
             if (fileAttributes == -1)

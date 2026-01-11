@@ -13,7 +13,7 @@ public:
     // GLOBAL: CMR2 0x00520f68
     static char m_regKeyPathCMR2[20];
     // GLOBAL: CMR2 0x00516180
-    static char m_regKeyPathFormatValue[3];
+    static char m_regKeyPathFormatValue[3]; // TODO: move this somewhere more generic?
     // GLOBAL: CMR2 0x00663ee4
     static unsigned char m_regKeyReadData[100];
 
