@@ -917,8 +917,8 @@ struct Graphics
     unsigned char field908_0x3b1;
     unsigned char field909_0x3b2;
     unsigned char field910_0x3b3;
-    IDirectDraw7 **pDD;
-    IDirectDraw7 **pDD7;
+    LPDIRECTDRAW7 pDD;
+    LPDIRECTDRAW7 pDD7; 
     unsigned int field913_0x3bc;
     unsigned int field917_0x3c0;
     unsigned char field921_0x3c4;
@@ -935,6 +935,15 @@ extern Graphics *g_pGraphics;
 
 class CGraphics {
 public:
+    static bool InitializeDirectX(void);
+    static void SetDefaults(void);
+
+private:
+    // GLOBAL: CMR2 0x005114a8
+    static IID m_iidDD7;
+
+    // GLOBAL: CMR2 0x0051615c
+    static char m_strSettingConfigurationToDefault[36];
 };
 
 #endif

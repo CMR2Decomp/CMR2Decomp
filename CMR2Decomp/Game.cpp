@@ -4,6 +4,7 @@
 #include "GameInfo.h"
 #include "InstallInfo.h"
 #include "NetworkLeaderboards.h"
+#include "Graphics.h"
 
 #include <time.h>
 
@@ -142,12 +143,14 @@ void CGame::InitializeGame(Unk0049c2c0 *p1, BYTE p2)
             CGameInfo::FUN_00510410();
             CGameInfo::FUN_00406560();
             CGameInfo::FUN_00406580();
-            CGameInfo::SetupInputs();
+            CGameInfo::SetupInputs(); // NOTE: this causes a crash right now
             didLoadGameInfo = CGameInfo::LoadGameInfo();
             CNetworkLeaderboards::Reset();
             CNetworkLeaderboards::LoadLeaderboards();
             CGameInfo::FUN_00405de0(0);
-            // initializedx
+            if (CGraphics::InitializeDirectX()) {
+                CGraphics::SetDefaults();
+            }
         }
     }
 
