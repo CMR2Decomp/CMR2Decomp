@@ -144,7 +144,7 @@ public:
     static ControllerData m_controllerInfo[6];
 
     // GLOBAL: CMR2 0x005168f4
-    static short m_unk0x005168f4[8];
+    static unsigned short m_unk0x005168f4[8];
 
     static BOOL DInputCreate(void);
     static LPDIRECTINPUTDEVICEA DInputCreateDevice(REFGUID param1, LPDIRECTINPUTDEVICEA *existingDevice);

@@ -84,9 +84,8 @@ void* CInput::m_unk0x005939a0;
 
 char CInput::m_strControllerInfoDir[32] = "%s\\Configuration\\Controller.rcf";
 BOOL CInput::m_hasLoadedControllerInfo;
-// ControllerInfo CInput::m_controllerInfo;
 ControllerData CInput::m_controllerInfo[6];
-short CInput::m_unk0x005168f4[8];
+unsigned short CInput::m_unk0x005168f4[8];
 
 // FUNCTION: CMR2 0x0049fd30
 BOOL CInput::DInputCreate(void) {
@@ -726,25 +725,27 @@ void CInput::LoadControllerInfo(void) {
 
 // FUNCTION: CMR2 0x0040be90
 void CInput::FUN_0040be90(unsigned int param1) {
-    unsigned short uVar1, uVar2;
+    int uVar1;
+    unsigned short uVar2;
     ControllerData * pController;
 
     uVar2 = param1;
     uVar1 = m_unk0x005168f4[uVar2];
+    pController = &m_controllerInfo[uVar1];
 
     if (uVar1 > 1) {
-        FUN_0040c440(param1, m_controllerInfo + uVar1);
+        FUN_0040c440(param1, pController);
     }
 
-    FUN_0049eb90(uVar2, 1, m_controllerInfo[uVar1].field_0xa_padding[0x134]);
-    FUN_0049eb90(uVar2, 2, m_controllerInfo[uVar1].field_0xa_padding[0x135]);
-    FUN_0049eb90(uVar2, 4, m_controllerInfo[uVar1].field_0xa_padding[0x136]);
-    FUN_0049eb90(uVar2, 8, m_controllerInfo[uVar1].field_0xa_padding[0x137]);
-    FUN_0049eb90(uVar2, 0x10, m_controllerInfo[uVar1].field_0xa_padding[0x138]);
-    FUN_0049eb90(uVar2, 0x20, m_controllerInfo[uVar1].field_0xa_padding[0x139]);
-    FUN_0049eb90(uVar2, 0x40, m_controllerInfo[uVar1].field_0xa_padding[0x13a]);
-    FUN_0049eb90(uVar2, 0x80, m_controllerInfo[uVar1].field_0xa_padding[0x13b]);
-    FUN_0049eb90(uVar2, 0x100, m_controllerInfo[uVar1].field_0xa_padding[0x13c]);
+    FUN_0049eb90(uVar2, 1, pController->field_0xa_padding[0x134]);
+    FUN_0049eb90(uVar2, 2, pController->field_0xa_padding[0x135]);
+    FUN_0049eb90(uVar2, 4, pController->field_0xa_padding[0x136]);
+    FUN_0049eb90(uVar2, 8, pController->field_0xa_padding[0x137]);
+    FUN_0049eb90(uVar2, 0x10, pController->field_0xa_padding[0x138]);
+    FUN_0049eb90(uVar2, 0x20, pController->field_0xa_padding[0x139]);
+    FUN_0049eb90(uVar2, 0x40, pController->field_0xa_padding[0x13a]);
+    FUN_0049eb90(uVar2, 0x80, pController->field_0xa_padding[0x13b]);
+    FUN_0049eb90(uVar2, 0x100, pController->field_0xa_padding[0x13c]);
 }
 
 // STUB: CMR2 0x0040c440
