@@ -821,3 +821,17 @@ void CInput::FUN_0049eb90(int param1, unsigned int param2, unsigned int param3) 
             break;
     }
 }
+
+// FUNCTION: CMR2 0x0040c530 
+int CInput::FUN_0040c530(unsigned int param1) {
+    int iVar1 = 0;
+
+    while (iVar1 < 32) {
+        if (!(param1 & 1)) break;
+        
+        param1 >>= 1;
+        iVar1++;
+    }
+
+    return iVar1;
+}
