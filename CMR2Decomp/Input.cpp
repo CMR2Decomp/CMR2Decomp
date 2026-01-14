@@ -84,8 +84,9 @@ void* CInput::m_unk0x005939a0;
 
 char CInput::m_strControllerInfoDir[32] = "%s\\Configuration\\Controller.rcf";
 BOOL CInput::m_hasLoadedControllerInfo;
-ControllerInfo CInput::m_controllerInfo;
-unsigned int CInput::m_unk0x005168f4;
+// ControllerInfo CInput::m_controllerInfo;
+ControllerData CInput::m_controllerInfo[6];
+short CInput::m_unk0x005168f4[8];
 
 // FUNCTION: CMR2 0x0049fd30
 BOOL CInput::DInputCreate(void) {
@@ -701,17 +702,19 @@ BOOL CInput::ResetForceFeedbackEffectsAlt(void) {
 
 // FUNCTION: CMR2 0x0040bf70
 void CInput::LoadControllerInfo(void) {
-    ControllerInfo *fileBuffer;
+    ControllerData *fileBuffer;
 
     m_hasLoadedControllerInfo = 0;
     sprintf(CFrontend::m_stringDest, m_strControllerInfoDir, CInstallInfo::GetGameHDPath());
 
-    fileBuffer = (ControllerInfo*)CFileBuffer::GetGenericFileBuffer(CFrontend::m_stringDest, TRUE);
+    fileBuffer = (ControllerData*)CFileBuffer::GetGenericFileBuffer(CFrontend::m_stringDest, TRUE);
     if (fileBuffer != NULL) {
         if (CGenericFileLoader::GetGenericFileSize() == 0x11a4) {
             memcpy(&m_controllerInfo, fileBuffer, sizeof(m_controllerInfo));
 
-            m_unk0x005168f4 = ((unsigned int*)fileBuffer)[0x468];  // Read the last 4 bytes
+            // write the first two elements of the array
+            memcpy(m_unk0x005168f4, &((unsigned int*)fileBuffer)[0x468], 4);
+
             CFileBuffer::FreeGenericFileBuffer(fileBuffer);
             m_hasLoadedControllerInfo = TRUE;
 
@@ -721,7 +724,100 @@ void CInput::LoadControllerInfo(void) {
     }
 }
 
-// STUB: CMR2 0x0040be90
+// FUNCTION: CMR2 0x0040be90
 void CInput::FUN_0040be90(unsigned int param1) {
+    unsigned short uVar1, uVar2;
+    ControllerData * pController;
 
+    uVar2 = param1;
+    uVar1 = m_unk0x005168f4[uVar2];
+
+    if (uVar1 > 1) {
+        FUN_0040c440(param1, m_controllerInfo + uVar1);
+    }
+
+    FUN_0049eb90(uVar2, 1, m_controllerInfo[uVar1].field_0xa_padding[0x134]);
+    FUN_0049eb90(uVar2, 2, m_controllerInfo[uVar1].field_0xa_padding[0x135]);
+    FUN_0049eb90(uVar2, 4, m_controllerInfo[uVar1].field_0xa_padding[0x136]);
+    FUN_0049eb90(uVar2, 8, m_controllerInfo[uVar1].field_0xa_padding[0x137]);
+    FUN_0049eb90(uVar2, 0x10, m_controllerInfo[uVar1].field_0xa_padding[0x138]);
+    FUN_0049eb90(uVar2, 0x20, m_controllerInfo[uVar1].field_0xa_padding[0x139]);
+    FUN_0049eb90(uVar2, 0x40, m_controllerInfo[uVar1].field_0xa_padding[0x13a]);
+    FUN_0049eb90(uVar2, 0x80, m_controllerInfo[uVar1].field_0xa_padding[0x13b]);
+    FUN_0049eb90(uVar2, 0x100, m_controllerInfo[uVar1].field_0xa_padding[0x13c]);
+}
+
+// STUB: CMR2 0x0040c440
+void CInput::FUN_0040c440(short param1, ControllerData* param2) {
+
+}
+
+// FUNCTION: CMR2 0x0049eb90
+void CInput::FUN_0049eb90(int param1, unsigned int param2, unsigned int param3) {
+    DeviceInfo* device = &m_availableDevices[param1];
+    switch(param2) {
+        case 1:
+            device->keyboard.field_0x468 = param3;
+            break;
+
+        case 2:
+            device->keyboard.field_0x469 = param3;
+            break;
+
+        case 4:
+            device->keyboard.field_0x46a = param3;
+            break;
+
+        case 8:
+            device->keyboard.field_0x46b = param3;
+            break;
+
+        case 0x10:
+            device->keyboard.field_0x46c = param3;
+            break;
+
+        case 0x20:
+            device->keyboard.field_0x46d = param3;
+            break;
+
+        case 0x40:
+            device->keyboard.field_0x46e = param3;
+            break;
+        
+        case 0x80:
+            device->keyboard.field_0x46f = param3;
+            break;
+
+        case 0x100:
+            device->keyboard.field_0x470 = param3;
+            break;
+
+        case 0x200:
+            device->keyboard.field_0x471 = param3;
+            break;
+
+        case 0x400:
+            device->keyboard.field_0x472 = param3;
+            break;
+
+        case 0x800:
+            device->keyboard.field_0x473 = param3;
+            break;
+        
+        case 0x1000:
+            device->keyboard.field_0x474 = param3;
+            break;
+
+        case 0x2000:
+            device->keyboard.field_0x475 = param3;
+            break;
+        
+        case 0x4000:
+            device->keyboard.field_0x476 = param3;
+            break;
+
+        case 0x8000:
+            device->keyboard.field_0x477 = param3;
+            break;
+    }
 }
