@@ -4,7 +4,7 @@
 #include "FileBuffer.h"
 #include <stdio.h>
 
-int CNetworkLeaderboards::m_leaderboardId;
+int CNetworkLeaderboards::m_leaderboardId = -1;
 int CNetworkLeaderboards::m_totalLeaderboards;
 NetworkLeaderboard CNetworkLeaderboards::m_leaderboards[32];
 char CNetworkLeaderboards::m_strNetworkLeaderboardsDir[40] = "%s\\NetworkLeaderboards\\leaderboards.nlb";

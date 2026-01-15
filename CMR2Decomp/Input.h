@@ -79,6 +79,44 @@ struct ForceFeedbackDevice {
     LPDIRECTINPUTEFFECT effects[10];       // +0xC (10 effect pointers)
 };
 
+struct ControllerData {
+    unsigned int field_0x0;
+    unsigned int field_0x4;
+    BYTE field_0x8;
+    BYTE field_0x9;
+    BYTE field_0xa_padding[286];
+    unsigned short field_0x128; // are you actually a struct?
+    unsigned short field_0x12a;
+    unsigned short field_0x12c;
+    unsigned short field_0x12e;
+    unsigned short field_0x130;
+    unsigned short field_0x132;
+    unsigned short field_0x134;
+    unsigned short field_0x136;
+    unsigned short field_0x138;
+    unsigned short field_0x13a;
+    unsigned short field_0x13c;
+    BYTE field_0x13e[434];
+};
+
+struct ControllerInfo {
+    int field_0x0;
+    int field_0x4;
+    BYTE field_0x8;
+    BYTE field_0x9;
+    BYTE field_0xa_padding[308];
+    BYTE field_0x13e;
+    BYTE field_0x13f;
+    BYTE field_0x140;
+    BYTE field_0x141;
+    BYTE field_0x142;
+    BYTE field_0x143;
+    BYTE field_0x144;
+    BYTE field_0x145;
+    BYTE field_0x146;
+    BYTE pad[4185];
+};
+
 class CInput {
 public:
     static const GUID m_dInputDevice7;
@@ -108,6 +146,18 @@ public:
     static int m_unk0x00593ba0;
     static void* m_unk0x005939a0;
 
+    // GLOBAL: CMR2 0x00516908
+    static char m_strControllerInfoDir[32];
+
+    // GLOBAL: CMR2 0x005334f0
+    static BOOL m_hasLoadedControllerInfo;
+
+    // GLOBAL: CMR2 0x00532250
+    static ControllerData m_controllerInfo[6];
+
+    // GLOBAL: CMR2 0x005168f4
+    static unsigned short m_unk0x005168f4[8];
+
     static BOOL DInputCreate(void);
     static LPDIRECTINPUTDEVICEA DInputCreateDevice(REFGUID param1, LPDIRECTINPUTDEVICEA *existingDevice);
     static int FUN_0049c0a0(void *param1, void *param2);
@@ -129,6 +179,11 @@ public:
     static void ResetForceFeedbackEffects(void);
     static BOOL ResetForceFeedbackEffectsAlt(void);
     static void DInputReleaseDevices(void);
+    static void LoadControllerInfo(void);
+    static void FUN_0040be90(unsigned int param1);
+    static void FUN_0040c440(unsigned int param1, ControllerData * param2);
+    static void FUN_0049eb90(int param1, unsigned int param2, unsigned int param3);
+    static BYTE FUN_0040c530(unsigned int param1);
 };
 
 #endif

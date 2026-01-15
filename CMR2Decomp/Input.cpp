@@ -2,6 +2,9 @@
 #include "GameInfo.h"
 #include "Graphics.h"
 #include "main.h"
+#include "InstallInfo.h"
+#include "Frontend.h"
+#include "FileBuffer.h"
 
 #include <stdio.h>
 
@@ -76,8 +79,13 @@ BOOL CInput::m_unk0x00666ee8 = FALSE;
 // GLOBAL: CMR2 0x00593ba0;
 int CInput::m_unk0x00593ba0;
 
-// GLOBAL: CMR2 0x005939a0;
+// GLOBAL: CMR2 0x005939a0
 void* CInput::m_unk0x005939a0;
+
+char CInput::m_strControllerInfoDir[32] = "%s\\Configuration\\Controller.rcf";
+BOOL CInput::m_hasLoadedControllerInfo;
+ControllerData CInput::m_controllerInfo[6];
+unsigned short CInput::m_unk0x005168f4[8];
 
 // FUNCTION: CMR2 0x0049fd30
 BOOL CInput::DInputCreate(void) {
@@ -689,4 +697,174 @@ BOOL CInput::ResetForceFeedbackEffectsAlt(void) {
     } while ((int)pDevice < (int)&m_forceFeedbackDevices[8]);
     m_unk0x00666ee8 = FALSE;
     return TRUE;
+}
+
+// FUNCTION: CMR2 0x0040bf70
+void CInput::LoadControllerInfo(void) {
+    ControllerData *fileBuffer;
+
+    m_hasLoadedControllerInfo = 0;
+    sprintf(CFrontend::m_stringDest, m_strControllerInfoDir, CInstallInfo::GetGameHDPath());
+
+    fileBuffer = (ControllerData*)CFileBuffer::GetGenericFileBuffer(CFrontend::m_stringDest, TRUE);
+    if (fileBuffer != NULL) {
+        if (CGenericFileLoader::GetGenericFileSize() == 0x11a4) {
+            memcpy(&m_controllerInfo, fileBuffer, sizeof(m_controllerInfo));
+
+            // write the first two elements of the array
+            memcpy(m_unk0x005168f4, &((unsigned int*)fileBuffer)[0x468], 4);
+
+            CFileBuffer::FreeGenericFileBuffer(fileBuffer);
+            m_hasLoadedControllerInfo = TRUE;
+
+            FUN_0040be90(0);
+            FUN_0040be90(1);
+        }
+    }
+}
+
+// FUNCTION: CMR2 0x0040be90
+void CInput::FUN_0040be90(unsigned int param1) {
+    int uVar1;
+    unsigned short uVar2;
+    ControllerData * pController;
+
+    uVar2 = param1;
+    uVar1 = m_unk0x005168f4[uVar2];
+    pController = &m_controllerInfo[uVar1];
+
+    if (uVar1 > 1) {
+        FUN_0040c440(param1, pController);
+    }
+
+    FUN_0049eb90(uVar2, 1, pController->field_0xa_padding[0x134]);
+    FUN_0049eb90(uVar2, 2, pController->field_0xa_padding[0x135]);
+    FUN_0049eb90(uVar2, 4, pController->field_0xa_padding[0x136]);
+    FUN_0049eb90(uVar2, 8, pController->field_0xa_padding[0x137]);
+    FUN_0049eb90(uVar2, 0x10, pController->field_0xa_padding[0x138]);
+    FUN_0049eb90(uVar2, 0x20, pController->field_0xa_padding[0x139]);
+    FUN_0049eb90(uVar2, 0x40, pController->field_0xa_padding[0x13a]);
+    FUN_0049eb90(uVar2, 0x80, pController->field_0xa_padding[0x13b]);
+    FUN_0049eb90(uVar2, 0x100, pController->field_0xa_padding[0x13c]);
+}
+
+// FUNCTION: CMR2 0x0040c440
+void CInput::FUN_0040c440(unsigned int param1, ControllerData* param2) {
+    unsigned short* puVar2;
+    unsigned short uVar4;
+    unsigned char bVar1;
+    int iVar3;
+    unsigned short combinedFlags;
+    
+    iVar3 = 0;
+    puVar2 = &param2->field_0x128;
+    
+    do {
+        if (*puVar2 == 0) {
+            if (param2->field_0x13e[iVar3] != 0) {
+                
+                combinedFlags = param2->field_0x13a | param2->field_0x136 | 
+                                param2->field_0x134 | param2->field_0x132 |
+                                param2->field_0x130 | param2->field_0x12e | 
+                                param2->field_0x12c | param2->field_0x12a |
+                                param2->field_0x128 | 0x400;
+
+                bVar1 = FUN_0040c530(combinedFlags & 0xffff);
+                
+                uVar4 = 1 << bVar1;
+                
+                FUN_0049eb90(param1 & 0xffff, uVar4 & 0xffff, param2->field_0x13e[iVar3]);
+                FUN_0049eb90(param1 & 0xffff, (1 << iVar3) & 0xffff, 0);
+                
+                *puVar2 = uVar4;
+            }
+        }
+        
+        iVar3++;
+        puVar2++;
+    } while (iVar3 < 10);
+}
+
+// FUNCTION: CMR2 0x0049eb90
+void CInput::FUN_0049eb90(int param1, unsigned int param2, unsigned int param3) {
+    DeviceInfo* device = &m_availableDevices[param1];
+    switch(param2) {
+        case 1:
+            device->keyboard.field_0x468 = param3;
+            break;
+
+        case 2:
+            device->keyboard.field_0x469 = param3;
+            break;
+
+        case 4:
+            device->keyboard.field_0x46a = param3;
+            break;
+
+        case 8:
+            device->keyboard.field_0x46b = param3;
+            break;
+
+        case 0x10:
+            device->keyboard.field_0x46c = param3;
+            break;
+
+        case 0x20:
+            device->keyboard.field_0x46d = param3;
+            break;
+
+        case 0x40:
+            device->keyboard.field_0x46e = param3;
+            break;
+        
+        case 0x80:
+            device->keyboard.field_0x46f = param3;
+            break;
+
+        case 0x100:
+            device->keyboard.field_0x470 = param3;
+            break;
+
+        case 0x200:
+            device->keyboard.field_0x471 = param3;
+            break;
+
+        case 0x400:
+            device->keyboard.field_0x472 = param3;
+            break;
+
+        case 0x800:
+            device->keyboard.field_0x473 = param3;
+            break;
+        
+        case 0x1000:
+            device->keyboard.field_0x474 = param3;
+            break;
+
+        case 0x2000:
+            device->keyboard.field_0x475 = param3;
+            break;
+        
+        case 0x4000:
+            device->keyboard.field_0x476 = param3;
+            break;
+
+        case 0x8000:
+            device->keyboard.field_0x477 = param3;
+            break;
+    }
+}
+
+// FUNCTION: CMR2 0x0040c530 
+BYTE CInput::FUN_0040c530(unsigned int param1) {
+    int iVar1 = 0;
+
+    while (iVar1 < 32) {
+        if (!(param1 & 1)) break;
+        
+        param1 >>= 1;
+        iVar1++;
+    }
+
+    return iVar1;
 }
