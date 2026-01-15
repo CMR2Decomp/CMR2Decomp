@@ -84,7 +84,19 @@ struct ControllerData {
     unsigned int field_0x4;
     BYTE field_0x8;
     BYTE field_0x9;
-    BYTE field_0xa_padding[742];
+    BYTE field_0xa_padding[286];
+    unsigned short field_0x128; // are you actually a struct?
+    unsigned short field_0x12a;
+    unsigned short field_0x12c;
+    unsigned short field_0x12e;
+    unsigned short field_0x130;
+    unsigned short field_0x132;
+    unsigned short field_0x134;
+    unsigned short field_0x136;
+    unsigned short field_0x138;
+    unsigned short field_0x13a;
+    unsigned short field_0x13c;
+    BYTE field_0x13e[434];
 };
 
 struct ControllerInfo {
@@ -169,9 +181,9 @@ public:
     static void DInputReleaseDevices(void);
     static void LoadControllerInfo(void);
     static void FUN_0040be90(unsigned int param1);
-    static void FUN_0040c440(short param1, ControllerData * param2);
+    static void FUN_0040c440(unsigned int param1, ControllerData * param2);
     static void FUN_0049eb90(int param1, unsigned int param2, unsigned int param3);
-    static int FUN_0040c530(unsigned int param1);
+    static BYTE FUN_0040c530(unsigned int param1);
 };
 
 #endif

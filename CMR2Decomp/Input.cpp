@@ -748,9 +748,41 @@ void CInput::FUN_0040be90(unsigned int param1) {
     FUN_0049eb90(uVar2, 0x100, pController->field_0xa_padding[0x13c]);
 }
 
-// STUB: CMR2 0x0040c440
-void CInput::FUN_0040c440(short param1, ControllerData* param2) {
+// FUNCTION: CMR2 0x0040c440
+void CInput::FUN_0040c440(unsigned int param1, ControllerData* param2) {
+    unsigned short* puVar2;
+    unsigned short uVar4;
+    unsigned char bVar1;
+    int iVar3;
+    unsigned short combinedFlags;
+    
+    iVar3 = 0;
+    puVar2 = &param2->field_0x128;
+    
+    do {
+        if (*puVar2 == 0) {
+            if (param2->field_0x13e[iVar3] != 0) {
+                
+                combinedFlags = param2->field_0x13a | param2->field_0x136 | 
+                                param2->field_0x134 | param2->field_0x132 |
+                                param2->field_0x130 | param2->field_0x12e | 
+                                param2->field_0x12c | param2->field_0x12a |
+                                param2->field_0x128 | 0x400;
 
+                bVar1 = FUN_0040c530(combinedFlags & 0xffff);
+                
+                uVar4 = 1 << bVar1;
+                
+                FUN_0049eb90(param1 & 0xffff, uVar4 & 0xffff, param2->field_0x13e[iVar3]);
+                FUN_0049eb90(param1 & 0xffff, (1 << iVar3) & 0xffff, 0);
+                
+                *puVar2 = uVar4;
+            }
+        }
+        
+        iVar3++;
+        puVar2++;
+    } while (iVar3 < 10);
 }
 
 // FUNCTION: CMR2 0x0049eb90
@@ -824,7 +856,7 @@ void CInput::FUN_0049eb90(int param1, unsigned int param2, unsigned int param3) 
 }
 
 // FUNCTION: CMR2 0x0040c530 
-int CInput::FUN_0040c530(unsigned int param1) {
+BYTE CInput::FUN_0040c530(unsigned int param1) {
     int iVar1 = 0;
 
     while (iVar1 < 32) {
