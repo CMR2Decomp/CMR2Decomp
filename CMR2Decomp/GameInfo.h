@@ -98,6 +98,10 @@ public:
     static bool FUN_00406410(int param1);
     static bool FUN_004eac50(int param1);
     static void FUN_004d0590(BYTE param1);
+    static void FUN_0049ea90(unsigned int param1);
+    static void FUN_0049e930(unsigned int param1);
+    static void FUN_004d05d0(void);
+    static bool FUN_004d05a0(void);
 
     // GLOBAL: CMR2 0x0052afa0
     static GameInfo m_gameInfo;
@@ -119,6 +123,18 @@ public:
 
     // GLOBAL: CMR2 0x005250dc
     static char m_stringGameInfoRCF[32];
+
+    // GLOBAL: CMR2 0x0059f8d0
+    static unsigned int m_unk0x0059f8d0;
+
+    // GLOBAL: CMR2 0x0049e930
+    static unsigned int m_unk0x0049e930;
+
+    // GLOBAL: CMR2 0x0081777c
+    static void * m_unk0x0081777c;
+    
+    // GLOBAL: CMR2 0x00817678
+    static BOOL m_unk0x00817678;
 };
 
 #endif

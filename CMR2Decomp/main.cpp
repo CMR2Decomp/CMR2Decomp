@@ -150,7 +150,7 @@ BOOL CMain::CreateGameWindow(HINSTANCE hInstance, HWND *pHWND, LPCSTR sWindowNam
 		return FALSE;
 
 	if (!g_pGraphics->isFullscreen)
-		nCmdShow = SW_SHOWDEFAULT; // TODO: should be SW_HIDE
+		nCmdShow = SW_HIDE;
 	else
 		nCmdShow = SW_MAXIMIZE;
 

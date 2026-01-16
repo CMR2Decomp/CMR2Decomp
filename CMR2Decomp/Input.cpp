@@ -286,8 +286,8 @@ BOOL CInput::SetupKeyboard(void) {
         m_availableDevices[uVar1].keyboard.field_0x472 = 0x1;
         m_availableDevices[uVar1].keyboard.field_0x473 = 0x0;
 
-        m_unk0x0059f8cc.field_0x0 += 1;
         iVar3++;
+        m_unk0x0059f8cc.field_0x0 = m_unk0x0059f8cc.field_0x0 + 1;
     } while (iVar3 < 2);
 
     bVar2 = SystemParametersInfoA(SPI_GETKEYBOARDDELAY, 0, &m_keyboardDelay, 0);
@@ -314,11 +314,12 @@ BOOL CInput::SetupKeyboard(void) {
 
     bVar2 = SystemParametersInfoA(SPI_GETKEYBOARDSPEED, 0, &m_keyboardSpeed, 0);
     if (!bVar2) m_keyboardSpeed = (PVOID)0x1f4;
-    else m_keyboardSpeed = (PVOID)(503 - ((BYTE)m_keyboardSpeed * 13));
+    else m_keyboardSpeed = (PVOID)((int)m_keyboardSpeed * -0xd + 0x1f7);
 
     m_pDirectInputKeyboard = DInputCreateDevice(m_dinputRefGuidKeyboard, &m_pOldDirectInputKeyboard);
     if (m_pDirectInputKeyboard != NULL)
-        return TRUE;
+        if (SUCCEEDED(m_pDirectInputKeyboard->Acquire()))
+            return TRUE;
 
     return FALSE;
 }
