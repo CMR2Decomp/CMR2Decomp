@@ -5,6 +5,7 @@
 #include "InstallInfo.h"
 #include "NetworkLeaderboards.h"
 #include "Graphics.h"
+#include "Input.h"
 
 #include <time.h>
 
@@ -151,6 +152,9 @@ void CGame::InitializeGame(Unk0049c2c0 *p1, BYTE p2)
             if (CGraphics::InitializeDirectX()) {
                 CGraphics::SetDefaults();
             }
+            CInput::LoadControllerInfo();
+            CGameInfo::FUN_0049ea90(1);
+            CGameInfo::FUN_004d05d0();
         }
     }
 

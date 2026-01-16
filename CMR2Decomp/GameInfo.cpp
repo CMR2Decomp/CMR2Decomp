@@ -28,7 +28,10 @@ int CGameInfo::m_unk0x0081a754;
 
 char CGameInfo::m_stringCMR[4] = "cmr";
 char CGameInfo::m_stringGameInfoRCF[32] = "%s\\Configuration\\GameInfo.rcf";
-
+unsigned int CGameInfo::m_unk0x0059f8d0;
+unsigned int CGameInfo::m_unk0x0049e930;
+void* CGameInfo::m_unk0x0081777c = NULL;
+BOOL CGameInfo::m_unk0x00817678 = FALSE;
 
 // FUNCTION: CMR2 0x004057f0
 unsigned char CGameInfo::GetGameLanguage(void)
@@ -687,4 +690,33 @@ bool CGameInfo::FUN_004eac50(int param1) {
 // FUNCTION: CMR2 0x004d0590
 void CGameInfo::FUN_004d0590(BYTE param1) {
     m_unk0x00817574 = param1;
+}
+
+// FUNCTION: CMR2 0x0049ea90
+void CGameInfo::FUN_0049ea90(unsigned int param1) {
+    FUN_0049e930(param1);
+    m_unk0x0059f8d0 = param1;
+}
+
+// FUNCTION: CMR2 0x0049e930
+void CGameInfo::FUN_0049e930(unsigned int param1) {
+    m_unk0x0049e930 = param1;
+}
+
+// FUNCTION: CMR2 0x004d05d0
+void CGameInfo::FUN_004d05d0(void) {
+    m_unk0x0081777c = 0;
+    m_unk0x00817678 = FALSE;
+    CInput::FUN_0049c0a0(FUN_004d05a0, NULL);
+}
+
+// FUNCTION: CMR2 0x004d05a0
+bool CGameInfo::FUN_004d05a0(void) {
+    if (m_unk0x0081777c != NULL) {
+        CFileBuffer::FreeGenericFileBuffer(m_unk0x0081777c);
+        m_unk0x0081777c = NULL;
+    }
+
+    m_unk0x00817678 = FALSE;
+    return true;
 }
