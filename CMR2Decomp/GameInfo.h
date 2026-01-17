@@ -127,8 +127,8 @@ public:
     // GLOBAL: CMR2 0x0059f8d0
     static unsigned int m_unk0x0059f8d0;
 
-    // GLOBAL: CMR2 0x0049e930
-    static unsigned int m_unk0x0049e930;
+    // GLOBAL: CMR2 0x00520870
+    static unsigned int m_unk0x00520870;
 
     // GLOBAL: CMR2 0x0081777c
     static void * m_unk0x0081777c;
