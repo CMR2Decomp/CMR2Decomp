@@ -29,7 +29,7 @@ int CGameInfo::m_unk0x0081a754;
 char CGameInfo::m_stringCMR[4] = "cmr";
 char CGameInfo::m_stringGameInfoRCF[32] = "%s\\Configuration\\GameInfo.rcf";
 unsigned int CGameInfo::m_unk0x0059f8d0;
-unsigned int CGameInfo::m_unk0x0049e930;
+unsigned int CGameInfo::m_unk0x00520870;
 void* CGameInfo::m_unk0x0081777c = NULL;
 BOOL CGameInfo::m_unk0x00817678 = FALSE;
 
@@ -700,7 +700,7 @@ void CGameInfo::FUN_0049ea90(unsigned int param1) {
 
 // FUNCTION: CMR2 0x0049e930
 void CGameInfo::FUN_0049e930(unsigned int param1) {
-    m_unk0x0049e930 = param1;
+    m_unk0x00520870 = param1;
 }
 
 // FUNCTION: CMR2 0x004d05d0
