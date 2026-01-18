@@ -54,9 +54,6 @@ struct DeviceInfo {
     CHAR field_0x436[20];
     CHAR field_0x447[20];
     BOOL unk_isJoystick; // not 100% sure on this
-    // this makes sense in terms of joystick related stuff
-    // but does break matching on SetupKeyboard due to it doing eax + <OFFSET> instead
-    // of matching completely to eax + CInput::m_availableDevices[0].field_0x46d
     union {
         KeyboardInfo keyboard;
         JoystickInfo joystick;
@@ -127,14 +124,14 @@ public:
     static PVOID m_keyboardDelay;
     static DWORD m_mouseGranularity;
     static PVOID m_keyboardSpeed;
-    static REFGUID m_dinputRefGuidKeyboard;
-    static REFGUID m_dinputRefGuidMouse;
-    static LPDIRECTINPUTDEVICEA m_pOldDirectInputKeyboard;
+    static GUID m_dinputRefGuidKeyboard;
+    static GUID m_dinputRefGuidMouse;
     static LPDIRECTINPUTDEVICEA m_pDirectInputKeyboard;
-    static LPDIRECTINPUTDEVICEA m_pOldDirectInputMouse;
     static LPDIRECTINPUTDEVICEA m_pDirectInputMouse;
-    static DIDATAFORMAT m_objectDataFormat;
-    static LPDIRECTINPUTDEVICEA m_pDirectInputJoystick;
+    static IID m_unk0x005117c8;
+    static DIDATAFORMAT m_didfMouse;
+    static DIDATAFORMAT m_didfKeyboard;
+    static DIDATAFORMAT m_didfJoystick;
     static USHORT m_unk0x00511400[8];
     static LPDIRECTINPUTDEVICEA m_unk0x0059f6b0[4];
     static CHAR m_strD[4];
@@ -159,7 +156,7 @@ public:
     static unsigned short m_unk0x005168f4[8];
 
     static BOOL DInputCreate(void);
-    static LPDIRECTINPUTDEVICEA DInputCreateDevice(REFGUID param1, LPDIRECTINPUTDEVICEA *existingDevice);
+    static LPDIRECTINPUTDEVICEA DInputCreateDevice(GUID* param1, DIDATAFORMAT *pDataFormat);
     static int FUN_0049c0a0(void *param1, void *param2);
     static BOOL DInputRelease(void);
     static int FUN_0049ef90();
