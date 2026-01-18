@@ -144,7 +144,7 @@ void CGame::InitializeGame(Unk0049c2c0 *p1, BYTE p2)
             CGameInfo::FUN_00510410();
             CGameInfo::FUN_00406560();
             CGameInfo::FUN_00406580();
-            CGameInfo::SetupInputs(); // NOTE: this causes a crash right now
+            CGameInfo::SetupInputs();
             didLoadGameInfo = CGameInfo::LoadGameInfo();
             CNetworkLeaderboards::Reset();
             CNetworkLeaderboards::LoadLeaderboards();

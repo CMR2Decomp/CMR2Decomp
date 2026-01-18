@@ -133,7 +133,7 @@ public:
     static DIDATAFORMAT m_didfKeyboard;
     static DIDATAFORMAT m_didfJoystick;
     static USHORT m_unk0x00511400[8];
-    static LPDIRECTINPUTDEVICEA m_unk0x0059f6b0[4];
+    static LPDIRECTINPUTDEVICEA m_unk0x0059f6b0[8];
     static CHAR m_strD[4];
     static CHAR m_strU[4];
     static CHAR m_strR[4];

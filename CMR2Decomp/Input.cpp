@@ -59,7 +59,7 @@ DIDATAFORMAT CInput::m_didfJoystick = c_dfDIJoystick2;
 USHORT CInput::m_unk0x00511400[8];
 
 // GLOBAL: CMR2 0x0059f6b0
-LPDIRECTINPUTDEVICEA CInput::m_unk0x0059f6b0[4];
+LPDIRECTINPUTDEVICEA CInput::m_unk0x0059f6b0[8];
 
 // GLOBAL: CMR2 0x00520880
 CHAR CInput::m_strD[4] = " D";
@@ -512,9 +512,9 @@ void CInput::SetupJoystickDeviceInfo(DeviceInfo *deviceInfo) {
     USHORT * unk0x00511400;
     JoystickBinding * bindings;
 
-    DIPROPDWORD dipd;
+    DIPROPRANGE dipd;
     dipd.diph.dwSize = 0x18;
-    dipd.diph.dwHeaderSize = 0x10;
+    dipd.diph.dwHeaderSize = sizeof(DIPROPRANGE);
     dipd.diph.dwHow = DIPH_BYOFFSET;
 
     deviceInfo->joystick.controlCount = 0;
@@ -539,7 +539,7 @@ void CInput::SetupJoystickDeviceInfo(DeviceInfo *deviceInfo) {
 
         unk0x00511400++;
         bindings++;
-    } while ((int)unk0x00511400 < (int)(m_unk0x00511400 + 16));
+    } while ((int)unk0x00511400 < (int)(m_unk0x00511400 + 8));
 }
 
 // FUNCTION: CMR2 0x0049ee10
