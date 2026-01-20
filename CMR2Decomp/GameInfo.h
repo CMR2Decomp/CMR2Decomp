@@ -69,6 +69,24 @@ struct GameInfo
     BYTE field_0x3994_padding[5]; // seems wrong that this 5 bytes, but we're a byte short without it
 };
 
+struct Unk0x0059fa20 {
+    BYTE field_0x0[12];
+    DWORD field_0xc;
+    BYTE field_0x10;
+};
+
+struct Unk0x00664750 {
+	void* field_0x0;
+	void* field_0x4;
+	unsigned short field_0x8;
+	unsigned short field_0xa;
+	void* field_0xc;
+    void* field_0x10;
+	char field_0x14;
+	BYTE field_0x15;
+	BYTE field_0x16[254];
+};
+
 class CGameInfo
 {
 public:
@@ -102,6 +120,11 @@ public:
     static void FUN_0049e930(unsigned int param1);
     static void FUN_004d05d0(void);
     static bool FUN_004d05a0(void);
+    static bool FUN_004aaa40(void);
+    static void FUN_004a0c60(void);
+    static void FUN_004a17b0(void);
+    static void FUN_004a17f0(bool param1);
+    static bool FUN_004aaac0(void);
 
     // GLOBAL: CMR2 0x0052afa0
     static GameInfo m_gameInfo;
@@ -135,6 +158,46 @@ public:
     
     // GLOBAL: CMR2 0x00817678
     static BOOL m_unk0x00817678;
+
+    // GLOBAL: CMR2 0x0066521c
+    static void *m_unk0x0066521c;
+
+    // GLOBAL: CMR2 0x00665220
+    static void *m_unk0x00665220;
+
+    // GLOBAL: CMR2 0x00664750
+    static Unk0x00664750 m_unk0x00664750[10];
+
+    // GLOBAL: CMR2 0x005a0098
+    static LPVOID *m_unk0x005a0098;
+    // GLOBAL: CMR2 0x005a00b8
+    static void *m_unk0x005a00b8;
+    // GLOBAL: CMR2 0x005a009c
+    static LPVOID *m_unk0x005a009c;
+    // GLOBAL: CMR2 0x005a02c0
+    static void *m_unk0x005a02c0;
+    // GLOBAL: CMR2 0x005a0060
+    static BOOL m_unk0x005a0060;
+    // GLOBAL: CMR2 0x005a1814
+    static BOOL m_unk0x005a1814;
+    // GLOBAL: CMR2 0x005a01bc
+    static bool m_unk0x005a01bc;
+    // GLOBAL: CMR2 0x0059fa20
+    static Unk0x0059fa20 m_unk0x0059fa20[80];
+    
+    // GLOBAL: CMR2 0x005a1fbc
+    static BOOL m_unk0x005a1fbc;
+    // GLOBAL: CMR2 0x005a1fb8
+    static void *m_unk0x005a1fb8;
+
+    // GLOBAL: CMR2 0x005a1fc0
+    static bool m_unk0x005a1fc0;
+
+    // GLOBAL: CMR2 0x00665218
+    static int m_unk0x00665218;
+
+    // GLOBAL: CMR2 0x00664650
+    static char m_unk0x00664650[256];
 };
 
 #endif

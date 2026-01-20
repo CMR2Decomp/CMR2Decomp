@@ -32,6 +32,22 @@ unsigned int CGameInfo::m_unk0x0059f8d0;
 unsigned int CGameInfo::m_unk0x00520870;
 void* CGameInfo::m_unk0x0081777c = NULL;
 BOOL CGameInfo::m_unk0x00817678 = FALSE;
+void *CGameInfo::m_unk0x0066521c = NULL;
+void *CGameInfo::m_unk0x00665220 = NULL;
+LPVOID *CGameInfo::m_unk0x005a0098;
+void *CGameInfo::m_unk0x005a00b8;
+LPVOID *CGameInfo::m_unk0x005a009c;
+void *CGameInfo::m_unk0x005a02c0;
+BOOL CGameInfo::m_unk0x005a0060;
+BOOL CGameInfo::m_unk0x005a1814;
+bool CGameInfo::m_unk0x005a01bc;
+Unk0x0059fa20 CGameInfo::m_unk0x0059fa20[80];
+BOOL CGameInfo::m_unk0x005a1fbc;
+void *CGameInfo::m_unk0x005a1fb8;
+bool CGameInfo::m_unk0x005a1fc0;
+Unk0x00664750 CGameInfo::m_unk0x00664750[10];
+int CGameInfo::m_unk0x00665218;
+char CGameInfo::m_unk0x00664650[256];
 
 // FUNCTION: CMR2 0x004057f0
 unsigned char CGameInfo::GetGameLanguage(void)
@@ -720,3 +736,66 @@ bool CGameInfo::FUN_004d05a0(void) {
     m_unk0x00817678 = FALSE;
     return true;
 }
+
+// FUNCTION: CMR2 0x004aaa40
+bool CGameInfo::FUN_004aaa40(void) {
+    Unk0x00664750 *puVar1;
+
+    m_unk0x0066521c = NULL;
+    m_unk0x00665220 = NULL;
+
+    FUN_004a0c60();
+    FUN_004a17f0(true);
+    FUN_004a17b0();
+    
+    puVar1 = m_unk0x00664750;
+    do {
+        sprintf((char*)&puVar1[-1].field_0x14, CMain::m_logFileBlankLine);
+        puVar1->field_0x0 = NULL;
+        puVar1++;
+    } while ((int)puVar1 < (int)&m_unk0x00665218);
+
+    m_unk0x00664750[9].field_0x15 = '\0';
+    CoInitialize(NULL);
+
+    CInput::FUN_0049c0a0(FUN_004aaac0, NULL);
+
+    return true;
+}
+
+// FUNCTION: CMR2 0x004a0c60
+void CGameInfo::FUN_004a0c60(void) {
+    m_unk0x005a0098 = &m_unk0x005a00b8;
+    memset(m_unk0x0059fa20, 0, sizeof(m_unk0x0059fa20));
+    m_unk0x005a009c = &m_unk0x005a02c0;
+    m_unk0x005a0060 = FALSE;
+    m_unk0x005a1814 = FALSE;
+    m_unk0x005a01bc = false;
+}
+
+// FUNCTION: CMR2 0x004a17b0
+void CGameInfo::FUN_004a17b0(void) {
+    m_unk0x005a1fbc = FALSE;
+    if (m_unk0x005a1fb8 != NULL) {
+        CFileBuffer::FreeGenericFileBuffer(m_unk0x005a1fb8);
+        m_unk0x005a1fb8 = NULL;
+    }
+}
+
+// FUNCTION: CMR2 0x004a17f0
+void CGameInfo::FUN_004a17f0(bool param1) {
+}
+
+// STUB: CMR2 0x004aaac0
+bool CGameInfo::FUN_004aaac0(void)
+{
+//   FUN_004a1a90();
+//   FUN_004aabb0();
+//   FUN_004aab40();
+//   FUN_004aaa10();
+//   thunk_FUN_004a17b0();
+  CoUninitialize();
+  return 1;
+}
+
+
