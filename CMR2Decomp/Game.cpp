@@ -41,6 +41,10 @@ DPID CGame::m_unk0x005a1ea0 = NULL;
 CLSID CGame::m_clsidDirectPlay = CLSID_DirectPlay;
 IID CGame::m_iidDirectPlay4A = IID_IDirectPlay4A;
 
+IDirectPlayLobby3A *CGame::pDirectPlayLobby3A;
+CLSID CGame::m_clsidDirectPlayLobby = CLSID_DirectPlayLobby;
+IID CGame::m_iidDirectPlayLobby3A = IID_IDirectPlayLobby3A;
+
 FuncTableGroup CGame::m_initializeGameGroupedFuncTable[10] = {
     {InitializeGame,
      FUN_00501680},
@@ -357,8 +361,13 @@ bool CGame::FUN_004aaac0(void)
 // STUB: CMR2 0x004aab40
 void CGame::FUN_004aab40(void) {}
 
-// STUB: CMR2 0x004aabb0
-void CGame::FUN_004aabb0(void) {}
+// FUNCTION: CMR2 0x004aabb0
+void CGame::FUN_004aabb0(void) {
+    if (pDirectPlayLobby3A != NULL) {
+        pDirectPlayLobby3A->Release();
+        pDirectPlayLobby3A = NULL;
+    }
+}
 
 // FUNCTION: CMR2 0x004aad40
 IDirectPlay4A* CGame::FUN_004aad40(void) {

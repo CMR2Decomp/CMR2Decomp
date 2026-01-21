@@ -3,6 +3,7 @@
 
 #include <windows.h>
 #include "../third_party/dx7sdk-7001/include/dplay.h"
+#include "../third_party/dx7sdk-7001/include/dplobby.h"
 
 typedef void (*FuncTableEntry)(struct Unk0049c2c0 *, BYTE);
 typedef void (*OtherFuncTableEntry)(struct Unk0049c2c0 *, BYTE);
@@ -134,6 +135,15 @@ public:
 
     // GLOBAL: CMR2 0x00511a18
     static IID m_iidDirectPlay4A;
+
+    // GLOBAL: CMR2 0x00665220
+    static IDirectPlayLobby3A *pDirectPlayLobby3A;
+
+    // GLOBAL: CMR2 0x00511ae8
+    static CLSID m_clsidDirectPlayLobby;
+
+    // GLOBAL: CMR2 0x00511ad8
+    static IID m_iidDirectPlayLobby3A;
 };
 
 #endif
