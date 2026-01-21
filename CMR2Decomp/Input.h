@@ -140,8 +140,6 @@ public:
     static CHAR m_strL[4];
     static ForceFeedbackDevice m_forceFeedbackDevices[8];
     static BOOL m_unk0x00666ee8;
-    static int m_unk0x00593ba0;
-    static void* m_unk0x005939a0;
 
     // GLOBAL: CMR2 0x00516908
     static char m_strControllerInfoDir[32];
@@ -157,7 +155,6 @@ public:
 
     static BOOL DInputCreate(void);
     static LPDIRECTINPUTDEVICEA DInputCreateDevice(GUID* param1, DIDATAFORMAT *pDataFormat);
-    static int FUN_0049c0a0(void *param1, void *param2);
     static BOOL DInputRelease(void);
     static int FUN_0049ef90();
     static BOOL FUN_0049f6b0(LPCDIDEVICEINSTANCEA lpddi, LPVOID pvRef);

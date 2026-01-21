@@ -2,6 +2,8 @@
 #define _GAME_H
 
 #include <windows.h>
+#include "../third_party/dx7sdk-7001/include/dplay.h"
+#include "../third_party/dx7sdk-7001/include/dplobby.h"
 
 typedef void (*FuncTableEntry)(struct Unk0049c2c0 *, BYTE);
 typedef void (*OtherFuncTableEntry)(struct Unk0049c2c0 *, BYTE);
@@ -27,6 +29,13 @@ struct Unk0049c2c0
     void *unk2;                      // pointer to something that is 64 bytes?
 };
 
+struct Unk0x005a1820 {
+    char field_0x0[100];
+    char field_0x64[100];
+    unsigned int field_0xc8;
+    unsigned int field_0xcc;
+};
+
 class CGame
 {
 public:
@@ -46,8 +55,17 @@ public:
     static void FUN_004083e0(BYTE param1);
     static void FUN_00406810(BYTE param1);
     static bool FUN_004067e0(void);
+    static int RegisterCallback(void *param1, void *param2);
     static void FUN_004b7a40(void);
-
+    static void FUN_004a17b0(void);
+    static void FUN_004a17f0(bool param1);
+    static BOOL FUN_004a1a90(void);
+    static void FUN_004aaa10(void);
+    static bool Cleanup(void);
+    static void DestroyDirectPlay(void);
+    static void DestroyDirectPlayLobby(void);
+    static IDirectPlay4A *GetDirectPlay(void);
+    
     // GLOBAL: CMR2 0x00663db8
     static BOOL m_shouldExit;
     // GLOBAL: CMR2 0x00663db4
@@ -91,6 +109,51 @@ public:
     static BYTE m_unk0x0052ea58;
     // GLOBAL: CMR2 0x0052ea59
     static BYTE m_unk0x0052ea59;
+
+    static void* m_unk0x005939a0;
+    static int m_unk0x00593ba0;    
+
+    // GLOBAL: CMR2 0x005a1818
+    static BYTE m_unk0x005a1818;
+
+    // GLOBAL: CMR2 0x005a1819
+    static BYTE m_unk0x005a1819;
+
+    // GLOBAL: CMR2 0x005a1820
+    static Unk0x005a1820 m_unk0x005a1820[7];
+    
+    // GLOBAL: CMR2 0x005a1e34
+    static int m_unk0x005a1e34;
+
+    // GLOBAL: CMR2 0x005a1fc0
+    static bool m_unk0x005a1fc0;
+
+    // GLOBAL: CMR2 0x0066521c
+    static IDirectPlay4A *m_pDirectPlay4A;
+
+    // GLOBAL: CMR2 0x005a1ea0
+    static DPID m_unk0x005a1ea0;
+
+    // GLOBAL: CMR2 0x00511a28
+    static CLSID m_clsidDirectPlay;
+
+    // GLOBAL: CMR2 0x00511a18
+    static IID m_iidDirectPlay4A;
+
+    // GLOBAL: CMR2 0x00665220
+    static IDirectPlayLobby3A *m_pDirectPlayLobby3A;
+
+    // GLOBAL: CMR2 0x00511ae8
+    static CLSID m_clsidDirectPlayLobby;
+
+    // GLOBAL: CMR2 0x00511ad8
+    static IID m_iidDirectPlayLobby3A;
+
+    // GLOBAL: CMR2 0x005a1fb8 
+    static void *m_unk0x005a1fb8;    
+
+    // GLOBAL: CMR2 0x005a1fbc
+    static BOOL m_unk0x005a1fbc;
 };
 
 #endif

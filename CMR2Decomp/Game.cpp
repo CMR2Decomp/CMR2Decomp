@@ -6,7 +6,9 @@
 #include "NetworkLeaderboards.h"
 #include "Graphics.h"
 #include "Input.h"
+#include "FileBuffer.h"
 
+#include <stdio.h>
 #include <time.h>
 
 BOOL CGame::m_shouldExit = FALSE;
@@ -29,6 +31,29 @@ BYTE CGame::m_unk0x00516120 = 1;
 BYTE CGame::m_unk0x00531768;
 BYTE CGame::m_unk0x0052ea58;
 BYTE CGame::m_unk0x0052ea59;
+
+// GLOBAL: CMR2 0x00593ba0;
+int CGame::m_unk0x00593ba0;
+
+// GLOBAL: CMR2 0x005939a0
+void* CGame::m_unk0x005939a0;
+
+BYTE CGame::m_unk0x005a1818;
+BYTE CGame::m_unk0x005a1819;
+Unk0x005a1820 CGame::m_unk0x005a1820[7];
+int CGame::m_unk0x005a1e34;
+bool CGame::m_unk0x005a1fc0;
+IDirectPlay4A *CGame::m_pDirectPlay4A = NULL;
+DPID CGame::m_unk0x005a1ea0 = NULL;
+CLSID CGame::m_clsidDirectPlay = CLSID_DirectPlay;
+IID CGame::m_iidDirectPlay4A = IID_IDirectPlay4A;
+
+IDirectPlayLobby3A *CGame::m_pDirectPlayLobby3A;
+CLSID CGame::m_clsidDirectPlayLobby = CLSID_DirectPlayLobby;
+IID CGame::m_iidDirectPlayLobby3A = IID_IDirectPlayLobby3A;
+
+BOOL CGame::m_unk0x005a1fbc;
+void *CGame::m_unk0x005a1fb8;
 
 FuncTableGroup CGame::m_initializeGameGroupedFuncTable[10] = {
     {InitializeGame,
@@ -291,3 +316,121 @@ bool CGame::FUN_004067e0(void)
     }
     return false;
 }
+
+// FUNCTION: CMR2 0x0049c0a0
+int CGame::RegisterCallback(void *param1, void *param2) {
+    int iVar2;
+    void **piVar3;
+
+    if (param1 == NULL)
+        return -1;
+
+    iVar2 = 0;
+    if (m_unk0x00593ba0 > 0) {
+        piVar3 = &m_unk0x005939a0;
+        while (1) {
+            if (param1 == *piVar3)
+                return iVar2;
+    
+            iVar2++;
+            piVar3++;
+            
+            if (iVar2 >= m_unk0x00593ba0) break;
+        }
+    }
+
+    if (m_unk0x00593ba0 >= 0x40)
+        return -1;
+
+    (&m_unk0x005939a0)[m_unk0x00593ba0] = param1;
+    return m_unk0x00593ba0++;
+}
+
+// FUNCTION: CMR2 0x004a17b0
+void CGame::FUN_004a17b0(void) {
+    m_unk0x005a1fbc = FALSE;
+    if (m_unk0x005a1fb8 != NULL) {
+        CFileBuffer::FreeGenericFileBuffer(m_unk0x005a1fb8);
+        m_unk0x005a1fb8 = NULL;
+    }    
+}
+
+// FUNCTION: CMR2 0x004a17f0
+void CGame::FUN_004a17f0(bool param1) {
+    if (param1)
+        m_unk0x005a1fc0 = false;
+
+    Unk0x005a1820 *dest = m_unk0x005a1820;
+    do {
+        sprintf(dest->field_0x64, CMain::m_logFileBlankLine);
+        sprintf(dest->field_0x0, CMain::m_logFileBlankLine);
+        dest->field_0xc8 = 0;
+        dest->field_0xcc = 0;
+        dest++;
+    } while ((int)dest < (int)&m_unk0x005a1e34);
+
+    m_unk0x005a1818 = 0;
+}
+
+// FUNCTION: CMR2 0x004a1a90
+BOOL CGame::FUN_004a1a90(void) {
+    IDirectPlay4A *pVar1;
+    HRESULT hr;
+    if (m_unk0x005a1fc0) {
+        pVar1 = GetDirectPlay();
+        if (pVar1 != NULL) {
+            hr = pVar1->DestroyPlayer(m_unk0x005a1ea0);
+            if (hr > DPERR_UNAVAILABLE && hr != DPERR_CONNECTIONLOST && hr == DP_OK)
+                return TRUE;
+        }
+    }
+
+    return FALSE;
+}
+
+// FUNCTION: CMR2 0x004aaa10
+void CGame::FUN_004aaa10(void) {
+    Unk0x00664750* puVar1;
+    puVar1 = CGameInfo::m_unk0x00664750;
+    do {
+        if (puVar1->field_0x0 != NULL) {
+            CFileBuffer::FreeGenericFileBuffer(puVar1->field_0x0);
+            puVar1->field_0x0 = NULL;
+        }
+        puVar1++;
+    } while ((int)puVar1 < (int)&CGameInfo::m_unk0x00665218);
+}
+
+// FUNCTION: CMR2 0x004aaac0
+bool CGame::Cleanup(void)
+{
+  FUN_004a1a90();
+  DestroyDirectPlayLobby();
+  DestroyDirectPlay();
+  FUN_004aaa10();
+  FUN_004a17b0();
+  CoUninitialize();
+  return 1;
+}
+
+// FUNCTION: CMR2 0x004aab40
+void CGame::DestroyDirectPlay(void) {
+    if (m_pDirectPlay4A != NULL) {
+        m_pDirectPlay4A->Release();
+        m_pDirectPlay4A = NULL;
+    }
+}
+
+// FUNCTION: CMR2 0x004aabb0
+void CGame::DestroyDirectPlayLobby(void) {
+    if (m_pDirectPlayLobby3A != NULL) {
+        m_pDirectPlayLobby3A->Release();
+        m_pDirectPlayLobby3A = NULL;
+    }
+}
+
+// FUNCTION: CMR2 0x004aad40
+IDirectPlay4A* CGame::GetDirectPlay(void) {
+    return m_pDirectPlay4A;
+}
+

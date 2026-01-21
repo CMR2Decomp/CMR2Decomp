@@ -6,6 +6,7 @@
 #include "FileBuffer.h"
 #include "GenericFileLoader.h"
 #include "main.h"
+#include "Game.h"
 
 #include <stdio.h>
 
@@ -32,6 +33,17 @@ unsigned int CGameInfo::m_unk0x0059f8d0;
 unsigned int CGameInfo::m_unk0x00520870;
 void* CGameInfo::m_unk0x0081777c = NULL;
 BOOL CGameInfo::m_unk0x00817678 = FALSE;
+LPVOID *CGameInfo::m_unk0x005a0098;
+void *CGameInfo::m_unk0x005a00b8;
+LPVOID *CGameInfo::m_unk0x005a009c;
+void *CGameInfo::m_unk0x005a02c0;
+BOOL CGameInfo::m_unk0x005a0060;
+HRESULT CGameInfo::m_unk0x005a1814;
+BYTE CGameInfo::m_unk0x005a01bc;
+BOOL CGameInfo::m_unk0x0059fa20[400];
+Unk0x00664750 CGameInfo::m_unk0x00664750[10];
+int CGameInfo::m_unk0x00665218;
+char CGameInfo::m_unk0x00664650[256];
 
 // FUNCTION: CMR2 0x004057f0
 unsigned char CGameInfo::GetGameLanguage(void)
@@ -707,7 +719,7 @@ void CGameInfo::FUN_0049e930(unsigned int param1) {
 void CGameInfo::FUN_004d05d0(void) {
     m_unk0x0081777c = 0;
     m_unk0x00817678 = FALSE;
-    CInput::FUN_0049c0a0(FUN_004d05a0, NULL);
+    CGame::RegisterCallback(FUN_004d05a0, NULL);
 }
 
 // FUNCTION: CMR2 0x004d05a0
@@ -720,3 +732,42 @@ bool CGameInfo::FUN_004d05a0(void) {
     m_unk0x00817678 = FALSE;
     return true;
 }
+
+// FUNCTION: CMR2 0x004aaa40
+bool CGameInfo::FUN_004aaa40(void) {
+    Unk0x00664750 *puVar1;
+
+    CGame::m_pDirectPlay4A = NULL;
+    CGame::m_pDirectPlayLobby3A = NULL;
+
+    FUN_004a0c60();
+    CGame::FUN_004a17f0(true);
+    CGame::FUN_004a17b0();
+    
+    puVar1 = m_unk0x00664750;
+    do {
+        sprintf((char*)&puVar1[-1].field_0x14, CMain::m_logFileBlankLine);
+        puVar1->field_0x0 = NULL;
+        puVar1++;
+    } while ((int)puVar1 < (int)&m_unk0x00665218);
+
+    m_unk0x00664750[9].field_0x15 = '\0';
+    CoInitialize(NULL);
+
+    CGame::RegisterCallback(CGame::Cleanup, NULL);
+
+    return true;
+}
+
+// FUNCTION: CMR2 0x004a0c60
+void CGameInfo::FUN_004a0c60(void) {
+    memset(m_unk0x0059fa20, 0, sizeof(m_unk0x0059fa20));
+    
+    m_unk0x005a0098 = &m_unk0x005a00b8;
+    m_unk0x005a009c = &m_unk0x005a02c0;
+    
+    m_unk0x005a0060 = FALSE;
+    m_unk0x005a1814 = FALSE;
+    m_unk0x005a01bc = false;
+}
+

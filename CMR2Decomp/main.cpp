@@ -158,7 +158,7 @@ BOOL CMain::CreateGameWindow(HINSTANCE hInstance, HWND *pHWND, LPCSTR sWindowNam
 	UpdateWindow(hWnd);
 	SetFocus(hWnd);
 	*pHWND = hWnd;
-	CInput::FUN_0049c0a0(FUN_004a8270, NULL);
+	CGame::RegisterCallback(FUN_004a8270, NULL);
 	return TRUE;
 }
 
