@@ -719,7 +719,7 @@ void CGameInfo::FUN_0049e930(unsigned int param1) {
 void CGameInfo::FUN_004d05d0(void) {
     m_unk0x0081777c = 0;
     m_unk0x00817678 = FALSE;
-    CInput::FUN_0049c0a0(FUN_004d05a0, NULL);
+    CGame::RegisterCallback(FUN_004d05a0, NULL);
 }
 
 // FUNCTION: CMR2 0x004d05a0
@@ -754,7 +754,7 @@ bool CGameInfo::FUN_004aaa40(void) {
     m_unk0x00664750[9].field_0x15 = '\0';
     CoInitialize(NULL);
 
-    CInput::FUN_0049c0a0(CGame::FUN_004aaac0, NULL);
+    CGame::RegisterCallback(CGame::Cleanup, NULL);
 
     return true;
 }

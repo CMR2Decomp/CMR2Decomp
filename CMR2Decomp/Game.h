@@ -55,15 +55,16 @@ public:
     static void FUN_004083e0(BYTE param1);
     static void FUN_00406810(BYTE param1);
     static bool FUN_004067e0(void);
+    static int RegisterCallback(void *param1, void *param2);
     static void FUN_004b7a40(void);
     static void FUN_004a17b0(void);
     static void FUN_004a17f0(bool param1);
     static BOOL FUN_004a1a90(void);
     static void FUN_004aaa10(void);
-    static bool FUN_004aaac0(void);
-    static void FUN_004aab40(void);
-    static void FUN_004aabb0(void);
-    static IDirectPlay4A *FUN_004aad40(void);
+    static bool Cleanup(void);
+    static void DestroyDirectPlay(void);
+    static void DestroyDirectPlayLobby(void);
+    static IDirectPlay4A *GetDirectPlay(void);
     
     // GLOBAL: CMR2 0x00663db8
     static BOOL m_shouldExit;
@@ -108,6 +109,9 @@ public:
     static BYTE m_unk0x0052ea58;
     // GLOBAL: CMR2 0x0052ea59
     static BYTE m_unk0x0052ea59;
+
+    static void* m_unk0x005939a0;
+    static int m_unk0x00593ba0;    
 
     // GLOBAL: CMR2 0x005a1818
     static BYTE m_unk0x005a1818;

@@ -32,6 +32,12 @@ BYTE CGame::m_unk0x00531768;
 BYTE CGame::m_unk0x0052ea58;
 BYTE CGame::m_unk0x0052ea59;
 
+// GLOBAL: CMR2 0x00593ba0;
+int CGame::m_unk0x00593ba0;
+
+// GLOBAL: CMR2 0x005939a0
+void* CGame::m_unk0x005939a0;
+
 BYTE CGame::m_unk0x005a1818;
 BYTE CGame::m_unk0x005a1819;
 Unk0x005a1820 CGame::m_unk0x005a1820[7];
@@ -311,6 +317,35 @@ bool CGame::FUN_004067e0(void)
     return false;
 }
 
+// FUNCTION: CMR2 0x0049c0a0
+int CGame::RegisterCallback(void *param1, void *param2) {
+    int iVar2;
+    void **piVar3;
+
+    if (param1 == NULL)
+        return -1;
+
+    iVar2 = 0;
+    if (m_unk0x00593ba0 > 0) {
+        piVar3 = &m_unk0x005939a0;
+        while (1) {
+            if (param1 == *piVar3)
+                return iVar2;
+    
+            iVar2++;
+            piVar3++;
+            
+            if (iVar2 >= m_unk0x00593ba0) break;
+        }
+    }
+
+    if (m_unk0x00593ba0 >= 0x40)
+        return -1;
+
+    (&m_unk0x005939a0)[m_unk0x00593ba0] = param1;
+    return m_unk0x00593ba0++;
+}
+
 // FUNCTION: CMR2 0x004a17b0
 void CGame::FUN_004a17b0(void) {
     m_unk0x005a1fbc = FALSE;
@@ -342,7 +377,7 @@ BOOL CGame::FUN_004a1a90(void) {
     IDirectPlay4A *pVar1;
     HRESULT hr;
     if (m_unk0x005a1fc0) {
-        pVar1 = FUN_004aad40();
+        pVar1 = GetDirectPlay();
         if (pVar1 != NULL) {
             hr = pVar1->DestroyPlayer(m_unk0x005a1ea0);
             if (hr > DPERR_UNAVAILABLE && hr != DPERR_CONNECTIONLOST && hr == DP_OK)
@@ -367,11 +402,11 @@ void CGame::FUN_004aaa10(void) {
 }
 
 // FUNCTION: CMR2 0x004aaac0
-bool CGame::FUN_004aaac0(void)
+bool CGame::Cleanup(void)
 {
   FUN_004a1a90();
-  FUN_004aabb0();
-  FUN_004aab40();
+  DestroyDirectPlayLobby();
+  DestroyDirectPlay();
   FUN_004aaa10();
   FUN_004a17b0();
   CoUninitialize();
@@ -379,7 +414,7 @@ bool CGame::FUN_004aaac0(void)
 }
 
 // FUNCTION: CMR2 0x004aab40
-void CGame::FUN_004aab40(void) {
+void CGame::DestroyDirectPlay(void) {
     if (m_pDirectPlay4A != NULL) {
         m_pDirectPlay4A->Release();
         m_pDirectPlay4A = NULL;
@@ -387,7 +422,7 @@ void CGame::FUN_004aab40(void) {
 }
 
 // FUNCTION: CMR2 0x004aabb0
-void CGame::FUN_004aabb0(void) {
+void CGame::DestroyDirectPlayLobby(void) {
     if (m_pDirectPlayLobby3A != NULL) {
         m_pDirectPlayLobby3A->Release();
         m_pDirectPlayLobby3A = NULL;
@@ -395,7 +430,7 @@ void CGame::FUN_004aabb0(void) {
 }
 
 // FUNCTION: CMR2 0x004aad40
-IDirectPlay4A* CGame::FUN_004aad40(void) {
+IDirectPlay4A* CGame::GetDirectPlay(void) {
     return m_pDirectPlay4A;
 }
 
