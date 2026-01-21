@@ -70,8 +70,8 @@ struct GameInfo
 };
 
 struct Unk0x0059fa20 {
-    BYTE field_0x0[12];
-    DWORD field_0xc;
+    DWORD field_0x0;
+    DWORD field_0x4;
     BYTE field_0x10;
 };
 
@@ -123,8 +123,6 @@ public:
     static bool FUN_004aaa40(void);
     static void FUN_004a0c60(void);
     static void FUN_004a17b0(void);
-    static void FUN_004a17f0(bool param1);
-    static bool FUN_004aaac0(void);
 
     // GLOBAL: CMR2 0x0052afa0
     static GameInfo m_gameInfo;
@@ -159,9 +157,6 @@ public:
     // GLOBAL: CMR2 0x00817678
     static BOOL m_unk0x00817678;
 
-    // GLOBAL: CMR2 0x0066521c
-    static void *m_unk0x0066521c;
-
     // GLOBAL: CMR2 0x00665220
     static void *m_unk0x00665220;
 
@@ -179,19 +174,17 @@ public:
     // GLOBAL: CMR2 0x005a0060
     static BOOL m_unk0x005a0060;
     // GLOBAL: CMR2 0x005a1814
-    static BOOL m_unk0x005a1814;
+    static HRESULT m_unk0x005a1814;
+
     // GLOBAL: CMR2 0x005a01bc
-    static bool m_unk0x005a01bc;
+    static BYTE m_unk0x005a01bc;
     // GLOBAL: CMR2 0x0059fa20
-    static Unk0x0059fa20 m_unk0x0059fa20[80];
+    static BOOL m_unk0x0059fa20[400];
     
     // GLOBAL: CMR2 0x005a1fbc
     static BOOL m_unk0x005a1fbc;
     // GLOBAL: CMR2 0x005a1fb8
     static void *m_unk0x005a1fb8;
-
-    // GLOBAL: CMR2 0x005a1fc0
-    static bool m_unk0x005a1fc0;
 
     // GLOBAL: CMR2 0x00665218
     static int m_unk0x00665218;

@@ -7,6 +7,7 @@
 #include "Graphics.h"
 #include "Input.h"
 
+#include <stdio.h>
 #include <time.h>
 
 BOOL CGame::m_shouldExit = FALSE;
@@ -29,6 +30,16 @@ BYTE CGame::m_unk0x00516120 = 1;
 BYTE CGame::m_unk0x00531768;
 BYTE CGame::m_unk0x0052ea58;
 BYTE CGame::m_unk0x0052ea59;
+
+BYTE CGame::m_unk0x005a1818;
+BYTE CGame::m_unk0x005a1819;
+Unk0x005a1820 CGame::m_unk0x005a1820[7];
+int CGame::m_unk0x005a1e34;
+bool CGame::m_unk0x005a1fc0;
+IDirectPlay4A *CGame::m_unk0x0066521c = NULL;
+DPID CGame::m_unk0x005a1ea0 = NULL;
+CLSID CGame::m_clsidDirectPlay = CLSID_DirectPlay;
+IID CGame::m_iidDirectPlay4A = IID_IDirectPlay4A;
 
 FuncTableGroup CGame::m_initializeGameGroupedFuncTable[10] = {
     {InitializeGame,
@@ -291,3 +302,66 @@ bool CGame::FUN_004067e0(void)
     }
     return false;
 }
+
+// STUB: CMR2 9x004a17b0
+void CGame::FUN_004a17b0(void) {}
+
+// FUNCTION: CMR2 0x004a17f0
+void CGame::FUN_004a17f0(bool param1) {
+    if (param1)
+        m_unk0x005a1fc0 = false;
+
+    Unk0x005a1820 *dest = m_unk0x005a1820;
+    do {
+        sprintf(dest->field_0x64, CMain::m_logFileBlankLine);
+        sprintf(dest->field_0x0, CMain::m_logFileBlankLine);
+        dest->field_0xc8 = 0;
+        dest->field_0xcc = 0;
+        dest++;
+    } while ((int)dest < (int)&m_unk0x005a1e34);
+
+    m_unk0x005a1818 = 0;
+}
+
+// FUNCTION: CMR2 0x004a1a90
+BOOL CGame::FUN_004a1a90(void) {
+    IDirectPlay4A *pVar1;
+    HRESULT hr;
+    if (m_unk0x005a1fc0) {
+        pVar1 = FUN_004aad40();
+        if (pVar1 != NULL) {
+            hr = pVar1->DestroyPlayer(m_unk0x005a1ea0);
+            if (hr > DPERR_UNAVAILABLE && hr != DPERR_CONNECTIONLOST && hr == DP_OK)
+                return TRUE;
+        }
+    }
+
+    return FALSE;
+}
+
+// STUB: CMR2 0x004aaa10
+void CGame::FUN_004aaa10(void) {}
+
+// FUNCTION: CMR2 0x004aaac0
+bool CGame::FUN_004aaac0(void)
+{
+  FUN_004a1a90();
+  FUN_004aabb0();
+  FUN_004aab40();
+  FUN_004aaa10();
+  FUN_004a17b0();
+  CoUninitialize();
+  return 1;
+}
+
+// STUB: CMR2 0x004aab40
+void CGame::FUN_004aab40(void) {}
+
+// STUB: CMR2 0x004aabb0
+void CGame::FUN_004aabb0(void) {}
+
+// FUNCTION: CMR2 0x004aad40
+IDirectPlay4A* CGame::FUN_004aad40(void) {
+    return m_unk0x0066521c;
+}
+
