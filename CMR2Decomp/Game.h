@@ -125,7 +125,7 @@ public:
     static bool m_unk0x005a1fc0;
 
     // GLOBAL: CMR2 0x0066521c
-    static IDirectPlay4A *m_unk0x0066521c;
+    static IDirectPlay4A *m_pDirectPlay4A;
 
     // GLOBAL: CMR2 0x005a1ea0
     static DPID m_unk0x005a1ea0;
@@ -137,13 +137,19 @@ public:
     static IID m_iidDirectPlay4A;
 
     // GLOBAL: CMR2 0x00665220
-    static IDirectPlayLobby3A *pDirectPlayLobby3A;
+    static IDirectPlayLobby3A *m_pDirectPlayLobby3A;
 
     // GLOBAL: CMR2 0x00511ae8
     static CLSID m_clsidDirectPlayLobby;
 
     // GLOBAL: CMR2 0x00511ad8
     static IID m_iidDirectPlayLobby3A;
+
+    // GLOBAL: CMR2 0x005a1fb8 
+    static void *m_unk0x005a1fb8;    
+
+    // GLOBAL: CMR2 0x005a1fbc
+    static BOOL m_unk0x005a1fbc;
 };
 
 #endif

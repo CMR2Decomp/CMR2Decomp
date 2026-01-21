@@ -6,6 +6,7 @@
 #include "NetworkLeaderboards.h"
 #include "Graphics.h"
 #include "Input.h"
+#include "FileBuffer.h"
 
 #include <stdio.h>
 #include <time.h>
@@ -36,14 +37,17 @@ BYTE CGame::m_unk0x005a1819;
 Unk0x005a1820 CGame::m_unk0x005a1820[7];
 int CGame::m_unk0x005a1e34;
 bool CGame::m_unk0x005a1fc0;
-IDirectPlay4A *CGame::m_unk0x0066521c = NULL;
+IDirectPlay4A *CGame::m_pDirectPlay4A = NULL;
 DPID CGame::m_unk0x005a1ea0 = NULL;
 CLSID CGame::m_clsidDirectPlay = CLSID_DirectPlay;
 IID CGame::m_iidDirectPlay4A = IID_IDirectPlay4A;
 
-IDirectPlayLobby3A *CGame::pDirectPlayLobby3A;
+IDirectPlayLobby3A *CGame::m_pDirectPlayLobby3A;
 CLSID CGame::m_clsidDirectPlayLobby = CLSID_DirectPlayLobby;
 IID CGame::m_iidDirectPlayLobby3A = IID_IDirectPlayLobby3A;
+
+BOOL CGame::m_unk0x005a1fbc;
+void *CGame::m_unk0x005a1fb8;
 
 FuncTableGroup CGame::m_initializeGameGroupedFuncTable[10] = {
     {InitializeGame,
@@ -307,8 +311,14 @@ bool CGame::FUN_004067e0(void)
     return false;
 }
 
-// STUB: CMR2 9x004a17b0
-void CGame::FUN_004a17b0(void) {}
+// FUNCTION: CMR2 0x004a17b0
+void CGame::FUN_004a17b0(void) {
+    m_unk0x005a1fbc = FALSE;
+    if (m_unk0x005a1fb8 != NULL) {
+        CFileBuffer::FreeGenericFileBuffer(m_unk0x005a1fb8);
+        m_unk0x005a1fb8 = NULL;
+    }    
+}
 
 // FUNCTION: CMR2 0x004a17f0
 void CGame::FUN_004a17f0(bool param1) {
@@ -343,8 +353,18 @@ BOOL CGame::FUN_004a1a90(void) {
     return FALSE;
 }
 
-// STUB: CMR2 0x004aaa10
-void CGame::FUN_004aaa10(void) {}
+// FUNCTION: CMR2 0x004aaa10
+void CGame::FUN_004aaa10(void) {
+    Unk0x00664750* puVar1;
+    puVar1 = CGameInfo::m_unk0x00664750;
+    do {
+        if (puVar1->field_0x0 != NULL) {
+            CFileBuffer::FreeGenericFileBuffer(puVar1->field_0x0);
+            puVar1->field_0x0 = NULL;
+        }
+        puVar1++;
+    } while ((int)puVar1 < (int)&CGameInfo::m_unk0x00665218);
+}
 
 // FUNCTION: CMR2 0x004aaac0
 bool CGame::FUN_004aaac0(void)
@@ -358,19 +378,24 @@ bool CGame::FUN_004aaac0(void)
   return 1;
 }
 
-// STUB: CMR2 0x004aab40
-void CGame::FUN_004aab40(void) {}
+// FUNCTION: CMR2 0x004aab40
+void CGame::FUN_004aab40(void) {
+    if (m_pDirectPlay4A != NULL) {
+        m_pDirectPlay4A->Release();
+        m_pDirectPlay4A = NULL;
+    }
+}
 
 // FUNCTION: CMR2 0x004aabb0
 void CGame::FUN_004aabb0(void) {
-    if (pDirectPlayLobby3A != NULL) {
-        pDirectPlayLobby3A->Release();
-        pDirectPlayLobby3A = NULL;
+    if (m_pDirectPlayLobby3A != NULL) {
+        m_pDirectPlayLobby3A->Release();
+        m_pDirectPlayLobby3A = NULL;
     }
 }
 
 // FUNCTION: CMR2 0x004aad40
 IDirectPlay4A* CGame::FUN_004aad40(void) {
-    return m_unk0x0066521c;
+    return m_pDirectPlay4A;
 }
 
