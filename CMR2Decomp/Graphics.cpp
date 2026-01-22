@@ -10,7 +10,6 @@ Graphics g_graphics;
 // GLOBAL: CMR2 0x00520b74
 Graphics *g_pGraphics = &g_graphics;
 
-IID CGraphics::m_iidDD7 = IID_IDirectDraw7;
 char CGraphics::m_strSettingConfigurationToDefault[36] = "Setting configuration to defaults";
 
 // FUNCTION: CMR2 0x00405830
@@ -19,8 +18,8 @@ bool CGraphics::InitializeDirectX(void) {
     LPDIRECTDRAW7 lpDD7;
     DDDEVICEIDENTIFIER2 lpDDIdenitifer;
 
-    DirectDrawCreateEx(NULL, (LPVOID*)&lpDD, m_iidDD7, 0);
-    lpDD->QueryInterface(m_iidDD7, (LPVOID*)&lpDD7);
+    DirectDrawCreateEx(NULL, (LPVOID*)&lpDD, IID_IDirectDraw7, 0);
+    lpDD->QueryInterface(IID_IDirectDraw7, (LPVOID*)&lpDD7);
     lpDD7->GetDeviceIdentifier(&lpDDIdenitifer, 0);
 
     if (strcmp(lpDDIdenitifer.szDescription, CGameInfo::m_gameInfo.graphicsCardName) == 0) {

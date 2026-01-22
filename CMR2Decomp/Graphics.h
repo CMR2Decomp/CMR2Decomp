@@ -933,15 +933,15 @@ struct Graphics
 
 extern Graphics *g_pGraphics;
 
+// GLOBAL: CMR2 0x005114a8
+// IID_IDirectDraw7
+
 class CGraphics {
 public:
     static bool InitializeDirectX(void);
     static void SetDefaults(void);
 
 private:
-    // GLOBAL: CMR2 0x005114a8
-    static IID m_iidDD7;
-
     // GLOBAL: CMR2 0x0051615c
     static char m_strSettingConfigurationToDefault[36];
 };

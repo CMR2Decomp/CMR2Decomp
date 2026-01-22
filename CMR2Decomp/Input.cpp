@@ -10,7 +10,7 @@
 #include <stdio.h>
 
 // GLOBAL: CMR2 0x00511758
-const GUID CInput::m_dInputDevice7 = IID_IDirectInput7A;
+// IID_IDirectInput7A
 
 // GLOBAL: CMR2 0x0059f8c8
 IDirectInput7A* CInput::m_lpDirectInput7;
@@ -33,28 +33,10 @@ PVOID CInput::m_keyboardDelay;
 // GLOBAL: CMR2 0x0059f8dc
 PVOID CInput::m_keyboardSpeed;
 
-// GLOBAL: CMR2 0x00511898
-GUID CInput::m_dinputRefGuidMouse = GUID_SysMouse;
-
-// GLOBAL: CMR2 0x005118a8
-GUID CInput::m_dinputRefGuidKeyboard = GUID_SysKeyboard;
-
-// GLOBAL: CMR2 0x005117c8
-IID CInput::m_unk0x005117c8 = IID_IDirectInputDevice7A;
-
 // GLOBAL: CMR2 0x0059f6a8
 LPDIRECTINPUTDEVICEA CInput::m_pDirectInputKeyboard = NULL;
 // GLOBAL: CMR2 0x0059f7c4
 LPDIRECTINPUTDEVICEA CInput::m_pDirectInputMouse = NULL;
-
-// GLOBAL: CMR2 0x00512e70
-DIDATAFORMAT CInput::m_didfMouse = c_dfDIMouse2;
-
-// GLOBAL: CMR2 0x00512e88
-DIDATAFORMAT CInput::m_didfKeyboard = c_dfDIKeyboard;
-
-// GLOBAL: CMR2 0x00512ea0
-DIDATAFORMAT CInput::m_didfJoystick = c_dfDIJoystick2;
 
 // GLOBAL: CMR2 0x00511400
 USHORT CInput::m_unk0x00511400[8];
@@ -84,21 +66,21 @@ unsigned short CInput::m_unk0x005168f4[8];
 
 // FUNCTION: CMR2 0x0049fd30
 BOOL CInput::DInputCreate(void) {
-    DirectInputCreateEx(CMain::m_hInstance, 0x700, m_dInputDevice7, (LPVOID*)&CInput::m_lpDirectInput7, NULL);
+    DirectInputCreateEx(CMain::m_hInstance, 0x700, IID_IDirectInput7A, (LPVOID*)&CInput::m_lpDirectInput7, NULL);
     CGame::RegisterCallback(DInputRelease, NULL);
     return TRUE;
 }
 
 // FUNCTION: CMR2 0x0049fe30
-LPDIRECTINPUTDEVICEA CInput::DInputCreateDevice(GUID* guid, DIDATAFORMAT *pDataFormat) {
+LPDIRECTINPUTDEVICEA CInput::DInputCreateDevice(REFGUID guid, LPCDIDATAFORMAT pDataFormat) {
     LPDIRECTINPUTDEVICEA pDevice = NULL;
     LPDIRECTINPUTDEVICE7A pOtherDevice = NULL;
     HRESULT h1, h2, h3, h4;
     ULONG refCount;
     
-    h1 = m_lpDirectInput7->CreateDevice(*guid, &pDevice, NULL);
+    h1 = m_lpDirectInput7->CreateDevice(guid, &pDevice, NULL);
     if (SUCCEEDED(h1)) {
-        h2 = pDevice->QueryInterface(m_unk0x005117c8, (LPVOID*)&pOtherDevice);
+        h2 = pDevice->QueryInterface(IID_IDirectInputDevice7A, (LPVOID*)&pOtherDevice);
         if (pOtherDevice != NULL) {
             refCount = pOtherDevice->Release();
             if (refCount == 0)
@@ -112,9 +94,9 @@ LPDIRECTINPUTDEVICEA CInput::DInputCreateDevice(GUID* guid, DIDATAFORMAT *pDataF
                 return NULL;
             }
             
-            if (IsEqualGUID(*guid, m_dinputRefGuidKeyboard)) {
+            if (IsEqualGUID(guid, GUID_SysKeyboard)) {
                 h4 = pDevice->SetCooperativeLevel(CMain::m_hWndList[CMain::m_hWndIx], DISCL_BACKGROUND | DISCL_NONEXCLUSIVE);  // 10
-            } else if (IsEqualGUID(*guid, m_dinputRefGuidMouse)) {
+            } else if (IsEqualGUID(guid, GUID_SysMouse)) {
                 if (g_pGraphics->isFullscreen) {
                     h4 = pDevice->SetCooperativeLevel(CMain::m_hWndList[CMain::m_hWndIx], DISCL_EXCLUSIVE | DISCL_FOREGROUND);  // 5
                 } else {
@@ -283,7 +265,7 @@ BOOL CInput::SetupKeyboard(void) {
     if (!bVar2) m_keyboardSpeed = (PVOID)0x1f4;
     else m_keyboardSpeed = (PVOID)((int)m_keyboardSpeed * -0xd + 0x1f7);
 
-    m_pDirectInputKeyboard = DInputCreateDevice(&m_dinputRefGuidKeyboard, &m_didfKeyboard);
+    m_pDirectInputKeyboard = DInputCreateDevice(GUID_SysKeyboard, &c_dfDIKeyboard);
     if (m_pDirectInputKeyboard != NULL)
         if (SUCCEEDED(m_pDirectInputKeyboard->Acquire()))
             return TRUE;
@@ -295,7 +277,7 @@ BOOL CInput::SetupKeyboard(void) {
 void CInput::SetupMouse(void) {
     HRESULT hr;
     DIPROPDWORD diPropDword;
-    m_pDirectInputMouse = DInputCreateDevice(&m_dinputRefGuidMouse, &m_didfMouse);
+    m_pDirectInputMouse = DInputCreateDevice(GUID_SysMouse, &c_dfDIMouse2);
 
     diPropDword.diph.dwSize = 0x14;
     diPropDword.diph.dwHeaderSize = 0x10;
@@ -357,7 +339,7 @@ BOOL CInput::SetupJoystick(LPCDIDEVICEINSTANCEA lpddi, LPVOID pvRef) {
         if (GET_DIDEVICE_SUBTYPE(lpddi->dwDevType) == DIDEVTYPE_MOUSE) pDeviceInfo->field_0x0 = 0;
         else pDeviceInfo->field_0x0 = 3;
     
-        pDevice = DInputCreateDevice((GUID*)&lpddi->guidInstance, &m_didfJoystick);
+        pDevice = DInputCreateDevice(lpddi->guidInstance, &c_dfDIJoystick2);
         m_unk0x0059f6b0[m_unk0x0059f8cc.field_0x2] = pDevice;
 
         if (pDevice != NULL) {
