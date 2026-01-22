@@ -89,8 +89,11 @@ public:
     static void DestroyDirectPlay(void);
     static void DestroyDirectPlayLobby(void);
     static IDirectPlay4A *GetDirectPlay(void);
-    static BOOL FUN_004d0a50(BYTE param1);
+    static bool FUN_004d0a50(bool param1);
     static bool FUN_004aaa40(void);
+    static bool LoadSplashScreens(BYTE param1);
+    static void FUN_0040bab0(BOOL param1);
+    static void FUN_004e2e50(void);
     
     // GLOBAL: CMR2 0x00663db8
     static BOOL m_shouldExit;
@@ -173,7 +176,53 @@ public:
     static Unk0x00664750 m_unk0x00664750[10];
     
     // GLOBAL: CMR2 0x00665218
-    static int m_unk0x00665218;    
+    static int m_unk0x00665218;
+    
+    // GLOBAL: CMR2 0x00532138
+    static BOOL m_unk0x00532138;
+
+    // GLOBAL: CMR2 0x00519264
+    static char m_strUK[3];
+
+    // GLOBAL: CMR2 0x00525058
+    static char m_strIta[4];
+
+    // GLOBAL: CMR2 0x0052505c
+    static char m_strKen[4];
+
+    // GLOBAL: CMR2 0x00525060
+    static char m_strItaly[8];
+
+    // GLOBAL: CMR2 0x00525068
+    static char m_strAus[4];
+
+    // GLOBAL: CMR2 0x0052506c
+    static char m_strSwe[4];
+    
+    // GLOBAL: CMR2 0x00525070
+    static char m_strKenya[8];
+    
+    // GLOBAL: CMR2 0x00525078
+    static char m_strFra[4];
+
+    // GLOBAL: CMR2 0x0052507c
+    static char m_strSweden[8];
+    
+    // GLOBAL: CMR2 0x00525084
+    static char m_strFrance[8];
+
+    // GLOBAL: CMR2 0x0052508c
+    static char m_strGre[4];
+
+    // GLOBAL: CMR2 0x00525090
+    static char m_strFin[4];
+
+    // GLOBAL: CMR2 0x00525094
+    static char m_strFinland[8];
+
+    // GLOBAL: CMR2 0x0052509c
+    static char m_strGreece[8];
+
 };
 
 #endif

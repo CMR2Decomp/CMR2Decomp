@@ -15,6 +15,19 @@ char CFrontend::m_feRes640[14] = "%s\\Res640.bfl";
 char CFrontend::m_feRes640C[15] = "%s\\Res640C.bfl";
 char CFrontend::m_feRes1024[15] = "%s\\Res1024.bfl";
 char CFrontend::m_feRes1024C[16] = "%s\\Res1024C.bfl";
+char CFrontend::m_strFrontendTexturesAr640ATGA[36] = "%s\\frontend\\Textures\\Ar_640A.tga";
+char CFrontend::m_strFrontendTexturesAr640DTGA[36] = "%s\\frontend\\Textures\\Ar_640D.tga";
+char CFrontend::m_strFrontendTexturesLgMatrixTGA[36] = "%s\\frontend\\Textures\\LgMatrix.tga";
+char CFrontend::m_strFrontendTexturesSmMatrixTGA[36]= "%s\\frontend\\Textures\\SmMatrix.tga";
+Texture* CFrontend::m_pAr640ATexture = NULL;
+Texture* CFrontend::m_pAr640DTexture = NULL;
+Texture* CFrontend::m_pLgMatrixTexture = NULL;
+Texture* CFrontend::m_pSmMatrixTexture = NULL;
+Texture* CFrontend::m_pSetupRepBanners[8];
+Texture* CFrontend::m_pTinyFlags[8];
+
+char CFrontend::m_strSetupRepTexturesBanners[40] = "%s\\setuprep\\Textures\\banners\\b%s.tga";
+char CFrontend::m_strFrontendTinyFlags[40] = "%s\\frontend\\Textures\\tinyflags\\t%s.tga";
 
 GenericFile CFrontend::m_unk0x00818260;
 unsigned int CFrontend::m_unk0x006e0c5c;
