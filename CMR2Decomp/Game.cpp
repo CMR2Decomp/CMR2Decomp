@@ -51,6 +51,9 @@ IDirectPlayLobby3A *CGame::m_pDirectPlayLobby3A;
 BOOL CGame::m_unk0x005a1fbc;
 void *CGame::m_unk0x005a1fb8;
 
+Unk0x00664750 CGame::m_unk0x00664750[10];
+int CGame::m_unk0x00665218;
+
 FuncTableGroup CGame::m_initializeGameGroupedFuncTable[10] = {
     {InitializeGame,
      FUN_00501680},
@@ -160,8 +163,8 @@ void CGame::InitializeGame(Unk0049c2c0 *p1, BYTE p2)
         FUN_004067e0();
         CGameInfo::FUN_00405de0(0);
 
-        if (CInstallInfo::FUN_0040e8d0() != 0)
-        {
+        // if (CInstallInfo::FUN_0040e8d0() != 0)
+        // {
             CGameInfo::FUN_00510410();
             CGameInfo::FUN_00406560();
             CGameInfo::FUN_00406580();
@@ -176,7 +179,10 @@ void CGame::InitializeGame(Unk0049c2c0 *p1, BYTE p2)
             CInput::LoadControllerInfo();
             CGameInfo::FUN_0049ea90(1);
             CGameInfo::FUN_004d05d0();
-        }
+            if (FUN_004aaa40() != false) {
+                CGame::FUN_004d0a50(0x1);
+            }
+        // }
     }
 
     CGame::SetShouldExit();
@@ -387,14 +393,14 @@ BOOL CGame::FUN_004a1a90(void) {
 // FUNCTION: CMR2 0x004aaa10
 void CGame::FUN_004aaa10(void) {
     Unk0x00664750* puVar1;
-    puVar1 = CGameInfo::m_unk0x00664750;
+    puVar1 = m_unk0x00664750;
     do {
         if (puVar1->field_0x0 != NULL) {
             CFileBuffer::FreeGenericFileBuffer(puVar1->field_0x0);
             puVar1->field_0x0 = NULL;
         }
         puVar1++;
-    } while ((int)puVar1 < (int)&CGameInfo::m_unk0x00665218);
+    } while ((int)puVar1 < (int)&m_unk0x00665218);
 }
 
 // FUNCTION: CMR2 0x004aaac0
@@ -430,3 +436,32 @@ IDirectPlay4A* CGame::GetDirectPlay(void) {
     return m_pDirectPlay4A;
 }
 
+// FUNCTION: CMR2 0x004aaa40
+bool CGame::FUN_004aaa40(void) {
+    Unk0x00664750 *puVar1;
+
+    m_pDirectPlay4A = NULL;
+    m_pDirectPlayLobby3A = NULL;
+
+    CGameInfo::FUN_004a0c60();
+    FUN_004a17f0(true);
+    FUN_004a17b0();
+    
+    puVar1 = m_unk0x00664750;
+    do {
+        sprintf((char*)&puVar1[-1].field_0x14, CMain::m_logFileBlankLine);
+        puVar1->field_0x0 = NULL;
+        puVar1++;
+    } while ((int)puVar1 < (int)&m_unk0x00665218);
+
+    m_unk0x00664750[9].field_0x15 = '\0';
+    CoInitialize(NULL);
+
+    RegisterCallback(Cleanup, NULL);
+
+    return true;
+}
+
+BOOL CGame::FUN_004d0a50(BYTE param1) {
+    return TRUE;
+}

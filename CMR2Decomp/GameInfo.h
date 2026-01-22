@@ -75,18 +75,6 @@ struct Unk0x0059fa20 {
     BYTE field_0x10;
 };
 
-struct Unk0x00664750 {
-	void* field_0x0;
-	void* field_0x4;
-	unsigned short field_0x8;
-	unsigned short field_0xa;
-	void* field_0xc;
-    void* field_0x10;
-	char field_0x14;
-	BYTE field_0x15;
-	BYTE field_0x16[254];
-};
-
 class CGameInfo
 {
 public:
@@ -120,7 +108,6 @@ public:
     static void FUN_0049e930(unsigned int param1);
     static void FUN_004d05d0(void);
     static bool FUN_004d05a0(void);
-    static bool FUN_004aaa40(void);
     static void FUN_004a0c60(void);
 
     // GLOBAL: CMR2 0x0052afa0
@@ -156,9 +143,6 @@ public:
     // GLOBAL: CMR2 0x00817678
     static BOOL m_unk0x00817678;
 
-    // GLOBAL: CMR2 0x00664750
-    static Unk0x00664750 m_unk0x00664750[10];
-
     // GLOBAL: CMR2 0x005a0098
     static LPVOID *m_unk0x005a0098;
     // GLOBAL: CMR2 0x005a00b8
@@ -176,9 +160,6 @@ public:
     static BYTE m_unk0x005a01bc;
     // GLOBAL: CMR2 0x0059fa20
     static BOOL m_unk0x0059fa20[400];
-    
-    // GLOBAL: CMR2 0x00665218
-    static int m_unk0x00665218;
 
     // GLOBAL: CMR2 0x00664650
     static char m_unk0x00664650[256];

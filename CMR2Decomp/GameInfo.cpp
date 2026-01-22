@@ -41,8 +41,6 @@ BOOL CGameInfo::m_unk0x005a0060;
 HRESULT CGameInfo::m_unk0x005a1814;
 BYTE CGameInfo::m_unk0x005a01bc;
 BOOL CGameInfo::m_unk0x0059fa20[400];
-Unk0x00664750 CGameInfo::m_unk0x00664750[10];
-int CGameInfo::m_unk0x00665218;
 char CGameInfo::m_unk0x00664650[256];
 
 // FUNCTION: CMR2 0x004057f0
@@ -730,32 +728,6 @@ bool CGameInfo::FUN_004d05a0(void) {
     }
 
     m_unk0x00817678 = FALSE;
-    return true;
-}
-
-// FUNCTION: CMR2 0x004aaa40
-bool CGameInfo::FUN_004aaa40(void) {
-    Unk0x00664750 *puVar1;
-
-    CGame::m_pDirectPlay4A = NULL;
-    CGame::m_pDirectPlayLobby3A = NULL;
-
-    FUN_004a0c60();
-    CGame::FUN_004a17f0(true);
-    CGame::FUN_004a17b0();
-    
-    puVar1 = m_unk0x00664750;
-    do {
-        sprintf((char*)&puVar1[-1].field_0x14, CMain::m_logFileBlankLine);
-        puVar1->field_0x0 = NULL;
-        puVar1++;
-    } while ((int)puVar1 < (int)&m_unk0x00665218);
-
-    m_unk0x00664750[9].field_0x15 = '\0';
-    CoInitialize(NULL);
-
-    CGame::RegisterCallback(CGame::Cleanup, NULL);
-
     return true;
 }
 
