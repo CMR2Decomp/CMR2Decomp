@@ -45,12 +45,8 @@ int CGame::m_unk0x005a1e34;
 bool CGame::m_unk0x005a1fc0;
 IDirectPlay4A *CGame::m_pDirectPlay4A = NULL;
 DPID CGame::m_unk0x005a1ea0 = NULL;
-CLSID CGame::m_clsidDirectPlay = CLSID_DirectPlay;
-IID CGame::m_iidDirectPlay4A = IID_IDirectPlay4A;
 
 IDirectPlayLobby3A *CGame::m_pDirectPlayLobby3A;
-CLSID CGame::m_clsidDirectPlayLobby = CLSID_DirectPlayLobby;
-IID CGame::m_iidDirectPlayLobby3A = IID_IDirectPlayLobby3A;
 
 BOOL CGame::m_unk0x005a1fbc;
 void *CGame::m_unk0x005a1fb8;

@@ -36,6 +36,18 @@ struct Unk0x005a1820 {
     unsigned int field_0xcc;
 };
 
+// GLOBAL: CMR2 0x00511a28
+// CLSID_DirectPlay
+
+// GLOBAL: CMR2 0x00511a18
+// IID_IDirectPlay4A
+
+// GLOBAL: CMR2 0x00511ae8
+// CLSID_DirectPlayLobby
+
+// GLOBAL: CMR2 0x00511ad8
+// IID_IDirectPlayLobby3A
+
 class CGame
 {
 public:
@@ -134,20 +146,8 @@ public:
     // GLOBAL: CMR2 0x005a1ea0
     static DPID m_unk0x005a1ea0;
 
-    // GLOBAL: CMR2 0x00511a28
-    static CLSID m_clsidDirectPlay;
-
-    // GLOBAL: CMR2 0x00511a18
-    static IID m_iidDirectPlay4A;
-
     // GLOBAL: CMR2 0x00665220
     static IDirectPlayLobby3A *m_pDirectPlayLobby3A;
-
-    // GLOBAL: CMR2 0x00511ae8
-    static CLSID m_clsidDirectPlayLobby;
-
-    // GLOBAL: CMR2 0x00511ad8
-    static IID m_iidDirectPlayLobby3A;
 
     // GLOBAL: CMR2 0x005a1fb8 
     static void *m_unk0x005a1fb8;    

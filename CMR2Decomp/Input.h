@@ -114,9 +114,26 @@ struct ControllerInfo {
     BYTE pad[4185];
 };
 
+// GLOBAL: CMR2 0x00511898
+// GUID_SysMouse
+
+// GLOBAL: CMR2 0x005118a8
+// GUID_SysKeyboard
+
+// GLOBAL: CMR2 0x005117c8
+// IID_IDirectInputDevice7A
+
+// GLOBAL: CMR2 0x00512e70
+// c_dfDIMouse2
+
+// GLOBAL: CMR2 0x00512e88
+// c_dfDIKeyboard
+
+// GLOBAL: CMR2 0x00512ea0
+// c_dfDIJoystick2
+
 class CInput {
 public:
-    static const GUID m_dInputDevice7;
     static IDirectInput7A *m_lpDirectInput7;
     static Unk0x0059f8cc m_unk0x0059f8cc;
     static char m_strKeyboard[12];
@@ -124,14 +141,12 @@ public:
     static PVOID m_keyboardDelay;
     static DWORD m_mouseGranularity;
     static PVOID m_keyboardSpeed;
-    static GUID m_dinputRefGuidKeyboard;
-    static GUID m_dinputRefGuidMouse;
+
     static LPDIRECTINPUTDEVICEA m_pDirectInputKeyboard;
     static LPDIRECTINPUTDEVICEA m_pDirectInputMouse;
-    static IID m_unk0x005117c8;
-    static DIDATAFORMAT m_didfMouse;
-    static DIDATAFORMAT m_didfKeyboard;
-    static DIDATAFORMAT m_didfJoystick;
+    
+
+    
     static USHORT m_unk0x00511400[8];
     static LPDIRECTINPUTDEVICEA m_unk0x0059f6b0[8];
     static CHAR m_strD[4];
@@ -154,7 +169,7 @@ public:
     static unsigned short m_unk0x005168f4[8];
 
     static BOOL DInputCreate(void);
-    static LPDIRECTINPUTDEVICEA DInputCreateDevice(GUID* param1, DIDATAFORMAT *pDataFormat);
+    static LPDIRECTINPUTDEVICEA DInputCreateDevice(REFGUID param1, LPCDIDATAFORMAT pDataFormat);
     static BOOL DInputRelease(void);
     static int FUN_0049ef90();
     static BOOL FUN_0049f6b0(LPCDIDEVICEINSTANCEA lpddi, LPVOID pvRef);
