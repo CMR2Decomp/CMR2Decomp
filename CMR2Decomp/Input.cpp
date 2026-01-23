@@ -39,7 +39,7 @@ LPDIRECTINPUTDEVICEA CInput::m_pDirectInputKeyboard = NULL;
 LPDIRECTINPUTDEVICEA CInput::m_pDirectInputMouse = NULL;
 
 // GLOBAL: CMR2 0x00511400
-USHORT CInput::m_unk0x00511400[8];
+USHORT CInput::m_unk0x00511400[8] = {0, 4, 8, 12, 16, 20, 24, 28};
 
 // GLOBAL: CMR2 0x0059f6b0
 LPDIRECTINPUTDEVICEA CInput::m_unk0x0059f6b0[8];
@@ -62,7 +62,7 @@ BOOL CInput::m_unk0x00666ee8 = FALSE;
 char CInput::m_strControllerInfoDir[32] = "%s\\Configuration\\Controller.rcf";
 BOOL CInput::m_hasLoadedControllerInfo;
 ControllerData CInput::m_controllerInfo[6];
-unsigned short CInput::m_unk0x005168f4[8];
+unsigned short CInput::m_unk0x005168f4[8] = {0, 1, 2, 3, 0, 0, 0, 0};
 
 // FUNCTION: CMR2 0x0049fd30
 BOOL CInput::DInputCreate(void) {

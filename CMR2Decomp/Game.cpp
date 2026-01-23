@@ -21,7 +21,7 @@ Unk0049c2c0 CGame::m_unk0x00817da0;
 int CGame::m_unk0x0052ea4c;
 bool CGame::m_unk0x00817eb0 = false;
 Unk00817d98 CGame::m_unk0x00817d98;
-BYTE CGame::m_unk0x00523c18;
+BYTE CGame::m_unk0x00523c18 = 0;
 BYTE CGame::m_unk0x00593cac;
 BYTE CGame::m_unk0x00593ba8;
 Unk00817d98 *CGame::m_unk0x00593ba4;

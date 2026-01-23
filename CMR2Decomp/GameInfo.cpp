@@ -30,7 +30,7 @@ int CGameInfo::m_unk0x0081a754;
 char CGameInfo::m_stringCMR[4] = "cmr";
 char CGameInfo::m_stringGameInfoRCF[32] = "%s\\Configuration\\GameInfo.rcf";
 unsigned int CGameInfo::m_unk0x0059f8d0;
-unsigned int CGameInfo::m_unk0x00520870;
+unsigned int CGameInfo::m_unk0x00520870 = 1;
 void* CGameInfo::m_unk0x0081777c = NULL;
 BOOL CGameInfo::m_unk0x00817678 = FALSE;
 LPVOID *CGameInfo::m_unk0x005a0098;
