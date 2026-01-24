@@ -19,15 +19,21 @@ char CFrontend::m_strFrontendTexturesAr640ATGA[36] = "%s\\frontend\\Textures\\Ar
 char CFrontend::m_strFrontendTexturesAr640DTGA[36] = "%s\\frontend\\Textures\\Ar_640D.tga";
 char CFrontend::m_strFrontendTexturesLgMatrixTGA[36] = "%s\\frontend\\Textures\\LgMatrix.tga";
 char CFrontend::m_strFrontendTexturesSmMatrixTGA[36]= "%s\\frontend\\Textures\\SmMatrix.tga";
-Texture* CFrontend::m_pAr640ATexture = NULL;
-Texture* CFrontend::m_pAr640DTexture = NULL;
-Texture* CFrontend::m_pLgMatrixTexture = NULL;
-Texture* CFrontend::m_pSmMatrixTexture = NULL;
+Texture* CFrontend::m_pAr640ATexture;
+Texture* CFrontend::m_pAr640DTexture;
+Texture* CFrontend::m_pLgMatrixTexture;
+Texture* CFrontend::m_pSmMatrixTexture;
 Texture* CFrontend::m_pSetupRepBanners[8];
 Texture* CFrontend::m_pTinyFlags[8];
+Texture* CFrontend::m_pTBronze;
+Texture* CFrontend::m_pTSilver;
+Texture* CFrontend::m_pTGold;
 
 char CFrontend::m_strSetupRepTexturesBanners[40] = "%s\\setuprep\\Textures\\banners\\b%s.tga";
 char CFrontend::m_strFrontendTinyFlags[40] = "%s\\frontend\\Textures\\tinyflags\\t%s.tga";
+char CFrontend::m_strFrontendTexturesTBronzeTGA[36] = "%s\\frontend\\Textures\\tbronze.tga";
+char CFrontend::m_strFrontendTexturesTSilverTGA[36] = "%s\\frontend\\Textures\\tsilver.tga";
+char CFrontend::m_strFrontendTexturesTGoldTGA[32] = "%s\\frontend\\Textures\\tgold.tga";
 
 GenericFile CFrontend::m_unk0x00818260;
 unsigned int CFrontend::m_unk0x006e0c5c;

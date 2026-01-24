@@ -94,6 +94,7 @@ public:
     static bool LoadSplashScreens(BYTE param1);
     static void FUN_0040bab0(BOOL param1);
     static void FUN_004e2e50(void);
+    static void FUN_004d2590(void);
     
     // GLOBAL: CMR2 0x00663db8
     static BOOL m_shouldExit;
@@ -222,7 +223,6 @@ public:
 
     // GLOBAL: CMR2 0x0052509c
     static char m_strGreece[8];
-
 };
 
 #endif

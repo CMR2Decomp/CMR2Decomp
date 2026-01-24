@@ -79,11 +79,29 @@ public:
     // GLOBAL: CMR2 0x00818348
     static Texture* m_pTinyFlags[8];
 
+    // GLOBAL: CMR2 0x008182bc
+    static Texture* m_pTBronze;
+
+    // GLOBAL: CMR2 0x008182c0
+    static Texture* m_pTSilver;
+
+    // GLOBAL: CMR2 0x008182c4
+    static Texture* m_pTGold;
+
     // GLOBAL: CMR2 0x00524fa0
     static char m_strSetupRepTexturesBanners[40];
 
     // GLOBAL: CMR2 0x00524f78
     static char m_strFrontendTinyFlags[40];
+
+    // GLOBAL: CMR2 0x00524f10
+    static char m_strFrontendTexturesTBronzeTGA[36];    
+
+    // GLOBAL: CMR2 0x00524f34
+    static char m_strFrontendTexturesTSilverTGA[36];
+
+    // GLOBAL: CMR2 0x00524f58
+    static char m_strFrontendTexturesTGoldTGA[32];
 };
 
 #endif

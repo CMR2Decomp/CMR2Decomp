@@ -72,6 +72,7 @@ char CGame::m_strFin[4] = "Fin";
 char CGame::m_strFinland[8] = "Finland";
 char CGame::m_strGreece[8] = "Greece";
 
+
 FuncTableGroup CGame::m_initializeGameGroupedFuncTable[10] = {
     {InitializeGame,
      FUN_00501680},
@@ -508,45 +509,63 @@ void CGame::FUN_0040bab0(BOOL param1) {
 
 // FUNCTION: CMR2 0x004e2e50
 void CGame::FUN_004e2e50(void) {
-    char* countries[8] = {
-        m_strFinland,
-        m_strGreece, 
-        m_strFrance,
-        m_strSweden,
-        m_strKenya,
-        m_strItaly,
-        m_strUK,
-        m_strAus
-    };
+    char countryCodes[8][10];
+    char countryNames[8][10];
+    BOOL bZero = false;
 
-    char* countryShort[8] = {
-        m_strFin,
-        m_strGre,
-        m_strFra,
-        m_strSwe,
-        m_strKen,
-        m_strIta,
-        m_strUK,
-        m_strAus
-    };
+    memcpy(countryCodes[0], m_strFin, sizeof(countryCodes[0]));
+    memcpy(countryCodes[1], m_strGre, sizeof(countryCodes[1]));
+    memcpy(countryCodes[2], m_strFra, sizeof(countryCodes[2]));
+    memcpy(countryCodes[3], m_strSwe, sizeof(countryCodes[3]));
+    memcpy(countryCodes[4], m_strAus, sizeof(countryCodes[4]));
+    memcpy(countryCodes[5], m_strKen, sizeof(countryCodes[5]));
+    memcpy(countryCodes[6], m_strIta, sizeof(countryCodes[6]));
+    memcpy(countryCodes[7], m_strUK, sizeof(countryCodes[7]));
+
+    memcpy(countryNames[0], m_strFinland, sizeof(countryNames[0]));
+    memcpy(countryNames[1], m_strGreece, sizeof(countryNames[1]));
+    memcpy(countryNames[2], m_strFrance, sizeof(countryNames[2]));
+    memcpy(countryNames[3], m_strSweden, sizeof(countryNames[3]));
+    memcpy(countryNames[4], m_strAus, sizeof(countryNames[4]));
+    memcpy(countryNames[5], m_strKenya, sizeof(countryNames[5]));
+    memcpy(countryNames[6], m_strItaly, sizeof(countryNames[6]));
+    memcpy(countryNames[7], m_strUK, sizeof(countryNames[7]));
 
     sprintf(CFrontend::m_stringDest, CFrontend::m_strFrontendTexturesAr640ATGA, CInstallInfo::GetGameCDPath());
-    CFrontend::m_pAr640ATexture = CTexture::FindLoadTexture(CGenericFileLoader::GetGenericFile(), CFrontend::m_stringDest, NULL, NULL, false, 0);
+    CFrontend::m_pAr640ATexture = CTexture::FindLoadTexture(CGenericFileLoader::GetGenericFile(), CFrontend::m_stringDest, false, NULL, bZero, bZero);
 
     sprintf(CFrontend::m_stringDest, CFrontend::m_strFrontendTexturesAr640DTGA, CInstallInfo::GetGameCDPath());
-    CFrontend::m_pAr640DTexture = CTexture::FindLoadTexture(CGenericFileLoader::GetGenericFile(), CFrontend::m_stringDest, NULL, NULL, false, 0);
+    CFrontend::m_pAr640DTexture = CTexture::FindLoadTexture(CGenericFileLoader::GetGenericFile(), CFrontend::m_stringDest, false, NULL, bZero, bZero);
 
     sprintf(CFrontend::m_stringDest, CFrontend::m_strFrontendTexturesLgMatrixTGA, CInstallInfo::GetGameCDPath());
-    CFrontend::m_pLgMatrixTexture = CTexture::FindLoadTexture(CGenericFileLoader::GetGenericFile(), CFrontend::m_stringDest, NULL, NULL, false, 0);
+    CFrontend::m_pLgMatrixTexture = CTexture::FindLoadTexture(CGenericFileLoader::GetGenericFile(), CFrontend::m_stringDest, false, NULL, bZero, bZero);
 
     sprintf(CFrontend::m_stringDest, CFrontend::m_strFrontendTexturesSmMatrixTGA, CInstallInfo::GetGameCDPath());
-    CFrontend::m_pSmMatrixTexture = CTexture::FindLoadTexture(CGenericFileLoader::GetGenericFile(), CFrontend::m_stringDest, NULL, NULL, false, 0);
+    CFrontend::m_pSmMatrixTexture = CTexture::FindLoadTexture(CGenericFileLoader::GetGenericFile(), CFrontend::m_stringDest, false, NULL, bZero, bZero);
 
+    // Load country banners and flags
     for (int i = 0; i < 8; i++) {
-        sprintf(CFrontend::m_stringDest, CFrontend::m_strSetupRepTexturesBanners, CInstallInfo::GetGameCDPath(), countries[i]);
-        CFrontend::m_pSetupRepBanners[i] = CTexture::FindLoadTexture(CGenericFileLoader::GetGenericFile(), CFrontend::m_stringDest, NULL, NULL, false, 0);
-
-        sprintf(CFrontend::m_stringDest, CFrontend::m_strFrontendTinyFlags, CInstallInfo::GetGameCDPath(), countryShort[i]);
-        CFrontend::m_pTinyFlags[i] = CTexture::FindLoadTexture(CGenericFileLoader::GetGenericFile(), CFrontend::m_stringDest, NULL, NULL, false, 0);
+        sprintf(CFrontend::m_stringDest, CFrontend::m_strSetupRepTexturesBanners, CInstallInfo::GetGameCDPath(), countryCodes[i]);
+        CFrontend::m_pSetupRepBanners[i] = CTexture::FindLoadTexture(CGenericFileLoader::GetGenericFile(), CFrontend::m_stringDest, false, NULL, bZero, bZero);
+        
+        sprintf(CFrontend::m_stringDest, CFrontend::m_strFrontendTinyFlags, CInstallInfo::GetGameCDPath(), countryNames[i]);
+        CFrontend::m_pTinyFlags[i] = CTexture::FindLoadTexture(CGenericFileLoader::GetGenericFile(), CFrontend::m_stringDest, false, NULL, bZero, bZero);
     }
+
+    // Load medal textures
+    sprintf(CFrontend::m_stringDest, CFrontend::m_strFrontendTexturesTGoldTGA, CInstallInfo::GetGameCDPath());
+    CFrontend::m_pTGold = CTexture::FindLoadTexture(CGenericFileLoader::GetGenericFile(), CFrontend::m_stringDest, false, NULL, bZero, bZero);
+    
+    sprintf(CFrontend::m_stringDest, CFrontend::m_strFrontendTexturesTSilverTGA, CInstallInfo::GetGameCDPath());
+    CFrontend::m_pTSilver = CTexture::FindLoadTexture(CGenericFileLoader::GetGenericFile(), CFrontend::m_stringDest, false, NULL, bZero, bZero);
+    
+    sprintf(CFrontend::m_stringDest, CFrontend::m_strFrontendTexturesTBronzeTGA, CInstallInfo::GetGameCDPath());
+    CFrontend::m_pTBronze = CTexture::FindLoadTexture(CGenericFileLoader::GetGenericFile(), CFrontend::m_stringDest, false, NULL, bZero, bZero);
+    
+    FUN_004d2590();
+}
+
+// STUB: CMR2 0x004d2590
+void CGame::FUN_004d2590(void) {
+
 }
