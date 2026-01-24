@@ -88,6 +88,111 @@ public:
     // GLOBAL: CMR2 0x008182c4
     static Texture* m_pTGold;
 
+    // GLOBAL: CMR2 0x00516c78
+    static char m_strEsc[4];
+
+    // GLOBAL: CMR2 0x00516c7c
+    static char m_strPum[4];
+
+    // GLOBAL: CMR2 0x00516c80
+    static char m_str205[4];
+
+    // GLOBAL: CMR2 0x00516c84
+    static char m_strStr[4];
+
+    // GLOBAL: CMR2 0x00516c88
+    static char m_str6R4[4];
+
+    // GLOBAL: CMR2 0x00516c8c
+    static char m_strMin[4];
+
+    // GLOBAL: CMR2 0x00516c90
+    static char m_strSie[4];
+
+    // GLOBAL: CMR2 0x00516c94
+    static char m_strIA2[4];
+
+    // GLOBAL: CMR2 0x00516c98
+    static char m_strIA1[4];
+
+    // GLOBAL: CMR2 0x00516c9c
+    static char m_strInt[4];
+
+    // GLOBAL: CMR2 0x00516ca0
+    static char m_strSea[4];
+
+    // GLOBAL: CMR2 0x00516ca4
+    static char m_str206[4];
+
+    // GLOBAL: CMR2 0x00516ca8
+    static char m_strSubShort[4];
+
+    // GLOBAL: CMR2 0x00516cac
+    static char m_strCor[4];
+
+    // GLOBAL: CMR2 0x00516cb0
+    static char m_strMA3[4];
+
+    // GLOBAL: CMR2 0x00516cb4
+    static char m_strMA2[4];
+
+    // GLOBAL: CMR2 0x00516cb8
+    static char m_strMA1[4];
+
+    // GLOBAL: CMR2 0x00516cbc
+    static char m_strMit[4];
+
+    // GLOBAL: CMR2 0x00516cc0
+    static char m_strFA2[4];
+
+    // GLOBAL: CMR2 0x00516cc4
+    static char m_strFA1[4];
+
+    // GLOBAL: CMR2 0x00516cc8
+    static char m_strF99Short[4];
+
+    // GLOBAL: CMR2 0x00516ccc
+    static char m_strFoc[4];    
+
+    // GLOBAL: CMR2 0x00524c10
+    static char m_strEscort[7];
+
+    // GLOBAL: CMR2 0x00524c18
+    static char m_strPuma[7];
+    
+    // GLOBAL: CMR2 0x00524c20
+    static char m_strStrts[7];
+
+    // GLOBAL: CMR2 0x00524c28
+    static char m_str6r4[4];
+
+    // GLOBAL: CMR2 0x00524c2c
+    static char m_strMini[7];
+
+    // GLOBAL: CMR2 0x00524c34
+    static char m_strSerra[7];
+
+    // GLOBAL: CMR2 0x00524c3c
+    static char m_strDelta[7];
+
+    // GLOBAL: CMR2 0x00524c44
+    static char m_strCrdba[7];
+
+    // GLOBAL: CMR2 0x00524c4c
+    static char m_strSub[4];
+
+    // GLOBAL: CMR2 0x00524c50
+    static char m_strCrlla[7];
+
+    // GLOBAL: CMR2 0x00524c58
+    static char m_strLncer[7];
+
+    // GLOBAL: CMR2 0x00524c60
+    static char m_strF99[4];
+
+    // GLOBAL: CMR2 0x00524c64
+    static char m_strF2000[7];
+
     // GLOBAL: CMR2 0x00524fa0
     static char m_strSetupRepTexturesBanners[40];
 
