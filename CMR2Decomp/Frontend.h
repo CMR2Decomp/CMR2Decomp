@@ -12,6 +12,7 @@ public:
     static BOOL FUN_004b7560(unsigned int param_1);
     static BOOL FUN_004b7590(unsigned int param_1);
     static BOOL FUN_004a9700(void);
+    static void FUN_004d2590(void);
 
     // GLOBAL: CMR2 0x00663b60
     static char m_stringDest[MAX_PATH];
@@ -152,7 +153,58 @@ public:
     static char m_strF99Short[4];
 
     // GLOBAL: CMR2 0x00516ccc
-    static char m_strFoc[4];    
+    static char m_strFoc[4];
+
+    // GLOBAL: CMR2 0x00519264
+    static char m_strUK[3];
+
+    // GLOBAL: CMR2 0x00525058
+    static char m_strIta[4];
+
+    // GLOBAL: CMR2 0x0052505c
+    static char m_strKen[4];
+
+    // GLOBAL: CMR2 0x00525060
+    static char m_strItaly[8];
+
+    // GLOBAL: CMR2 0x00525068
+    static char m_strAus[4];
+
+    // GLOBAL: CMR2 0x0052506c
+    static char m_strSwe[4];
+    
+    // GLOBAL: CMR2 0x00525070
+    static char m_strKenya[8];
+    
+    // GLOBAL: CMR2 0x00525078
+    static char m_strFra[4];
+
+    // GLOBAL: CMR2 0x0052507c
+    static char m_strSweden[8];
+    
+    // GLOBAL: CMR2 0x00525084
+    static char m_strFrance[8];
+
+    // GLOBAL: CMR2 0x0052508c
+    static char m_strGre[4];
+
+    // GLOBAL: CMR2 0x00525090
+    static char m_strFin[4];
+
+    // GLOBAL: CMR2 0x00525094
+    static char m_strFinland[8];
+
+    // GLOBAL: CMR2 0x0052509c
+    static char m_strGreece[8];    
+    
+    // GLOBAL: CMR2 0x00524ba0
+    static char m_strFrontendTexturesCarsLivery[40];
+
+    // GLOBAL: CMR2 0x00524bc8
+    static char m_strFrontendTexturesCarsB01[36];
+
+    // GLOBAL: CMR2 0x00524bec
+    static char m_strFrontendTexturesCarsF01[36];    
 
     // GLOBAL: CMR2 0x00524c10
     static char m_strEscort[7];
@@ -207,6 +259,18 @@ public:
 
     // GLOBAL: CMR2 0x00524f58
     static char m_strFrontendTexturesTGoldTGA[32];
+
+    // GLOBAL: CMR2 0x00818530
+    static Texture* m_unk0x00818530[3];
+    
+    // GLOBAL: CMR2 0x0081853c
+    static char* m_unk0x0081853c;
+
+    // GLOBAL: CMR2 0x008182cc
+    static Texture* m_unk0x008182cc[22];
+
+    // GLOBAL: CMR2 0x0081884c
+    static Texture* m_unk0x0081884c[22];
 };
 
 #endif

@@ -2,6 +2,7 @@
 #include "FileBuffer.h"
 #include "GameInfo.h"
 #include "InstallInfo.h"
+#include "main.h"
 
 #include <stdio.h>
 
@@ -28,6 +29,21 @@ Texture* CFrontend::m_pTinyFlags[8];
 Texture* CFrontend::m_pTBronze;
 Texture* CFrontend::m_pTSilver;
 Texture* CFrontend::m_pTGold;
+
+char CFrontend::m_strUK[3] = "UK";
+char CFrontend::m_strIta[4] = "Ita";
+char CFrontend::m_strKen[4] = "Ken";
+char CFrontend::m_strItaly[8] = "Italy";
+char CFrontend::m_strAus[4] = "Aus";
+char CFrontend::m_strSwe[4] = "Swe";
+char CFrontend::m_strKenya[8] = "Kenya";
+char CFrontend::m_strFra[4] = "Fra";
+char CFrontend::m_strSweden[8] = "Sweden";
+char CFrontend::m_strFrance[8] = "France";
+char CFrontend::m_strGre[4] = "Gre";
+char CFrontend::m_strFin[4] = "Fin";
+char CFrontend::m_strFinland[8] = "Finland";
+char CFrontend::m_strGreece[8] = "Greece";
 
 char CFrontend::m_strEsc[4] = "Esc";
 char CFrontend::m_strPum[4] = "Pum";
@@ -71,6 +87,10 @@ char CFrontend::m_strFrontendTexturesTBronzeTGA[36] = "%s\\frontend\\Textures\\t
 char CFrontend::m_strFrontendTexturesTSilverTGA[36] = "%s\\frontend\\Textures\\tsilver.tga";
 char CFrontend::m_strFrontendTexturesTGoldTGA[32] = "%s\\frontend\\Textures\\tgold.tga";
 
+char CFrontend::m_strFrontendTexturesCarsLivery[40] = "%s\\frontend\\Textures\\cars\\livery%d.tga";
+char CFrontend::m_strFrontendTexturesCarsB01[36] = "%s\\frontend\\Textures\\cars\\%sB01.tga";
+char CFrontend::m_strFrontendTexturesCarsF01[36] = "%s\\frontend\\Textures\\cars\\%sF01.tga";
+
 GenericFile CFrontend::m_unk0x00818260;
 unsigned int CFrontend::m_unk0x006e0c5c;
 unsigned int CFrontend::m_unk0x006e0c64;
@@ -78,6 +98,11 @@ unsigned int CFrontend::m_unk0x006e0c60;
 unsigned int CFrontend::m_unk0x006e0c68;
 unsigned int CFrontend::m_unk0x00663b38;
 unsigned int CFrontend::m_unk0x00663b48;
+
+Texture* CFrontend::m_unk0x00818530[3];
+char* CFrontend::m_unk0x0081853c;
+Texture* CFrontend::m_unk0x008182cc[22];
+Texture* CFrontend::m_unk0x0081884c[22];
 
 // FUNCTION: CMR2 0x004d21e0
 void CFrontend::FUN_004d21e0(void)
@@ -183,4 +208,86 @@ BOOL CFrontend::FUN_004a9700(void)
         return FALSE;
 
     return TRUE;
+}
+
+// FUNCTION: CMR2 0x004d2590
+void CFrontend::FUN_004d2590(void) {
+    int index;
+    int ix;
+    const char* carNames[22] = {
+        m_strF2000,
+        m_strF99,
+        CMain::m_logFileBlankLine,
+        CMain::m_logFileBlankLine,
+        m_strLncer,
+        CMain::m_logFileBlankLine,
+        CMain::m_logFileBlankLine,
+        CMain::m_logFileBlankLine,
+        m_strCrlla,
+        m_strSub,
+        m_str206,
+        m_strCrdba,
+        m_strDelta,
+        CMain::m_logFileBlankLine,
+        CMain::m_logFileBlankLine,
+        m_strSerra,
+        m_strMini,
+        m_str6r4,
+        m_strStrts,
+        m_str205,
+        m_strPuma,
+        m_strEscort
+    };
+
+    index = -2;
+    ix = 0;
+    
+    do {
+        const char* carName = carNames[ix];
+        if (carName[0] != '\0') {
+            // Load front texture (F01)
+            sprintf(CFrontend::m_stringDest, CFrontend::m_strFrontendTexturesCarsF01, CInstallInfo::GetGameCDPath(), carName);
+            m_unk0x0081884c[ix] = CTexture::FindLoadTexture(CGenericFileLoader::GetGenericFile(), CFrontend::m_stringDest, 0, 0, 0, 0);
+            
+            // Load back texture (B01)
+            sprintf(CFrontend::m_stringDest,CFrontend::m_strFrontendTexturesCarsB01, CInstallInfo::GetGameCDPath(), carName);
+            m_unk0x008182cc[ix] = CTexture::FindLoadTexture(CGenericFileLoader::GetGenericFile(), CFrontend::m_stringDest, 0, 0, 0, 0);
+        } else {
+            // Handle blank entries with switch/case based on index
+            switch(index) {
+                case 0:  // index 0, 1
+                case 1:
+                    m_unk0x0081884c[ix] = m_unk0x0081884c[1];
+                    m_unk0x008182cc[ix] = m_unk0x008182cc[1];
+                    break;
+                    
+                case 3:   // index 3, 4, 5
+                case 4:
+                case 5:
+                    m_unk0x0081884c[ix] = m_unk0x0081884c[4];
+                    m_unk0x008182cc[ix] = m_unk0x008182cc[4];
+                    break;
+                    
+                case 11:  // index 11, 12
+                case 12:
+                    m_unk0x0081884c[ix] = m_unk0x0081884c[12];
+                    m_unk0x008182cc[ix] = m_unk0x008182cc[12];
+                    break;
+            }
+        }
+        
+        index++;
+        ix++;
+    } while (index + 2 < 22);
+    
+    // Load livery textures (1-3)
+    Texture** pTexture = m_unk0x00818530;
+    int liveryIndex = 0;
+
+    do {
+        liveryIndex++;  // Increment first so we use 1, 2, 3
+        sprintf(CFrontend::m_stringDest, CFrontend::m_strFrontendTexturesCarsLivery, CInstallInfo::GetGameCDPath(), liveryIndex);
+        *pTexture = CTexture::FindLoadTexture(CGenericFileLoader::GetGenericFile(), CFrontend::m_stringDest, 0, 0, 0, 0);
+        pTexture++;
+    } while ((int)pTexture < (int)&m_unk0x0081853c[0]);
 }

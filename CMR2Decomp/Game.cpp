@@ -57,21 +57,6 @@ Unk0x00664750 CGame::m_unk0x00664750[10];
 int CGame::m_unk0x00665218;
 BOOL CGame::m_unk0x00532138 = FALSE;
 
-char CGame::m_strUK[3] = "UK";
-char CGame::m_strIta[4] = "Ita";
-char CGame::m_strKen[4] = "Ken";
-char CGame::m_strItaly[8] = "Italy";
-char CGame::m_strAus[4] = "Aus";
-char CGame::m_strSwe[4] = "Swe";
-char CGame::m_strKenya[8] = "Kenya";
-char CGame::m_strFra[4] = "Fra";
-char CGame::m_strSweden[8] = "Sweden";
-char CGame::m_strFrance[8] = "France";
-char CGame::m_strGre[4] = "Gre";
-char CGame::m_strFin[4] = "Fin";
-char CGame::m_strFinland[8] = "Finland";
-char CGame::m_strGreece[8] = "Greece";
-
 
 FuncTableGroup CGame::m_initializeGameGroupedFuncTable[10] = {
     {InitializeGame,
@@ -513,23 +498,23 @@ void CGame::FUN_004e2e50(void) {
     char countryNames[8][10];
     BOOL bZero = false;
 
-    memcpy(countryCodes[0], m_strFin, sizeof(countryCodes[0]));
-    memcpy(countryCodes[1], m_strGre, sizeof(countryCodes[1]));
-    memcpy(countryCodes[2], m_strFra, sizeof(countryCodes[2]));
-    memcpy(countryCodes[3], m_strSwe, sizeof(countryCodes[3]));
-    memcpy(countryCodes[4], m_strAus, sizeof(countryCodes[4]));
-    memcpy(countryCodes[5], m_strKen, sizeof(countryCodes[5]));
-    memcpy(countryCodes[6], m_strIta, sizeof(countryCodes[6]));
-    memcpy(countryCodes[7], m_strUK, sizeof(countryCodes[7]));
+    memcpy(countryCodes[0], CFrontend::m_strFin, sizeof(countryCodes[0]));
+    memcpy(countryCodes[1], CFrontend::m_strGre, sizeof(countryCodes[1]));
+    memcpy(countryCodes[2], CFrontend::m_strFra, sizeof(countryCodes[2]));
+    memcpy(countryCodes[3], CFrontend::m_strSwe, sizeof(countryCodes[3]));
+    memcpy(countryCodes[4], CFrontend::m_strAus, sizeof(countryCodes[4]));
+    memcpy(countryCodes[5], CFrontend::m_strKen, sizeof(countryCodes[5]));
+    memcpy(countryCodes[6], CFrontend::m_strIta, sizeof(countryCodes[6]));
+    memcpy(countryCodes[7], CFrontend::m_strUK, sizeof(countryCodes[7]));
 
-    memcpy(countryNames[0], m_strFinland, sizeof(countryNames[0]));
-    memcpy(countryNames[1], m_strGreece, sizeof(countryNames[1]));
-    memcpy(countryNames[2], m_strFrance, sizeof(countryNames[2]));
-    memcpy(countryNames[3], m_strSweden, sizeof(countryNames[3]));
-    memcpy(countryNames[4], m_strAus, sizeof(countryNames[4]));
-    memcpy(countryNames[5], m_strKenya, sizeof(countryNames[5]));
-    memcpy(countryNames[6], m_strItaly, sizeof(countryNames[6]));
-    memcpy(countryNames[7], m_strUK, sizeof(countryNames[7]));
+    memcpy(countryNames[0], CFrontend::m_strFinland, sizeof(countryNames[0]));
+    memcpy(countryNames[1], CFrontend::m_strGreece, sizeof(countryNames[1]));
+    memcpy(countryNames[2], CFrontend::m_strFrance, sizeof(countryNames[2]));
+    memcpy(countryNames[3], CFrontend::m_strSweden, sizeof(countryNames[3]));
+    memcpy(countryNames[4], CFrontend::m_strAus, sizeof(countryNames[4]));
+    memcpy(countryNames[5], CFrontend::m_strKenya, sizeof(countryNames[5]));
+    memcpy(countryNames[6], CFrontend::m_strItaly, sizeof(countryNames[6]));
+    memcpy(countryNames[7], CFrontend::m_strUK, sizeof(countryNames[7]));
 
     sprintf(CFrontend::m_stringDest, CFrontend::m_strFrontendTexturesAr640ATGA, CInstallInfo::GetGameCDPath());
     CFrontend::m_pAr640ATexture = CTexture::FindLoadTexture(CGenericFileLoader::GetGenericFile(), CFrontend::m_stringDest, false, NULL, bZero, bZero);
@@ -562,92 +547,6 @@ void CGame::FUN_004e2e50(void) {
     sprintf(CFrontend::m_stringDest, CFrontend::m_strFrontendTexturesTBronzeTGA, CInstallInfo::GetGameCDPath());
     CFrontend::m_pTBronze = CTexture::FindLoadTexture(CGenericFileLoader::GetGenericFile(), CFrontend::m_stringDest, false, NULL, bZero, bZero);
     
-    FUN_004d2590();
+    CFrontend::FUN_004d2590();
 }
 
-// FUNCTION: CMR2 0x004d2590
-void CGame::FUN_004d2590(void) {
-    const char* carNames[22] = {
-        CFrontend::m_strF2000,    // 0
-        CFrontend::m_strF99,      // 1
-        CMain::m_logFileBlankLine,         // 2 - blank
-        CMain::m_logFileBlankLine,         // 3 - blank
-        CFrontend::m_strLncer,    // 4
-        CMain::m_logFileBlankLine,         // 5 - blank
-        CMain::m_logFileBlankLine,         // 6 - blank
-        CMain::m_logFileBlankLine,         // 7 - blank
-        CFrontend::m_strCrlla,    // 8
-        CFrontend::m_strSub,      // 9
-        CFrontend::m_str206,      // 10
-        CFrontend::m_strCrdba,    // 11
-        CFrontend::m_strDelta,    // 12
-        CMain::m_logFileBlankLine,         // 13 - blank
-        CMain::m_logFileBlankLine,         // 14 - blank
-        CFrontend::m_strSerra,    // 15
-        CFrontend::m_strMini,     // 16
-        CFrontend::m_str6r4,      // 17
-        CFrontend::m_strStrts,    // 18
-        CFrontend::m_str205,      // 19
-        CFrontend::m_strPuma,     // 20
-        CFrontend::m_strEscort    // 21
-    };
-    
-    int index = -2;  // EBX starts at 0xfffffffe
-    int arrayOffset = 0;  // ESI starts at 0
-    
-    // // Loop through car names
-    // do {
-    //     const char* carName = carNames[arrayOffset];
-        
-    //     if (carName[0] != '\0') {
-    //         // Load front texture (F01)
-    //         sprintf(CFrontend::m_stringDest, "%s\\frontend\\Textures\\cars\\%sF01.tga", 
-    //                 CInstallInfo::GetGameCDPath(), carName);
-    //         *(Texture**)(DAT_0081884c + arrayOffset) = 
-    //             CTexture::FindLoadTexture(CGenericFileLoader::GetGenericFile(), CFrontend::m_stringDest, 0, 0, 0, 0);
-            
-    //         // Load back texture (B01)
-    //         sprintf(CFrontend::m_stringDest, "%s\\frontend\\Textures\\cars\\%sB01.tga", 
-    //                 CInstallInfo::GetGameCDPath(), carName);
-    //         *(Texture**)(DAT_008182cc + arrayOffset) = 
-    //             CTexture::FindLoadTexture(CGenericFileLoader::GetGenericFile(), CFrontend::m_stringDest, 0, 0, 0, 0);
-    //     } else {
-    //         // Handle blank entries with switch/case based on index
-    //         switch(index) {
-    //             case -2:  // index 0, 1
-    //             case -1:
-    //                 *(Texture**)(DAT_0081884c + arrayOffset) = DAT_00818850;
-    //                 *(Texture**)(DAT_008182cc + arrayOffset) = DAT_008182d0;
-    //                 break;
-                    
-    //             case 1:   // index 3, 4, 5
-    //             case 2:
-    //             case 3:
-    //                 *(Texture**)(DAT_0081884c + arrayOffset) = DAT_0081885c;
-    //                 *(Texture**)(DAT_008182cc + arrayOffset) = DAT_008182dc;
-    //                 break;
-                    
-    //             case 10:  // index 11, 12
-    //             case 11:
-    //                 *(Texture**)(DAT_0081884c + arrayOffset) = DAT_0081887c;
-    //                 *(Texture**)(DAT_008182cc + arrayOffset) = DAT_008182fc;
-    //                 break;
-    //         }
-    //     }
-        
-    //     index++;
-    //     arrayOffset += 4;
-    // } while (index + 2 < 22);
-    
-    // // Load livery textures (1-3)
-    // int liveryIndex = 0;
-    // Texture** liveryPtr = (Texture**)&DAT_00818530;
-    
-    // do {
-    //     liveryIndex++;
-    //     sprintf(CFrontend::m_stringDest, "%s\\frontend\\Textures\\cars\\livery%d.tga", 
-    //             CInstallInfo::GetGameCDPath(), liveryIndex);
-    //     *liveryPtr = CTexture::FindLoadTexture(CGenericFileLoader::GetGenericFile(), CFrontend::m_stringDest, 0, 0, 0, 0);
-    //     liveryPtr++;
-    // } while ((int)liveryPtr < (int)&DAT_0081853c);
-}
