@@ -91,7 +91,6 @@ public:
     static IDirectPlay4A *GetDirectPlay(void);
     static bool FUN_004d0a50(bool param1);
     static bool FUN_004aaa40(void);
-    static bool LoadSplashScreens(BYTE param1);
     static void FUN_0040bab0(BOOL param1);
     static void FUN_004e2e50(void);
     

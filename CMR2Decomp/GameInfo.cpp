@@ -743,3 +743,12 @@ void CGameInfo::FUN_004a0c60(void) {
     m_unk0x005a01bc = false;
 }
 
+// FUNCTION: CMR2 0x00405bd0
+unsigned int CGameInfo::FUN_00405bd0(void) {
+  return m_gameInfo.unknownGraphicsOptions >> 5 & 0xf;
+}
+
+// FUNCTION: CMR2 0x00405c00
+unsigned int CGameInfo::FUN_00405c00(void) {
+  return m_gameInfo.unknownGraphicsOptions >> 9 & 0xf;
+}

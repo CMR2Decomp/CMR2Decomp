@@ -3,6 +3,7 @@
 #include "GameInfo.h"
 #include "InstallInfo.h"
 #include "main.h"
+#include "Graphics.h"
 
 #include <stdio.h>
 
@@ -290,4 +291,15 @@ void CFrontend::FUN_004d2590(void) {
         *pTexture = CTexture::FindLoadTexture(CGenericFileLoader::GetGenericFile(), CFrontend::m_stringDest, 0, 0, 0, 0);
         pTexture++;
     } while ((int)pTexture < (int)&m_unk0x0081853c[0]);
+}
+
+// FUNCTION: CMR2 0x004d08d0
+bool CFrontend::LoadSplashScreens(bool param1) {
+    short sVar1 = -1;
+    
+    if (param1) {      
+        CGraphics::FUN_004a78a0(CGameInfo::GetScreenWidth(), CGameInfo::GetScreenHeight(), CGameInfo::GetColourDepth(), CGameInfo::FUN_00405bd0(), CGameInfo::FUN_00405c00());
+    }
+    
+    return true;
 }

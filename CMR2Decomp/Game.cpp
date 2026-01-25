@@ -184,7 +184,9 @@ void CGame::InitializeGame(Unk0049c2c0 *p1, BYTE p2)
             CGameInfo::FUN_0049ea90(1);
             CGameInfo::FUN_004d05d0();
             if (FUN_004aaa40() != false) {
-                CGame::FUN_004d0a50(0x1);
+                if (CGame::FUN_004d0a50(true)) {
+                    return;
+                }
             }
         // }
     }
@@ -471,7 +473,7 @@ bool CGame::FUN_004d0a50(bool param1) {
     BOOL didLoadSplashScreens;
     BOOL bVar2;
 
-    didLoadSplashScreens = LoadSplashScreens(param1);
+    didLoadSplashScreens = CFrontend::LoadSplashScreens(param1);
     if (didLoadSplashScreens != FALSE) {
         FUN_0040bab0(TRUE);
         FUN_004e2e50();
@@ -480,11 +482,6 @@ bool CGame::FUN_004d0a50(bool param1) {
     }
 
     return false;
-}
-
-// STUB: CMR2 0x004d08d0
-bool CGame::LoadSplashScreens(BYTE param1) {
-    return true;
 }
 
 // FUNCTION: CMR2 0x0040bab0

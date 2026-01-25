@@ -3,6 +3,7 @@
 #include "Input.h"
 #include "RegKey.h"
 #include "main.h"
+#include "Sound.h"
 
 // GLOBAL: CMR2 0x00660830
 Graphics g_graphics;
@@ -11,6 +12,10 @@ Graphics g_graphics;
 Graphics *g_pGraphics = &g_graphics;
 
 char CGraphics::m_strSettingConfigurationToDefault[36] = "Setting configuration to defaults";
+
+BOOL CGraphics::m_unk0x00520b7c = TRUE;
+BOOL CGraphics::m_unk0x005a2734 = FALSE;
+char CGraphics::m_unk0x005a2738[256];
 
 // FUNCTION: CMR2 0x00405830
 bool CGraphics::InitializeDirectX(void) {
@@ -86,3 +91,20 @@ void CGraphics::SetDefaults(void) {
     
     g_pGraphics->field913_0x3bc &= 0xfffffffb;
 }
+
+// FUNCTION: CMR2 0x004a78a0
+void CGraphics::FUN_004a78a0(unsigned int screenWidth, unsigned int screenHeight, unsigned int colourDepth, unsigned int param4, unsigned int param5) {
+    if (m_unk0x00520b7c == 0) {
+        FUN_004a2b50(TRUE);
+    }
+}
+
+// FUNCTION: CMR2 0x004a2b50
+void CGraphics::FUN_004a2b50(BOOL param1) {
+    CSound::FUN_004a2ac0();
+    if (param1 == 0) {
+        m_unk0x005a2734 = FALSE;
+        strcpy(m_unk0x005a2738, CMain::m_logFileBlankLine);
+    }
+}
+

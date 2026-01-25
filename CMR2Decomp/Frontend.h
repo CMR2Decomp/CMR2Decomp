@@ -13,6 +13,7 @@ public:
     static BOOL FUN_004b7590(unsigned int param_1);
     static BOOL FUN_004a9700(void);
     static void FUN_004d2590(void);
+    static bool LoadSplashScreens(bool param1);
 
     // GLOBAL: CMR2 0x00663b60
     static char m_stringDest[MAX_PATH];

@@ -109,6 +109,8 @@ public:
     static void FUN_004d05d0(void);
     static bool FUN_004d05a0(void);
     static void FUN_004a0c60(void);
+    static unsigned int FUN_00405bd0(void);
+    static unsigned int FUN_00405c00(void);
 
     // GLOBAL: CMR2 0x0052afa0
     static GameInfo m_gameInfo;
