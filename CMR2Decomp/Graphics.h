@@ -940,10 +940,21 @@ class CGraphics {
 public:
     static bool InitializeDirectX(void);
     static void SetDefaults(void);
+    static void FUN_004a2b50(BOOL param1);
+    static void FUN_004a78a0(unsigned int screenWidth, unsigned int screenHeight, unsigned int colourDepth, unsigned int param4, unsigned int param5);
 
 private:
     // GLOBAL: CMR2 0x0051615c
     static char m_strSettingConfigurationToDefault[36];
+
+    // GLOBAL: CMR2 0x00520b7c
+    static BOOL m_unk0x00520b7c;
+
+    // GLOBAL: CMR2 0x005a2734
+    static BOOL m_unk0x005a2734;
+
+    // GLOBAL: CMR2 0x005a2738
+    static char m_unk0x005a2738[256];
 };
 
 #endif

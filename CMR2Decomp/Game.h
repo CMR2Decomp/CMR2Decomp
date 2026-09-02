@@ -36,6 +36,18 @@ struct Unk0x005a1820 {
     unsigned int field_0xcc;
 };
 
+struct Unk0x00664750 {
+	void* field_0x0;
+	void* field_0x4;
+	unsigned short field_0x8;
+	unsigned short field_0xa;
+	void* field_0xc;
+    void* field_0x10;
+	char field_0x14;
+	BYTE field_0x15;
+	BYTE field_0x16[254];
+};
+
 // GLOBAL: CMR2 0x00511a28
 // CLSID_DirectPlay
 
@@ -77,6 +89,10 @@ public:
     static void DestroyDirectPlay(void);
     static void DestroyDirectPlayLobby(void);
     static IDirectPlay4A *GetDirectPlay(void);
+    static bool FUN_004d0a50(bool param1);
+    static bool FUN_004aaa40(void);
+    static void FUN_0040bab0(BOOL param1);
+    static void FUN_004e2e50(void);
     
     // GLOBAL: CMR2 0x00663db8
     static BOOL m_shouldExit;
@@ -154,6 +170,15 @@ public:
 
     // GLOBAL: CMR2 0x005a1fbc
     static BOOL m_unk0x005a1fbc;
+
+    // GLOBAL: CMR2 0x00664750
+    static Unk0x00664750 m_unk0x00664750[10];
+    
+    // GLOBAL: CMR2 0x00665218
+    static int m_unk0x00665218;
+    
+    // GLOBAL: CMR2 0x00532138
+    static BOOL m_unk0x00532138;
 };
 
 #endif

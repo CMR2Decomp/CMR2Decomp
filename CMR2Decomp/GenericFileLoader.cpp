@@ -33,3 +33,8 @@ int CGenericFileLoader::GetGenericFileSize(void)
 {
     return m_fileSize;
 }
+
+// FUNCTION: CMR2 0x004d21a0
+GenericFile* CGenericFileLoader::GetGenericFile(void) {
+    return &m_genericFile;
+}

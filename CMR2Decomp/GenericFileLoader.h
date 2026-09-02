@@ -22,6 +22,7 @@ public:
     static bool FUN_004a9d70(GenericFile *file, char *fileName);
     static bool FUN_004a9c30(char *fileName, GenericFile *param_2);
     static int GetGenericFileSize(void);
+    static GenericFile* GetGenericFile(void);
 };
 
 #endif
