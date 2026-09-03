@@ -4,6 +4,8 @@
 #include <windows.h>
 #include "../third_party/dx7sdk-7001/include/d3d.h"
 
+#include "Texture.h"
+
 struct Graphics
 {
     unsigned int resX;
@@ -931,6 +933,25 @@ struct Graphics
     unsigned char field928_0x3cb;
 };
 
+struct D3DTextureManager {
+    IDirect3D7* pDD;                     // 0x0
+    IDirect3DDevice7* pD3D;              // 0x4
+    GUID* pDeviceGUID;                   // 0x8
+    DWORD field_0xc;                     // 0xc
+    DWORD field_0x10;                    // 0x10
+    DWORD field_0x14;                    // 0x14
+    BYTE field_0x18[0x338];              // 0x18 - 0x34f (padding)
+    void* textureInfo1;                  // 0x350 (TextureInfo*)
+    void* textureInfo2;                  // 0x354 (TextureInfo*)
+    void* textureInfo3;                  // 0x358 (TextureInfo*)
+    void* textureInfo4;                  // 0x35c (TextureInfo*)
+    void* textureInfo5;                  // 0x360 (TextureInfo*)
+    DDPIXELFORMAT ddpfZBuffer;           // 0x364
+    Texture* textureBuffer[2048];        // 0x384
+    Texture* textureBuffer2[20];            // 0x2384
+    BYTE field_0x23d4[0x94];             // 0x23d4 - 0x2467 (padding)
+};
+
 extern Graphics *g_pGraphics;
 
 // GLOBAL: CMR2 0x005114a8
@@ -940,21 +961,25 @@ class CGraphics {
 public:
     static bool InitializeDirectX(void);
     static void SetDefaults(void);
-    static void FUN_004a2b50(BOOL param1);
     static void FUN_004a78a0(unsigned int screenWidth, unsigned int screenHeight, unsigned int colourDepth, unsigned int param4, unsigned int param5);
+    static void FUN_004a5ba0(void);
+    static BOOL FUN_004a5be0(void);
 
 private:
     // GLOBAL: CMR2 0x0051615c
     static char m_strSettingConfigurationToDefault[36];
 
+    // GLOBAL: CMR2 0x00520b78
+    static D3DTextureManager* m_pTextureManager;
+
     // GLOBAL: CMR2 0x00520b7c
     static BOOL m_unk0x00520b7c;
 
-    // GLOBAL: CMR2 0x005a2734
-    static BOOL m_unk0x005a2734;
+    // GLOBAL: CMR2 0x0065fa2c
+    static void* m_unk0x0065fa2c;
 
-    // GLOBAL: CMR2 0x005a2738
-    static char m_unk0x005a2738[256];
+    // GLOBAL: CMR2 0x0065fa28
+    static int m_unk0x0065fa28;
 };
 
 #endif

@@ -1,6 +1,5 @@
 #include "Graphics.h"
 #include "GameInfo.h"
-#include "Input.h"
 #include "RegKey.h"
 #include "main.h"
 #include "Sound.h"
@@ -10,12 +9,13 @@ Graphics g_graphics;
 
 // GLOBAL: CMR2 0x00520b74
 Graphics *g_pGraphics = &g_graphics;
+D3DTextureManager *CGraphics::m_pTextureManager;
 
 char CGraphics::m_strSettingConfigurationToDefault[36] = "Setting configuration to defaults";
 
 BOOL CGraphics::m_unk0x00520b7c = TRUE;
-BOOL CGraphics::m_unk0x005a2734 = FALSE;
-char CGraphics::m_unk0x005a2738[256];
+void* CGraphics::m_unk0x0065fa2c;
+int CGraphics::m_unk0x0065fa28;
 
 // FUNCTION: CMR2 0x00405830
 bool CGraphics::InitializeDirectX(void) {
@@ -95,16 +95,59 @@ void CGraphics::SetDefaults(void) {
 // FUNCTION: CMR2 0x004a78a0
 void CGraphics::FUN_004a78a0(unsigned int screenWidth, unsigned int screenHeight, unsigned int colourDepth, unsigned int param4, unsigned int param5) {
     if (m_unk0x00520b7c == 0) {
-        FUN_004a2b50(TRUE);
+        CSound::FUN_004a2b50(TRUE);
+        FUN_004a5be0();
     }
 }
 
-// FUNCTION: CMR2 0x004a2b50
-void CGraphics::FUN_004a2b50(BOOL param1) {
-    CSound::FUN_004a2ac0();
-    if (param1 == 0) {
-        m_unk0x005a2734 = FALSE;
-        strcpy(m_unk0x005a2738, CMain::m_logFileBlankLine);
+// FUNCTION: CMR2 0x004a5be0
+BOOL CGraphics::FUN_004a5be0(void) {
+    int index, textureID, iVar4, iVar7;
+
+    m_pTextureManager->pDD->EvictManagedTextures();
+    m_unk0x0065fa2c = NULL;
+
+    index = 0;
+    textureID = 0;
+    do {
+        Texture* pTexture = m_pTextureManager->textureBuffer[index];
+        if (pTexture != NULL && pTexture->pSurface != NULL && textureID == pTexture->textureId) {
+            
+            if (pTexture->pSurface->Release() == 0) {
+                pTexture->pSurface = NULL;
+            }
+        }
+        
+        index++;
+        textureID++;
+    } while (index < 2048);
+
+    FUN_004a5ba0();
+    index = 0;
+
+    if (m_unk0x0065fa28 != 0) {
+        do {
+            iVar4 = 0x5f0;
+            iVar7 = 0x734;
+
+            do {
+                Texture* pTexture = m_pTextureManager->textureBuffer2[index];
+                if (pTexture != NULL) {
+                    IDirectDrawSurface7* pOther = pTexture->pSurface;
+                    if (pOther->Release() == 0) {
+                        pTexture->pSurface = NULL;
+                    }
+                }
+            } while (0x71f < iVar7);
+            
+            index++;
+        } while (index < m_unk0x0065fa28);
     }
+
+    return TRUE;
 }
 
+// STUB: CMR2 0x004a5ba0
+void CGraphics::FUN_004a5ba0(void) {
+
+}
