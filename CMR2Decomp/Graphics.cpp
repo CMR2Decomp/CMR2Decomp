@@ -97,6 +97,7 @@ void CGraphics::FUN_004a78a0(unsigned int screenWidth, unsigned int screenHeight
     if (m_unk0x00520b7c == 0) {
         CSound::FUN_004a2b50(TRUE);
         FUN_004a5be0();
+        ReleaseDirect3D();
     }
 }
 
@@ -147,7 +148,29 @@ BOOL CGraphics::FUN_004a5be0(void) {
     return TRUE;
 }
 
+// FUNCTION: CMR2 0x004a8810
+BOOL CGraphics::ReleaseDirect3D(void)
+{
+    FUN_004b1de0();
+
+    if (m_pTextureManager->pD3D != NULL && m_pTextureManager->pD3D->Release() == 0)
+        m_pTextureManager->pD3D = NULL;
+    
+    m_pTextureManager->pD3D = NULL;
+    
+    if (m_pTextureManager->pDD != NULL && m_pTextureManager->pDD->Release() == 0)
+        m_pTextureManager->pDD = NULL;
+    
+    m_pTextureManager->pDD = NULL;
+    return TRUE;
+}
+
 // STUB: CMR2 0x004a5ba0
 void CGraphics::FUN_004a5ba0(void) {
+
+}
+
+// STUB: CMR2 0x004b1de0
+void CGraphics::FUN_004b1de0(void) {
 
 }
