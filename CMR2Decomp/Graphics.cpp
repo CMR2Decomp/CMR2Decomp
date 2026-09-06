@@ -96,7 +96,7 @@ void CGraphics::SetDefaults(void) {
 void CGraphics::FUN_004a78a0(unsigned int screenWidth, unsigned int screenHeight, unsigned int colourDepth, unsigned int param4, unsigned int param5) {
     if (m_unk0x00520b7c == 0) {
         CSound::FUN_004a2b50(TRUE);
-        FUN_004a5be0();
+        FUN_004a5be0(); // TODO: UNFINISHED
         ReleaseDirect3D();
     }
 }
@@ -151,7 +151,7 @@ BOOL CGraphics::FUN_004a5be0(void) {
 // FUNCTION: CMR2 0x004a8810
 BOOL CGraphics::ReleaseDirect3D(void)
 {
-    FUN_004b1de0();
+    ReleaseVertexBuffers();
 
     if (m_pTextureManager->pD3D != NULL && m_pTextureManager->pD3D->Release() == 0)
         m_pTextureManager->pD3D = NULL;
@@ -170,7 +170,14 @@ void CGraphics::FUN_004a5ba0(void) {
 
 }
 
-// STUB: CMR2 0x004b1de0
-void CGraphics::FUN_004b1de0(void) {
+// FUNCTION: CMR2 0x004b1de0
+void CGraphics::ReleaseVertexBuffers(void) {
+    if (m_pTextureManager->pVertexBuffer3 != NULL && m_pTextureManager->pVertexBuffer3->Release() == 0)
+        m_pTextureManager->pVertexBuffer3 = NULL;
+    
+    if (m_pTextureManager->pVertexBuffer2 != NULL && m_pTextureManager->pVertexBuffer2->Release() == 0)
+        m_pTextureManager->pVertexBuffer2 = NULL;
 
+    if (m_pTextureManager->pVertexBuffer1 != NULL && m_pTextureManager->pVertexBuffer1->Release() == 0)
+        m_pTextureManager->pVertexBuffer1 = NULL;        
 }

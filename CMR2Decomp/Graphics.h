@@ -934,13 +934,17 @@ struct Graphics
 };
 
 struct D3DTextureManager {
-    IDirect3D7* pDD;                     // 0x0
-    IDirect3DDevice7* pD3D;              // 0x4
-    GUID* pDeviceGUID;                   // 0x8
-    DWORD field_0xc;                     // 0xc
-    DWORD field_0x10;                    // 0x10
-    DWORD field_0x14;                    // 0x14
-    BYTE field_0x18[0x338];              // 0x18 - 0x34f (padding)
+    IDirect3D7* pDD;                      // 0x0
+    IDirect3DDevice7* pD3D;               // 0x4
+    GUID* pDeviceGUID;                    // 0x8
+    DWORD field_0xc;                      // 0xc
+    DWORD field_0x10;                     // 0x10
+    DWORD field_0x14;                     // 0x14
+    BYTE field_0x18[0x320];                 // 0x18 - 0x337 (padding)
+    IDirect3DVertexBuffer7* pVertexBuffer1;  // 0x338 - 0x1800 verts
+    IDirect3DVertexBuffer7* pVertexBuffer2;  // 0x33c - 0x7080 verts
+    IDirect3DVertexBuffer7* pVertexBuffer3;  // 0x340 - 1 vert
+    BYTE field_0x344[0xc];                   // 0x344 - 0x34f (padding)
     void* textureInfo1;                  // 0x350 (TextureInfo*)
     void* textureInfo2;                  // 0x354 (TextureInfo*)
     void* textureInfo3;                  // 0x358 (TextureInfo*)
@@ -965,7 +969,7 @@ public:
     static void FUN_004a5ba0(void);
     static BOOL FUN_004a5be0(void);
     static BOOL ReleaseDirect3D(void);
-    static void FUN_004b1de0(void);
+    static void ReleaseVertexBuffers(void);
 
 private:
     // GLOBAL: CMR2 0x0051615c
