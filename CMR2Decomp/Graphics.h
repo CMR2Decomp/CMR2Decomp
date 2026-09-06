@@ -971,6 +971,7 @@ public:
     static BOOL ReleaseDirect3D(void);
     static void ReleaseVertexBuffers(void);
     static void ReleaseSurfaces(void);
+    static void FUN_004a8bd0(int param1);
 
 private:
     // GLOBAL: CMR2 0x0051615c
@@ -990,6 +991,9 @@ private:
 
     // GLOBAL: CMR2 0x006dd890
     static int m_unk0x006dd890;
+    
+    // GLOBAL: CMR2 0x00663b1c
+    static int m_unk0x00663b1c;
 };
 
 #endif

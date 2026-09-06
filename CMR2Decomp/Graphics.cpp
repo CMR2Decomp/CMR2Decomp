@@ -3,6 +3,7 @@
 #include "RegKey.h"
 #include "main.h"
 #include "Sound.h"
+#include <basetsd.h>
 
 // GLOBAL: CMR2 0x00660830
 Graphics g_graphics;
@@ -17,6 +18,7 @@ BOOL CGraphics::m_unk0x00520b7c = TRUE;
 void* CGraphics::m_unk0x0065fa2c;
 int CGraphics::m_unk0x0065fa28;
 int CGraphics::m_unk0x006dd890;
+int CGraphics::m_unk0x00663b1c;
 
 // FUNCTION: CMR2 0x00405830
 bool CGraphics::InitializeDirectX(void) {
@@ -101,6 +103,8 @@ void CGraphics::FUN_004a78a0(unsigned int screenWidth, unsigned int screenHeight
         ReleaseDirect3D();
         ReleaseSurfaces();
     }
+
+    FUN_004a8bd0(param4);
 }
 
 // FUNCTION: CMR2 0x004a5be0
@@ -220,4 +224,9 @@ void CGraphics::ReleaseSurfaces(void) {
     if (g_pGraphics->pDD7 != NULL && g_pGraphics->pDD7->Release() == 0) {
         g_pGraphics->pDD7 = NULL;
     }
+}
+
+// FUNCTION: CMR2 0x004a8bd0
+void CGraphics::FUN_004a8bd0(int param1) {
+    m_unk0x00663b1c = param1;
 }
