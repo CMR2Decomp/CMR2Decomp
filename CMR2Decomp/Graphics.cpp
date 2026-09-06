@@ -16,6 +16,7 @@ char CGraphics::m_strSettingConfigurationToDefault[36] = "Setting configuration 
 BOOL CGraphics::m_unk0x00520b7c = TRUE;
 void* CGraphics::m_unk0x0065fa2c;
 int CGraphics::m_unk0x0065fa28;
+int CGraphics::m_unk0x006dd890;
 
 // FUNCTION: CMR2 0x00405830
 bool CGraphics::InitializeDirectX(void) {
@@ -172,6 +173,7 @@ void CGraphics::FUN_004a5ba0(void) {
 
 // FUNCTION: CMR2 0x004b1de0
 void CGraphics::ReleaseVertexBuffers(void) {
+    int index = 99;
     if (m_pTextureManager->pVertexBuffer3 != NULL && m_pTextureManager->pVertexBuffer3->Release() == 0)
         m_pTextureManager->pVertexBuffer3 = NULL;
     
@@ -179,5 +181,15 @@ void CGraphics::ReleaseVertexBuffers(void) {
         m_pTextureManager->pVertexBuffer2 = NULL;
 
     if (m_pTextureManager->pVertexBuffer1 != NULL && m_pTextureManager->pVertexBuffer1->Release() == 0)
-        m_pTextureManager->pVertexBuffer1 = NULL;        
+        m_pTextureManager->pVertexBuffer1 = NULL;
+
+    // not sure if this loop is fully correct or not
+    do {
+        if (m_pTextureManager->pVertexBuffers[index] != NULL && m_pTextureManager->pVertexBuffers[index]->Release() == 0)
+            m_pTextureManager->pVertexBuffers[index] = NULL;
+
+        index--;
+    } while (index >= 0);
+
+    m_unk0x006dd890 = 0;
 }
