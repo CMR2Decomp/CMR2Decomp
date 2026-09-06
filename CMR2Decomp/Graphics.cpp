@@ -19,6 +19,7 @@ void* CGraphics::m_unk0x0065fa2c;
 int CGraphics::m_unk0x0065fa28;
 int CGraphics::m_unk0x006dd890;
 int CGraphics::m_unk0x00663b1c;
+int CGraphics::m_unk0x00663b24;
 
 // FUNCTION: CMR2 0x00405830
 bool CGraphics::InitializeDirectX(void) {
@@ -229,4 +230,9 @@ void CGraphics::ReleaseSurfaces(void) {
 // FUNCTION: CMR2 0x004a8bd0
 void CGraphics::FUN_004a8bd0(int param1) {
     m_unk0x00663b1c = param1;
+}
+
+// FUNCTION: CMR2 0x004a8d90
+void CGraphics::FUN_004a8d90(int param1) {
+    m_unk0x00663b24 = param1;
 }

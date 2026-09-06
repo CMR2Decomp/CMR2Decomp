@@ -972,6 +972,7 @@ public:
     static void ReleaseVertexBuffers(void);
     static void ReleaseSurfaces(void);
     static void FUN_004a8bd0(int param1);
+    static void FUN_004a8d90(int param1);
 
 private:
     // GLOBAL: CMR2 0x0051615c
@@ -994,6 +995,9 @@ private:
     
     // GLOBAL: CMR2 0x00663b1c
     static int m_unk0x00663b1c;
+    
+    // GLOBAL: CMR2 0x00663b24
+    static int m_unk0x00663b24;    
 };
 
 #endif
