@@ -99,6 +99,7 @@ void CGraphics::FUN_004a78a0(unsigned int screenWidth, unsigned int screenHeight
         CSound::FUN_004a2b50(TRUE);
         FUN_004a5be0(); // TODO: UNFINISHED
         ReleaseDirect3D();
+        ReleaseSurfaces();
     }
 }
 
@@ -192,4 +193,31 @@ void CGraphics::ReleaseVertexBuffers(void) {
     } while (index >= 0);
 
     m_unk0x006dd890 = 0;
+}
+
+// FUNCTION: CMR2 0x004a8040
+void CGraphics::ReleaseSurfaces(void) {
+    if (g_pGraphics->pSurface3 != NULL && g_pGraphics->pSurface3->Release() == 0)
+        g_pGraphics->pSurface3 = NULL;
+
+    g_pGraphics->pSurface3 = NULL;
+
+    if (g_pGraphics->pSurface2 != NULL && g_pGraphics->pSurface2->Release() == 0)
+        g_pGraphics->pSurface2 = NULL;
+
+    g_pGraphics->pSurface2 = NULL;
+
+    if (g_pGraphics->pSurface != NULL && g_pGraphics->pSurface->Release() == 0)
+        g_pGraphics->pSurface = NULL;
+
+    g_pGraphics->pSurface = NULL;
+    
+    g_pGraphics->pDD7->SetCooperativeLevel(CMain::m_hWndList[CMain::m_hWndIx], DDSCL_NORMAL);
+    if (g_pGraphics->isFullscreen != 0) {
+        g_pGraphics->pDD7->RestoreDisplayMode();
+    }
+
+    if (g_pGraphics->pDD7 != NULL && g_pGraphics->pDD7->Release() == 0) {
+        g_pGraphics->pDD7 = NULL;
+    }
 }

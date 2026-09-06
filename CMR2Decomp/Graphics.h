@@ -298,7 +298,7 @@ struct Graphics
     unsigned char field287_0x131;
     unsigned char field288_0x132;
     unsigned char field289_0x133;
-    IDirectDrawSurface7 **pSurface;
+    IDirectDrawSurface7 *pSurface;
     unsigned char field291_0x138;
     unsigned char field292_0x139;
     unsigned char field293_0x13a;
@@ -593,7 +593,7 @@ struct Graphics
     unsigned char field582_0x261;
     unsigned char field583_0x262;
     unsigned char field584_0x263;
-    IDirectDrawSurface7 **pSurface2;
+    IDirectDrawSurface7 *pSurface2;
     unsigned char field586_0x268;
     unsigned char field587_0x269;
     unsigned char field588_0x26a;
@@ -890,7 +890,7 @@ struct Graphics
     unsigned char field879_0x391;
     unsigned char field880_0x392;
     unsigned char field881_0x393;
-    IDirectDrawSurface7 **pSurface3;
+    IDirectDrawSurface7 *pSurface3;
     unsigned char field883_0x398;
     unsigned char field884_0x399;
     unsigned char field885_0x39a;
@@ -970,6 +970,7 @@ public:
     static BOOL FUN_004a5be0(void);
     static BOOL ReleaseDirect3D(void);
     static void ReleaseVertexBuffers(void);
+    static void ReleaseSurfaces(void);
 
 private:
     // GLOBAL: CMR2 0x0051615c
