@@ -16,11 +16,13 @@ struct MMIOData {
 class CSound {
 public:
     static BOOL __fastcall FUN_004a2ac0(void);
+    static void FUN_004a2b50(BOOL param1);
     static bool FUN_004bd230(void);
     static HRESULT StopDirectSoundBuffer(void);
     static bool FUN_004a3250(HRESULT param1);
     static MMRESULT __fastcall CloseMMIO(MMIOData* hhmio);
     static void __fastcall CloseAndCleanupMMIO(MMIOData* pMMIO);
+    
 
     // GLOBAL: CMR2 0x005a23e8
     static MMIOData *m_pMMIO;
@@ -36,6 +38,12 @@ public:
 
     // GLOBAL: CMR2 0x005a2730
     static BOOL m_unk0x005a2730;
+
+    // GLOBAL: CMR2 0x005a2734
+    static BOOL m_unk0x005a2734;
+
+    // GLOBAL: CMR2 0x005a2738
+    static char m_unk0x005a2738[256];    
 
     // GLOBAL: CMR2 0x005a2854
     static IDirectSoundBuffer* m_pDirectSoundBuffer;

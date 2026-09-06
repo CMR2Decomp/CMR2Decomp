@@ -1,4 +1,5 @@
 #include "Sound.h"
+#include "main.h"
 
 BOOL CSound::m_unk0x005a2728;
 BOOL CSound::m_unk0x005a272c;
@@ -7,6 +8,17 @@ MMIOData *CSound::m_pMMIO;
 IDirectSoundBuffer* CSound::m_pDirectSoundBuffer;
 HACMSTREAM CSound::m_unk0x00816a7c;
 BOOL CSound::m_unk0x005a2720;
+BOOL CSound::m_unk0x005a2734 = FALSE;
+char CSound::m_unk0x005a2738[256];
+
+// FUNCTION: CMR2 0x004a2b50
+void CSound::FUN_004a2b50(BOOL param1) {
+    FUN_004a2ac0();
+    if (param1 == 0) {
+        m_unk0x005a2734 = FALSE;
+        strcpy(m_unk0x005a2738, CMain::m_logFileBlankLine);
+    }
+}
 
 // FUNCTION: CMR2 0x004a2ac0
 BOOL __fastcall CSound::FUN_004a2ac0(void) {

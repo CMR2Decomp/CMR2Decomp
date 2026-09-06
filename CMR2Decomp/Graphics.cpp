@@ -1,21 +1,25 @@
 #include "Graphics.h"
 #include "GameInfo.h"
-#include "Input.h"
 #include "RegKey.h"
 #include "main.h"
 #include "Sound.h"
+#include <basetsd.h>
 
 // GLOBAL: CMR2 0x00660830
 Graphics g_graphics;
 
 // GLOBAL: CMR2 0x00520b74
 Graphics *g_pGraphics = &g_graphics;
+D3DTextureManager *CGraphics::m_pTextureManager;
 
 char CGraphics::m_strSettingConfigurationToDefault[36] = "Setting configuration to defaults";
 
 BOOL CGraphics::m_unk0x00520b7c = TRUE;
-BOOL CGraphics::m_unk0x005a2734 = FALSE;
-char CGraphics::m_unk0x005a2738[256];
+void* CGraphics::m_unk0x0065fa2c;
+int CGraphics::m_unk0x0065fa28;
+int CGraphics::m_unk0x006dd890;
+int CGraphics::m_unk0x00663b1c;
+int CGraphics::m_unk0x00663b24;
 
 // FUNCTION: CMR2 0x00405830
 bool CGraphics::InitializeDirectX(void) {
@@ -95,16 +99,140 @@ void CGraphics::SetDefaults(void) {
 // FUNCTION: CMR2 0x004a78a0
 void CGraphics::FUN_004a78a0(unsigned int screenWidth, unsigned int screenHeight, unsigned int colourDepth, unsigned int param4, unsigned int param5) {
     if (m_unk0x00520b7c == 0) {
-        FUN_004a2b50(TRUE);
+        CSound::FUN_004a2b50(TRUE);
+        FUN_004a5be0(); // TODO: UNFINISHED
+        ReleaseDirect3D();
+        ReleaseSurfaces();
+    }
+
+    FUN_004a8bd0(param4);
+}
+
+// FUNCTION: CMR2 0x004a5be0
+BOOL CGraphics::FUN_004a5be0(void) {
+    int index, textureID, iVar4, iVar7;
+
+    m_pTextureManager->pDD->EvictManagedTextures();
+    m_unk0x0065fa2c = NULL;
+
+    index = 0;
+    textureID = 0;
+    do {
+        Texture* pTexture = m_pTextureManager->textureBuffer[index];
+        if (pTexture != NULL && pTexture->pSurface != NULL && textureID == pTexture->textureId) {
+            
+            if (pTexture->pSurface->Release() == 0) {
+                pTexture->pSurface = NULL;
+            }
+        }
+        
+        index++;
+        textureID++;
+    } while (index < 2048);
+
+    FUN_004a5ba0();
+    index = 0;
+
+    if (m_unk0x0065fa28 != 0) {
+        do {
+            iVar4 = 0x5f0;
+            iVar7 = 0x734;
+
+            do {
+                Texture* pTexture = m_pTextureManager->textureBuffer2[index];
+                if (pTexture != NULL) {
+                    IDirectDrawSurface7* pOther = pTexture->pSurface;
+                    if (pOther->Release() == 0) {
+                        pTexture->pSurface = NULL;
+                    }
+                }
+            } while (0x71f < iVar7);
+            
+            index++;
+        } while (index < m_unk0x0065fa28);
+    }
+
+    return TRUE;
+}
+
+// FUNCTION: CMR2 0x004a8810
+BOOL CGraphics::ReleaseDirect3D(void)
+{
+    ReleaseVertexBuffers();
+
+    if (m_pTextureManager->pD3D != NULL && m_pTextureManager->pD3D->Release() == 0)
+        m_pTextureManager->pD3D = NULL;
+    
+    m_pTextureManager->pD3D = NULL;
+    
+    if (m_pTextureManager->pDD != NULL && m_pTextureManager->pDD->Release() == 0)
+        m_pTextureManager->pDD = NULL;
+    
+    m_pTextureManager->pDD = NULL;
+    return TRUE;
+}
+
+// STUB: CMR2 0x004a5ba0
+void CGraphics::FUN_004a5ba0(void) {
+
+}
+
+// FUNCTION: CMR2 0x004b1de0
+void CGraphics::ReleaseVertexBuffers(void) {
+    int index = 99;
+    if (m_pTextureManager->pVertexBuffer3 != NULL && m_pTextureManager->pVertexBuffer3->Release() == 0)
+        m_pTextureManager->pVertexBuffer3 = NULL;
+    
+    if (m_pTextureManager->pVertexBuffer2 != NULL && m_pTextureManager->pVertexBuffer2->Release() == 0)
+        m_pTextureManager->pVertexBuffer2 = NULL;
+
+    if (m_pTextureManager->pVertexBuffer1 != NULL && m_pTextureManager->pVertexBuffer1->Release() == 0)
+        m_pTextureManager->pVertexBuffer1 = NULL;
+
+    // not sure if this loop is fully correct or not
+    do {
+        if (m_pTextureManager->pVertexBuffers[index] != NULL && m_pTextureManager->pVertexBuffers[index]->Release() == 0)
+            m_pTextureManager->pVertexBuffers[index] = NULL;
+
+        index--;
+    } while (index >= 0);
+
+    m_unk0x006dd890 = 0;
+}
+
+// FUNCTION: CMR2 0x004a8040
+void CGraphics::ReleaseSurfaces(void) {
+    if (g_pGraphics->pSurface3 != NULL && g_pGraphics->pSurface3->Release() == 0)
+        g_pGraphics->pSurface3 = NULL;
+
+    g_pGraphics->pSurface3 = NULL;
+
+    if (g_pGraphics->pSurface2 != NULL && g_pGraphics->pSurface2->Release() == 0)
+        g_pGraphics->pSurface2 = NULL;
+
+    g_pGraphics->pSurface2 = NULL;
+
+    if (g_pGraphics->pSurface != NULL && g_pGraphics->pSurface->Release() == 0)
+        g_pGraphics->pSurface = NULL;
+
+    g_pGraphics->pSurface = NULL;
+    
+    g_pGraphics->pDD7->SetCooperativeLevel(CMain::m_hWndList[CMain::m_hWndIx], DDSCL_NORMAL);
+    if (g_pGraphics->isFullscreen != 0) {
+        g_pGraphics->pDD7->RestoreDisplayMode();
+    }
+
+    if (g_pGraphics->pDD7 != NULL && g_pGraphics->pDD7->Release() == 0) {
+        g_pGraphics->pDD7 = NULL;
     }
 }
 
-// FUNCTION: CMR2 0x004a2b50
-void CGraphics::FUN_004a2b50(BOOL param1) {
-    CSound::FUN_004a2ac0();
-    if (param1 == 0) {
-        m_unk0x005a2734 = FALSE;
-        strcpy(m_unk0x005a2738, CMain::m_logFileBlankLine);
-    }
+// FUNCTION: CMR2 0x004a8bd0
+void CGraphics::FUN_004a8bd0(int param1) {
+    m_unk0x00663b1c = param1;
 }
 
+// FUNCTION: CMR2 0x004a8d90
+void CGraphics::FUN_004a8d90(int param1) {
+    m_unk0x00663b24 = param1;
+}

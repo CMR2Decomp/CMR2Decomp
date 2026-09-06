@@ -2,8 +2,16 @@
 #define _TEXTURE_H
 
 #include "GenericFileLoader.h"
+#include "../third_party/dx7sdk-7001/include/ddraw.h"
 
-struct Texture {};
+struct Texture {
+    USHORT                  textureId;
+    BYTE                    field_0x2[134];
+    BYTE                    field_0x134[140];
+    IDirectDrawSurface7*    pSurface;
+    BYTE                    field_288[612];
+    void*                   buffer;
+};
 
 class CTexture {
 public:
