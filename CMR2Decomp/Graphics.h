@@ -956,6 +956,18 @@ struct D3DTextureManager {
     BYTE field_0x23d4[0x94];             // 0x23d4 - 0x2467 (padding)
 };
 
+struct DDEnumDeviceBufferEntry {
+    GUID* pGUID;
+    GUID guid;
+    BYTE padding[44];
+};
+
+struct DDDeviceEnumBuffer {
+    DWORD count;
+    DWORD reserved;
+    DDEnumDeviceBufferEntry entries[10];
+};
+
 extern Graphics *g_pGraphics;
 
 // GLOBAL: CMR2 0x005114a8
@@ -973,6 +985,7 @@ public:
     static void ReleaseSurfaces(void);
     static void FUN_004a8bd0(int param1);
     static void FUN_004a8d90(int param1);
+    static BOOL FUN_004bdb60_DDEnumCallback(GUID* lpGUID, LPSTR lpDriverDescription, LPSTR lpDriverName,  LPVOID lpContext, HMONITOR hMonitor);
 
 private:
     // GLOBAL: CMR2 0x0051615c
@@ -997,7 +1010,8 @@ private:
     static int m_unk0x00663b1c;
     
     // GLOBAL: CMR2 0x00663b24
-    static int m_unk0x00663b24;    
+    static int m_unk0x00663b24;
+    
 };
 
 #endif

@@ -236,3 +236,24 @@ void CGraphics::FUN_004a8bd0(int param1) {
 void CGraphics::FUN_004a8d90(int param1) {
     m_unk0x00663b24 = param1;
 }
+// FUNCTION: CMR2 0x004bdc80
+BOOL CGraphics::FUN_004bdb60_DDEnumCallback(GUID* lpGUID, LPSTR lpDriverDescription, LPSTR lpDriverName,
+                                             LPVOID lpContext, HMONITOR hMonitor)
+{
+    DDDeviceEnumBuffer* pBuffer = (DDDeviceEnumBuffer*)lpContext;
+
+    if (m_unk0x00816ce8.count == 10)
+        return FALSE;
+
+    if (lpGUID == NULL) {
+        pBuffer->entries[m_unk0x00816ce8.count].pGUID = NULL;
+    } else {
+        pBuffer->entries[m_unk0x00816ce8.count].guid = *lpGUID;
+        pBuffer->entries[m_unk0x00816ce8.count].pGUID = &pBuffer->entries[m_unk0x00816ce8.count].guid;
+    }
+
+    m_lifetimeDisplayDeviceCount++;
+    m_unk0x00816ce8.count++;
+
+    return TRUE;
+}
