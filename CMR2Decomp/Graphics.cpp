@@ -285,6 +285,8 @@ BOOL CGraphics::FUN_004bdb60(DDDeviceEnumBuffer* param1, HWND hWnd) {
 
                 pDirectDrawConfirm->SetCooperativeLevel(hWnd, DDSCL_NORMAL);
 
+                FUN_004bde20(pEntry, pDirectDrawConfirm);
+
                 index++;
             } while (index < param1->count);
         }
@@ -355,4 +357,19 @@ BOOL CGraphics::FUN_004bdd30(DDEnumDeviceBufferEntry *pEnumDevice,IDirectDraw7 *
         pEnumDevice->capFlag1 = 0;
 
     return TRUE;
+}
+
+// FUNCTION: CMR2 0x004bde20
+void CGraphics::FUN_004bde20(DDEnumDeviceBufferEntry *pEnumDevice,IDirectDraw7 *pDevice) {
+    pDevice->QueryInterface(IID_IDirect3D7, (LPVOID*)&pDevice);
+
+    ((IDirect3D7*)pDevice)->EnumDevices(FUN_004bde60, pEnumDevice);
+
+    if (pDevice != NULL)
+        pDevice->Release();
+}
+
+// STUB: CMR2 0x004bde60
+HRESULT CGraphics::FUN_004bde60(LPSTR lpDeviceDescription, LPSTR lpDeviceName, LPD3DDEVICEDESC7 lpD3DDeviceDesc, LPVOID lpUserArg) {
+    return 0;
 }

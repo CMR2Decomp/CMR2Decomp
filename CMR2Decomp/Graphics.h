@@ -978,6 +978,9 @@ extern Graphics *g_pGraphics;
 // GLOBAL: CMR2 0x005114a8
 // IID_IDirectDraw7
 
+// GLOBAL: CMR2 0x00511578
+// IID_IDirect3D7
+
 class CGraphics {
 public:
     static bool InitializeDirectX(void);
@@ -994,6 +997,8 @@ public:
     static BOOL FUN_004bdb60(DDDeviceEnumBuffer* param1, HWND hWnd);
     static BOOL FUN_004bdb60_DDEnumCallback(GUID* lpGUID, LPSTR lpDriverDescription, LPSTR lpDriverName,  LPVOID lpContext, HMONITOR hMonitor);
     static BOOL FUN_004bdd30(DDEnumDeviceBufferEntry *device,IDirectDraw7 *pDD);
+    static void FUN_004bde20(DDEnumDeviceBufferEntry *device,IDirectDraw7 *pDD);
+    static HRESULT FUN_004bde60(LPSTR lpDeviceDescription, LPSTR lpDeviceName, LPD3DDEVICEDESC7 lpD3DDeviceDesc, LPVOID lpUserArg);
 
 private:
     // GLOBAL: CMR2 0x0051615c
