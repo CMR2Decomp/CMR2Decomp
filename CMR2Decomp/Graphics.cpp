@@ -4,6 +4,9 @@
 #include "main.h"
 #include "Sound.h"
 #include <basetsd.h>
+#include <cstring>
+#include <wingdi.h>
+#include <winuser.h>
 
 // GLOBAL: CMR2 0x00660830
 Graphics g_graphics;
@@ -20,6 +23,11 @@ int CGraphics::m_unk0x0065fa28;
 int CGraphics::m_unk0x006dd890;
 int CGraphics::m_unk0x00663b1c;
 int CGraphics::m_unk0x00663b24;
+BOOL CGraphics::m_unk0x0081709c;
+DDDeviceEnumBuffer CGraphics::m_unk0x0065fd08;
+DDDeviceEnumBuffer CGraphics::m_displayDevicePool;
+int CGraphics::m_lifetimeDisplayDeviceCount = 0;
+int CGraphics::m_totalPixelsForScreen = 0;
 
 // FUNCTION: CMR2 0x00405830
 bool CGraphics::InitializeDirectX(void) {
@@ -106,6 +114,9 @@ void CGraphics::FUN_004a78a0(unsigned int screenWidth, unsigned int screenHeight
     }
 
     FUN_004a8bd0(param4);
+    FUN_004a8d90(param5);
+
+    BOOL b = FUN_004a7910();
 }
 
 // FUNCTION: CMR2 0x004a5be0
@@ -236,24 +247,109 @@ void CGraphics::FUN_004a8bd0(int param1) {
 void CGraphics::FUN_004a8d90(int param1) {
     m_unk0x00663b24 = param1;
 }
+
+// FUNCTION: CMR2 0x004a7910
+BOOL CGraphics::FUN_004a7910(void) {
+    m_pTextureManager->textureInfo2 = NULL;
+    m_pTextureManager->textureInfo5 = NULL;
+    m_pTextureManager->textureInfo1 = NULL;
+
+    FUN_004bdb60(&m_unk0x0065fd08,CMain::m_hWndList[CMain::m_hWndIx]);
+
+    return TRUE;
+}
+
+// FUNCTION: CMR2 0x004bdb60
+BOOL CGraphics::FUN_004bdb60(DDDeviceEnumBuffer* param1, HWND hWnd) {
+    int index = 0;
+    LPDIRECTDRAW7 pDirectDraw = NULL;
+    LPDIRECTDRAW7 pDirectDrawConfirm = NULL;
+    DDEnumDeviceBufferEntry* pEntry;
+
+    if (m_unk0x0081709c != TRUE)  {
+        m_displayDevicePool.count = 0;
+        memset(param1, 0, 0xa2);
+
+        DirectDrawEnumerateExA(&FUN_004bdb60_DDEnumCallback, param1, DDENUM_ATTACHEDSECONDARYDEVICES | DDENUM_DETACHEDSECONDARYDEVICES | DDENUM_NONDISPLAYDEVICES);
+        param1->count = m_displayDevicePool.count;
+
+        if (m_displayDevicePool.count > 0) {
+            pEntry = &param1->entries[0];
+            do {
+                DirectDrawCreateEx(pEntry->pGUID, (LPVOID*)&pDirectDraw, IID_IDirectDraw7, NULL);
+                pDirectDraw->QueryInterface(IID_IDirectDraw7, (LPVOID*)&pDirectDrawConfirm);
+
+                // TODO: this should be something else?
+                pDirectDraw->SetCooperativeLevel(hWnd, DDSCL_FULLSCREEN | DDSCL_EXCLUSIVE | DDSCL_ALLOWMODEX);
+                FUN_004bdd30(pEntry, pDirectDrawConfirm);
+
+                pDirectDrawConfirm->SetCooperativeLevel(hWnd, DDSCL_NORMAL);
+
+                index++;
+            } while (index < param1->count);
+        }
+    }
+    
+    m_unk0x0081709c = TRUE;
+    return TRUE;
+}
+
 // FUNCTION: CMR2 0x004bdc80
 BOOL CGraphics::FUN_004bdb60_DDEnumCallback(GUID* lpGUID, LPSTR lpDriverDescription, LPSTR lpDriverName,
                                              LPVOID lpContext, HMONITOR hMonitor)
 {
     DDDeviceEnumBuffer* pBuffer = (DDDeviceEnumBuffer*)lpContext;
 
-    if (m_unk0x00816ce8.count == 10)
+    if (m_displayDevicePool.count == 10)
         return FALSE;
 
     if (lpGUID == NULL) {
-        pBuffer->entries[m_unk0x00816ce8.count].pGUID = NULL;
+        pBuffer->entries[m_displayDevicePool.count].pGUID = NULL;
     } else {
-        pBuffer->entries[m_unk0x00816ce8.count].guid = *lpGUID;
-        pBuffer->entries[m_unk0x00816ce8.count].pGUID = &pBuffer->entries[m_unk0x00816ce8.count].guid;
+        pBuffer->entries[m_displayDevicePool.count].guid = *lpGUID;
+        pBuffer->entries[m_displayDevicePool.count].pGUID = &pBuffer->entries[m_displayDevicePool.count].guid;
     }
 
     m_lifetimeDisplayDeviceCount++;
-    m_unk0x00816ce8.count++;
+    m_displayDevicePool.count++;
+
+    return TRUE;
+}
+
+// FUNCTION: CMR2 0x004bdd30
+BOOL CGraphics::FUN_004bdd30(DDEnumDeviceBufferEntry *pEnumDevice,IDirectDraw7 *pDevice) {
+    HDC hdc;
+    int hRes, vRes, bpp;
+    DDCAPS driverCaps, helCaps;
+    LPDDCAPS pDriverCaps;
+    LPDDSURFACEDESC2 what;
+    LPDIRECTDRAWSURFACE7 what2;
+
+    if (pEnumDevice == NULL) {
+        hdc = GetDC(NULL);
+        hRes = GetDeviceCaps(hdc, HORZRES);
+        vRes = GetDeviceCaps(hdc, VERTRES);
+        bpp = GetDeviceCaps(hdc, BITSPIXEL);
+        ReleaseDC(NULL, hdc);
+
+        if (bpp == 8 || bpp != 0x10) {
+            m_totalPixelsForScreen = vRes * hRes;
+        } else {
+            m_totalPixelsForScreen = vRes * hRes * 2;
+        }
+    }
+
+    pDriverCaps = &driverCaps;
+
+    driverCaps.dwSize = sizeof(DDCAPS);
+    helCaps.dwSize = sizeof(DDCAPS);
+
+    pDevice->GetCaps(pDriverCaps, (LPDDCAPS)&helCaps);
+    pEnumDevice->capFlag1 = driverCaps.dwCaps & 1;
+    pEnumDevice->capFlag80000 = driverCaps.dwCaps & 0x80000;
+    pEnumDevice->capFlag200 = driverCaps.dwCaps & 0x200;
+
+    m_displayDevicePool.entries[0].pGUID = (GUID*)0x10000000;
 
     return TRUE;
 }

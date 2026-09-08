@@ -959,7 +959,11 @@ struct D3DTextureManager {
 struct DDEnumDeviceBufferEntry {
     GUID* pGUID;
     GUID guid;
-    BYTE padding[44];
+    DWORD capFlag80000;
+    BYTE padding1[0x4];
+    DWORD capFlag1;
+    DWORD capFlag200;
+    BYTE padding2[0x1c];
 };
 
 struct DDDeviceEnumBuffer {
@@ -967,6 +971,7 @@ struct DDDeviceEnumBuffer {
     DWORD reserved;
     DDEnumDeviceBufferEntry entries[10];
 };
+
 
 extern Graphics *g_pGraphics;
 
@@ -985,7 +990,10 @@ public:
     static void ReleaseSurfaces(void);
     static void FUN_004a8bd0(int param1);
     static void FUN_004a8d90(int param1);
+    static BOOL FUN_004a7910(void);
+    static BOOL FUN_004bdb60(DDDeviceEnumBuffer* param1, HWND hWnd);
     static BOOL FUN_004bdb60_DDEnumCallback(GUID* lpGUID, LPSTR lpDriverDescription, LPSTR lpDriverName,  LPVOID lpContext, HMONITOR hMonitor);
+    static BOOL FUN_004bdd30(DDEnumDeviceBufferEntry *device,IDirectDraw7 *pDD);
 
 private:
     // GLOBAL: CMR2 0x0051615c
@@ -1012,6 +1020,20 @@ private:
     // GLOBAL: CMR2 0x00663b24
     static int m_unk0x00663b24;
     
+    // GLOBAL: CMR2 0x0081709c
+    static BOOL m_unk0x0081709c;
+
+    // GLOBAL: CMR2 0x0065fd08
+    static DDDeviceEnumBuffer m_unk0x0065fd08;
+
+    // GLOBAL: CMR2 0x00816ce8
+    static DDDeviceEnumBuffer m_displayDevicePool;
+
+    // GLOBAL: CMR2 0x00817098
+    static int m_lifetimeDisplayDeviceCount;
+
+    // GLOBAL: CMR2 0x00817094
+    static int m_totalPixelsForScreen;
 };
 
 #endif
