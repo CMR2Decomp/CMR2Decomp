@@ -369,7 +369,38 @@ void CGraphics::FUN_004bde20(DDEnumDeviceBufferEntry *pEnumDevice,IDirectDraw7 *
         pDevice->Release();
 }
 
-// STUB: CMR2 0x004bde60
+// FUNCTION: CMR2 0x004bde60
 HRESULT CGraphics::FUN_004bde60(LPSTR lpDeviceDescription, LPSTR lpDeviceName, LPD3DDEVICEDESC7 lpD3DDeviceDesc, LPVOID lpUserArg) {
-    return 0;
+    if ((lpD3DDeviceDesc->dpcTriCaps.dwTextureFilterCaps & 1) == 0)
+        return 1;
+
+    DDEnumDeviceBufferEntry* pEntry = (DDEnumDeviceBufferEntry*)lpUserArg;
+    pEntry->capTextureFilter1 = 1;
+    pEntry->capTextureFilter3 = 1;
+
+    if ((lpD3DDeviceDesc->dpcTriCaps.dwTextureFilterCaps & 2) != 0)
+        pEntry->capTextureFilter2 = 1;
+
+    if ((lpD3DDeviceDesc->dwDevCaps & 0x100) != 0)
+        pEntry->capHardwareRasterization = 1;
+
+    DWORD deviceZBufferBitDepth = lpD3DDeviceDesc->dwDeviceZBufferBitDepth;
+    if ((deviceZBufferBitDepth & 0x400) != 0) {
+        pEntry->zBufferBitDepth = 0x10;
+        pEntry->hasZBuffer = 1;
+    } else if ((deviceZBufferBitDepth & 0x200) != 0) {
+        pEntry->zBufferBitDepth = 0x18;
+        pEntry->hasZBuffer = 1;
+    } else if ((deviceZBufferBitDepth & 0x100) != 0) {
+        pEntry->zBufferBitDepth = 0x20;
+        pEntry->hasZBuffer = 1;
+    }
+    
+    if ((lpD3DDeviceDesc->dwDeviceRenderBitDepth & 0x100) != 0) {
+        pEntry->capRender16Bit = 1;
+        return 1;
+    }
+    
+    pEntry->capRender16Bit = 0;
+    return 1;
 }

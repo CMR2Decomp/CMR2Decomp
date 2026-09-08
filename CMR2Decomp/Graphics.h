@@ -956,14 +956,24 @@ struct D3DTextureManager {
     BYTE field_0x23d4[0x94];             // 0x23d4 - 0x2467 (padding)
 };
 
-struct DDEnumDeviceBufferEntry {
-    GUID* pGUID;
-    GUID guid;
-    DWORD capFlag80000;
-    BYTE padding1[0x4];
-    DWORD capFlag1;
-    DWORD capFlag200;
-    BYTE padding2[0x1c];
+struct DDEnumDeviceBufferEntry
+{
+    GUID* pGUID;                    // 0x00
+    GUID  guid;                     // 0x04
+
+    DWORD capFlag80000;             // 0x14
+    DWORD capRender16Bit;           // 0x18
+    DWORD capFlag1;                 // 0x1C
+    DWORD capFlag200;               // 0x20
+
+    DWORD capTextureFilter1;        // 0x24
+    DWORD capTextureFilter2;        // 0x28
+    DWORD hasZBuffer;               // 0x2C
+    DWORD zBufferBitDepth;          // 0x30
+    DWORD capTextureFilter3;        // 0x34
+    DWORD capHardwareRasterization; // 0x38
+
+    DWORD unknown3C;                // 0x3C
 };
 
 struct DDDeviceEnumBuffer {
