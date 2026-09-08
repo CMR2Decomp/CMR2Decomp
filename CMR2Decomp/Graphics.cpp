@@ -320,12 +320,11 @@ BOOL CGraphics::FUN_004bdb60_DDEnumCallback(GUID* lpGUID, LPSTR lpDriverDescript
 BOOL CGraphics::FUN_004bdd30(DDEnumDeviceBufferEntry *pEnumDevice,IDirectDraw7 *pDevice) {
     HDC hdc;
     int hRes, vRes, bpp;
-    DDCAPS driverCaps, helCaps;
     LPDDCAPS pDriverCaps;
-    LPDDSURFACEDESC2 what;
-    LPDIRECTDRAWSURFACE7 what2;
+    DDCAPS driverCaps, helCaps;
+    DWORD totalLocalVidMem;
 
-    if (pEnumDevice == NULL) {
+    if (pEnumDevice->pGUID == NULL) {
         hdc = GetDC(NULL);
         hRes = GetDeviceCaps(hdc, HORZRES);
         vRes = GetDeviceCaps(hdc, VERTRES);
@@ -344,12 +343,16 @@ BOOL CGraphics::FUN_004bdd30(DDEnumDeviceBufferEntry *pEnumDevice,IDirectDraw7 *
     driverCaps.dwSize = sizeof(DDCAPS);
     helCaps.dwSize = sizeof(DDCAPS);
 
-    pDevice->GetCaps(pDriverCaps, (LPDDCAPS)&helCaps);
+    pDevice->GetCaps(pDriverCaps, &helCaps);
     pEnumDevice->capFlag1 = driverCaps.dwCaps & 1;
-    pEnumDevice->capFlag80000 = driverCaps.dwCaps & 0x80000;
     pEnumDevice->capFlag200 = driverCaps.dwCaps & 0x200;
+    pEnumDevice->capFlag80000 = driverCaps.dwCaps2 & 0x80000;
 
-    m_displayDevicePool.entries[0].pGUID = (GUID*)0x10000000;
+    ((DDSCAPS2*)&m_displayDevicePool.entries[0])->dwCaps = DDSCAPS_LOCALVIDMEM;
+    pDevice->GetAvailableVidMem((LPDDSCAPS2)&m_displayDevicePool.entries[0].pGUID, &totalLocalVidMem, NULL);
+
+    if (totalLocalVidMem < 0x1c2000)
+        pEnumDevice->capFlag1 = 0;
 
     return TRUE;
 }
