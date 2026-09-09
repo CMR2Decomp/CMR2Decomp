@@ -250,11 +250,24 @@ void CGraphics::FUN_004a8d90(int param1) {
 
 // FUNCTION: CMR2 0x004a7910
 BOOL CGraphics::FUN_004a7910(void) {
+    DWORD capFlag1 = 0;
     m_pTextureManager->textureInfo2 = NULL;
     m_pTextureManager->textureInfo5 = NULL;
     m_pTextureManager->textureInfo1 = NULL;
 
     FUN_004bdb60(&m_unk0x0065fd08,CMain::m_hWndList[CMain::m_hWndIx]);
+    capFlag1 = FUN_004a96c0(m_unk0x00663b1c);
+    while (capFlag1 == 0) {
+        if (m_unk0x0065fd08.count -1 < m_unk0x00663b1c + 1U) {
+            return FALSE;
+        }
+
+        FUN_004a8bd0(m_unk0x00663b1c + 1U);
+        capFlag1 = FUN_004a96c0(m_unk0x00663b1c);
+    }
+
+    m_unk0x0065fd08.reserved = m_unk0x00663b1c;
+    DirectDrawCreateEx(m_unk0x0065fd08.entries[m_unk0x00663b1c].pGUID, (LPVOID*)&g_pGraphics->pDD, IID_IDirectDraw7, NULL);
 
     return TRUE;
 }
@@ -299,7 +312,7 @@ BOOL CGraphics::FUN_004bdb60(DDDeviceEnumBuffer* param1, HWND hWnd) {
             } while (index < param1->count);
         }
 
-        // this suggests that `m_displayDevicePool` isnt correct
+        // this suggests that `m_displayDevicePool` isnt correct? or they're doing something gnarly
         memcpy((BYTE*)&m_displayDevicePool + 0x20, param1, sizeof(DDDeviceEnumBuffer));
         m_unk0x0081709c = TRUE;
     }
@@ -414,4 +427,9 @@ HRESULT CGraphics::FUN_004bde60(LPSTR lpDeviceDescription, LPSTR lpDeviceName, L
     
     pEntry->capRender16Bit = 0;
     return 1;
+}
+
+// FUNCTION: CMR2 0x004a96c0
+DWORD CGraphics::FUN_004a96c0(int param1) {
+    return m_unk0x0065fd08.entries[param1].capFlag1;
 }

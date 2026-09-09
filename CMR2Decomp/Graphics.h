@@ -1009,6 +1009,7 @@ public:
     static BOOL FUN_004bdd30(DDEnumDeviceBufferEntry *device,IDirectDraw7 *pDD);
     static void FUN_004bde20(DDEnumDeviceBufferEntry *device,IDirectDraw7 *pDD);
     static HRESULT FUN_004bde60(LPSTR lpDeviceDescription, LPSTR lpDeviceName, LPD3DDEVICEDESC7 lpD3DDeviceDesc, LPVOID lpUserArg);
+    static DWORD FUN_004a96c0(int param1);
 
 private:
     // GLOBAL: CMR2 0x0051615c
