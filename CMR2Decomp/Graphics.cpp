@@ -261,38 +261,49 @@ BOOL CGraphics::FUN_004a7910(void) {
 
 // FUNCTION: CMR2 0x004bdb60
 BOOL CGraphics::FUN_004bdb60(DDDeviceEnumBuffer* param1, HWND hWnd) {
-    int index = 0;
     LPDIRECTDRAW7 pDirectDraw = NULL;
     LPDIRECTDRAW7 pDirectDrawConfirm = NULL;
     DDEnumDeviceBufferEntry* pEntry;
+    int index = 0;
 
-    if (m_unk0x0081709c != TRUE)  {
+    if (m_unk0x0081709c == 0)  {
         m_displayDevicePool.count = 0;
-        memset(param1, 0, 0xa2);
+        memset(param1, 0, 0x288);
 
         DirectDrawEnumerateExA(&FUN_004bdb60_DDEnumCallback, param1, DDENUM_ATTACHEDSECONDARYDEVICES | DDENUM_DETACHEDSECONDARYDEVICES | DDENUM_NONDISPLAYDEVICES);
         param1->count = m_displayDevicePool.count;
 
         if (m_displayDevicePool.count > 0) {
-            pEntry = &param1->entries[0];
+            pEntry = param1->entries;
             do {
                 DirectDrawCreateEx(pEntry->pGUID, (LPVOID*)&pDirectDraw, IID_IDirectDraw7, NULL);
                 pDirectDraw->QueryInterface(IID_IDirectDraw7, (LPVOID*)&pDirectDrawConfirm);
 
-                // TODO: this should be something else?
-                pDirectDraw->SetCooperativeLevel(hWnd, DDSCL_FULLSCREEN | DDSCL_EXCLUSIVE | DDSCL_ALLOWMODEX);
+                pDirectDrawConfirm->SetCooperativeLevel(hWnd, DDSCL_FULLSCREEN | DDSCL_EXCLUSIVE | DDSCL_ALLOWMODEX);
                 FUN_004bdd30(pEntry, pDirectDrawConfirm);
 
                 pDirectDrawConfirm->SetCooperativeLevel(hWnd, DDSCL_NORMAL);
 
                 FUN_004bde20(pEntry, pDirectDrawConfirm);
 
+                if (pDirectDrawConfirm != NULL && pDirectDrawConfirm->Release() == 0) {
+                    pDirectDrawConfirm = NULL;
+                }
+                
+                if (pDirectDraw != NULL && pDirectDraw->Release() == 0) {
+                    pDirectDraw = NULL;
+                }
+
                 index++;
+                pEntry++;
             } while (index < param1->count);
         }
+
+        // this suggests that `m_displayDevicePool` isnt correct
+        memcpy((BYTE*)&m_displayDevicePool + 0x20, param1, sizeof(DDDeviceEnumBuffer));
+        m_unk0x0081709c = TRUE;
     }
     
-    m_unk0x0081709c = TRUE;
     return TRUE;
 }
 
