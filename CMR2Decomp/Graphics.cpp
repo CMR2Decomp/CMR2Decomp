@@ -5,7 +5,9 @@
 #include "Sound.h"
 #include <basetsd.h>
 #include <cstring>
+#include <windef.h>
 #include <wingdi.h>
+#include <winnt.h>
 #include <winuser.h>
 
 // GLOBAL: CMR2 0x00660830
@@ -28,6 +30,10 @@ DDDeviceEnumBuffer CGraphics::m_unk0x0065fd08;
 DDDeviceEnumBuffer CGraphics::m_displayDevicePool;
 int CGraphics::m_lifetimeDisplayDeviceCount = 0;
 int CGraphics::m_totalPixelsForScreen = 0;
+int CGraphics::m_unk0x00660040 = 0;
+int CGraphics::m_unk0x00663b18 = 0;
+int CGraphics::m_unk0x00663b20 = 0;
+Entry CGraphics::m_unk0x006634d8[10];
 
 // FUNCTION: CMR2 0x00405830
 bool CGraphics::InitializeDirectX(void) {
@@ -251,6 +257,11 @@ void CGraphics::FUN_004a8d90(int param1) {
 // FUNCTION: CMR2 0x004a7910
 BOOL CGraphics::FUN_004a7910(void) {
     DWORD capFlag1 = 0;
+    HDC hdc = 0;
+    int iHorzRes = 0, iVertRes = 0, iVar6 = 0, cx = 0, iSystemMetricsScreenY = 0, iSystemMetricsScreenX = 0;
+    LPDIRECTDRAW7 pDD;
+    tagRECT lpWindowRect, lpClientRect;
+
     m_pTextureManager->textureInfo2 = NULL;
     m_pTextureManager->textureInfo5 = NULL;
     m_pTextureManager->textureInfo1 = NULL;
@@ -269,6 +280,57 @@ BOOL CGraphics::FUN_004a7910(void) {
     m_unk0x0065fd08.reserved = m_unk0x00663b1c;
     DirectDrawCreateEx(m_unk0x0065fd08.entries[m_unk0x00663b1c].pGUID, (LPVOID*)&g_pGraphics->pDD, IID_IDirectDraw7, NULL);
 
+    g_pGraphics->pDD->AddRef();
+    if (g_pGraphics->pDD != NULL && g_pGraphics->pDD->Release() == 0) {
+        g_pGraphics->pDD = NULL;
+    }
+
+    g_pGraphics->resX = 0;
+    g_pGraphics->resY = 0;
+    g_pGraphics->depth = 0;
+    hdc = GetDC(NULL);
+    iHorzRes = GetDeviceCaps(hdc, HORZRES);
+    g_pGraphics->screenResX = iHorzRes;
+    iVertRes = GetDeviceCaps(hdc, VERTRES);
+    g_pGraphics->screenResY = iVertRes;
+    ReleaseDC(NULL, hdc);
+
+    iVar6 = FUN_004a8bc0();
+    iVar6 = FUN_004a96e0(iVar6);
+    if (iVar6 == 0) {
+        g_pGraphics->isFullscreen = 1;
+        FUN_004a8d90(0);
+        m_unk0x00660040 = 1;
+    }
+
+    g_pGraphics->isFullscreen = 1;
+    
+    pDD = g_pGraphics->pDD;
+    if (g_pGraphics->isFullscreen == 0) {
+        pDD->SetCooperativeLevel(CMain::m_hWndList[CMain::m_hWndIx], 0);
+        GetWindowRect(CMain::m_hWndList[CMain::m_hWndIx], &lpWindowRect);
+        GetClientRect(CMain::m_hWndList[CMain::m_hWndIx], &lpClientRect);
+        iVar6 = ((lpClientRect.top - lpClientRect.bottom) - lpWindowRect.top) + 0x1e0 + lpWindowRect.bottom;
+        cx = ((lpClientRect.left- lpClientRect.right) - lpWindowRect.left) + 0x280 + lpWindowRect.right;
+
+        iSystemMetricsScreenY = GetSystemMetrics(SM_CYSCREEN);
+        iSystemMetricsScreenY = iSystemMetricsScreenY / 2 + -0xf0;
+
+        iSystemMetricsScreenX = GetSystemMetrics(SM_CXSCREEN);
+
+        SetWindowPos(CMain::m_hWndList[CMain::m_hWndIx], NULL, iSystemMetricsScreenX / 2 + -0x140, iSystemMetricsScreenY, cx, iVar6, SWP_NOZORDER);
+        UpdateWindow(CMain::m_hWndList[CMain::m_hWndIx]);
+        ShowWindow(CMain::m_hWndList[CMain::m_hWndIx], SW_SHOWNORMAL);
+    } else {
+        pDD->SetCooperativeLevel(CMain::m_hWndList[CMain::m_hWndIx], DDSCL_FULLSCREEN | DDSCL_EXCLUSIVE | DDSCL_ALLOWREBOOT | DDSCL_MULTITHREADED);
+    }
+
+    g_pGraphics->pDD7->QueryInterface(IID_IDirect3D7, (LPVOID*)&m_pTextureManager);
+    m_unk0x00663b18 = 0;
+    m_unk0x00663b20 = 0;
+
+    DirectDrawEnumerateExA(&FUN_004a8b30_DDEnumCallback, NULL, DDENUM_ATTACHEDSECONDARYDEVICES | DDENUM_DETACHEDSECONDARYDEVICES | DDENUM_NONDISPLAYDEVICES);
+    
     return TRUE;
 }
 
@@ -432,4 +494,35 @@ HRESULT CGraphics::FUN_004bde60(LPSTR lpDeviceDescription, LPSTR lpDeviceName, L
 // FUNCTION: CMR2 0x004a96c0
 DWORD CGraphics::FUN_004a96c0(int param1) {
     return m_unk0x0065fd08.entries[param1].capFlag1;
+}
+
+// FUNCTION: CMR2 0x004a8bc0
+INT32 CGraphics::FUN_004a8bc0(void) {
+    return m_unk0x00663b1c;
+}
+
+// FUNCTION: CMR2 0x004a96e0
+DWORD CGraphics::FUN_004a96e0(int param_1) {
+    return m_unk0x0065fd08.entries[param_1].capFlag80000;
+}
+
+// FUNCTION: CMR2 0x004a8b30
+BOOL CGraphics::FUN_004a8b30_DDEnumCallback(GUID* lpGUID, LPSTR lpDriverDescription, LPSTR lpDriverName,
+                                             LPVOID lpContext, HMONITOR hMonitor) {
+    LPDIRECTDRAW7 lplpDD;
+    char format[512];
+    DDDEVICEIDENTIFIER2 ddDeviceIdent;
+    DirectDrawCreateEx(lpGUID, (LPVOID*)&lplpDD, IID_IDirectDraw7, NULL);
+    
+    lplpDD->GetDeviceIdentifier(&ddDeviceIdent, 0);
+    if (lplpDD != NULL) {
+        if (lplpDD->Release() == 0)
+            lplpDD = NULL;
+    }
+
+    wsprintfA(m_unk0x006634d8[m_unk0x00663b18].unk_0x00, CRegKey::m_regKeyPathFormatValue, format, NULL);
+
+    m_unk0x00663b18++;
+
+    return TRUE;
 }

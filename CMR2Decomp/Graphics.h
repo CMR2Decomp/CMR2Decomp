@@ -982,6 +982,10 @@ struct DDDeviceEnumBuffer {
     DDEnumDeviceBufferEntry entries[10];
 };
 
+struct Entry {
+    char unk_0x00[0x50];           // untraced — candidate: GUID, driver name, or other DDDEVICEIDENTIFIER fields
+    char name[0x50];               // confirmed: device description, written via wsprintfA("%s", ...)
+};
 
 extern Graphics *g_pGraphics;
 
@@ -1010,6 +1014,9 @@ public:
     static void FUN_004bde20(DDEnumDeviceBufferEntry *device,IDirectDraw7 *pDD);
     static HRESULT FUN_004bde60(LPSTR lpDeviceDescription, LPSTR lpDeviceName, LPD3DDEVICEDESC7 lpD3DDeviceDesc, LPVOID lpUserArg);
     static DWORD FUN_004a96c0(int param1);
+    static INT32 FUN_004a8bc0(void);
+    static DWORD FUN_004a96e0(int param_1);
+    static BOOL FUN_004a8b30_DDEnumCallback(GUID* lpGUID, LPSTR lpDriverDescription, LPSTR lpDriverName,  LPVOID lpContext, HMONITOR hMonitor);
 
 private:
     // GLOBAL: CMR2 0x0051615c
@@ -1029,6 +1036,15 @@ private:
 
     // GLOBAL: CMR2 0x006dd890
     static int m_unk0x006dd890;
+
+    // GLOBAL: CMR2 0x006634d8
+    static Entry m_unk0x006634d8[10];
+
+    // GLOBAL: CMR2 0x00663b18
+    static int m_unk0x00663b18;
+    
+    // GLOBAL: CMR2 0x00663b20
+    static int m_unk0x00663b20;
     
     // GLOBAL: CMR2 0x00663b1c
     static int m_unk0x00663b1c;
@@ -1050,6 +1066,9 @@ private:
 
     // GLOBAL: CMR2 0x00817094
     static int m_totalPixelsForScreen;
+
+    // GLOBAL: CMR2 0x00660040
+    static int m_unk0x00660040; // potentialy a flag for isFullscreen
 };
 
 #endif
