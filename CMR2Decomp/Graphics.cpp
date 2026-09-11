@@ -507,8 +507,7 @@ DWORD CGraphics::FUN_004a96e0(int param_1) {
 }
 
 // FUNCTION: CMR2 0x004a8b30
-BOOL CGraphics::FUN_004a8b30_DDEnumCallback(GUID* lpGUID, LPSTR lpDriverDescription, LPSTR lpDriverName,
-                                             LPVOID lpContext, HMONITOR hMonitor) {
+BOOL CGraphics::FUN_004a8b30_DDEnumCallback(GUID* lpGUID, LPSTR lpDriverDescription, LPSTR lpDriverName, LPVOID lpContext, HMONITOR hMonitor) {
     LPDIRECTDRAW7 lplpDD;
     DDDEVICEIDENTIFIER2 ddDeviceIdent;
     DirectDrawCreateEx(lpGUID, (LPVOID*)&lplpDD, IID_IDirectDraw7, NULL);
@@ -519,7 +518,7 @@ BOOL CGraphics::FUN_004a8b30_DDEnumCallback(GUID* lpGUID, LPSTR lpDriverDescript
             lplpDD = NULL;
     }
 
-    wsprintfA(m_unk0x006634d8[m_unk0x00663b18].unk_0x00, CRegKey::m_regKeyPathFormatValue, ddDeviceIdent.szDescription, NULL);
+    wsprintfA(m_unk0x006634d8[m_unk0x00663b18].unk_0x00, CRegKey::m_regKeyPathFormatValue, ddDeviceIdent.szDescription);
 
     m_unk0x00663b18++;
 
