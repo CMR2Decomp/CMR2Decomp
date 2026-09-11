@@ -24,7 +24,6 @@ void* CGraphics::m_unk0x0065fa2c;
 int CGraphics::m_unk0x0065fa28;
 int CGraphics::m_unk0x006dd890;
 int CGraphics::m_unk0x00663b1c;
-int CGraphics::m_unk0x00663b24;
 BOOL CGraphics::m_unk0x0081709c;
 DDDeviceEnumBuffer CGraphics::m_unk0x0065fd08;
 DDDeviceEnumBuffer CGraphics::m_displayDevicePool;
@@ -33,7 +32,10 @@ int CGraphics::m_totalPixelsForScreen = 0;
 int CGraphics::m_unk0x00660040 = 0;
 int CGraphics::m_unk0x00663b18 = 0;
 int CGraphics::m_unk0x00663b20 = 0;
+int CGraphics::m_unk0x00663b24 = 0;
+DWORD CGraphics::m_displayCount = 0;
 Entry CGraphics::m_unk0x006634d8[10];
+DisplayMode CGraphics::m_displays[10];
 
 // FUNCTION: CMR2 0x00405830
 bool CGraphics::InitializeDirectX(void) {
@@ -278,7 +280,7 @@ BOOL CGraphics::FUN_004a7910(void) {
     }
 
     m_unk0x0065fd08.reserved = m_unk0x00663b1c;
-    DirectDrawCreateEx(m_unk0x0065fd08.entries[m_unk0x00663b1c].pGUID, (LPVOID*)&g_pGraphics->pDD, IID_IDirectDraw7, NULL);
+    DirectDrawCreateEx(m_unk0x0065fd08.entries[m_unk0x00663b1c].device.pGUID, (LPVOID*)&g_pGraphics->pDD, IID_IDirectDraw7, NULL);
 
     g_pGraphics->pDD->AddRef();
     if (g_pGraphics->pDD != NULL && g_pGraphics->pDD->Release() == 0) {
@@ -330,6 +332,11 @@ BOOL CGraphics::FUN_004a7910(void) {
     m_unk0x00663b20 = 0;
 
     DirectDrawEnumerateExA(&FUN_004a8b30_DDEnumCallback, NULL, DDENUM_ATTACHEDSECONDARYDEVICES | DDENUM_DETACHEDSECONDARYDEVICES | DDENUM_NONDISPLAYDEVICES);
+
+    g_pGraphics->pDD7->Compact();
+    m_displayCount = 0;
+
+    g_pGraphics->pDD7->EnumDisplayModes(0, NULL, NULL, FUN_004a8da0);
     
     return TRUE;
 }
@@ -341,7 +348,7 @@ BOOL CGraphics::FUN_004bdb60(DDDeviceEnumBuffer* param1, HWND hWnd) {
     DDEnumDeviceBufferEntry* pEntry;
     int index = 0;
 
-    if (m_unk0x0081709c == 0)  {
+    if (m_unk0x0081709c == FALSE)  {
         m_displayDevicePool.count = 0;
         memset(param1, 0, 0x288);
 
@@ -351,7 +358,7 @@ BOOL CGraphics::FUN_004bdb60(DDDeviceEnumBuffer* param1, HWND hWnd) {
         if (m_displayDevicePool.count > 0) {
             pEntry = param1->entries;
             do {
-                DirectDrawCreateEx(pEntry->pGUID, (LPVOID*)&pDirectDraw, IID_IDirectDraw7, NULL);
+                DirectDrawCreateEx(pEntry->device.pGUID, (LPVOID*)&pDirectDraw, IID_IDirectDraw7, NULL);
                 pDirectDraw->QueryInterface(IID_IDirectDraw7, (LPVOID*)&pDirectDrawConfirm);
 
                 pDirectDrawConfirm->SetCooperativeLevel(hWnd, DDSCL_FULLSCREEN | DDSCL_EXCLUSIVE | DDSCL_ALLOWMODEX);
@@ -392,10 +399,10 @@ BOOL CGraphics::FUN_004bdb60_DDEnumCallback(GUID* lpGUID, LPSTR lpDriverDescript
         return FALSE;
 
     if (lpGUID == NULL) {
-        pBuffer->entries[m_displayDevicePool.count].pGUID = NULL;
+        pBuffer->entries[m_displayDevicePool.count].device.pGUID = NULL;
     } else {
-        pBuffer->entries[m_displayDevicePool.count].guid = *lpGUID;
-        pBuffer->entries[m_displayDevicePool.count].pGUID = &pBuffer->entries[m_displayDevicePool.count].guid;
+        pBuffer->entries[m_displayDevicePool.count].device.guid = *lpGUID;
+        pBuffer->entries[m_displayDevicePool.count].device.pGUID = &pBuffer->entries[m_displayDevicePool.count].device.guid;
     }
 
     m_lifetimeDisplayDeviceCount++;
@@ -412,7 +419,7 @@ BOOL CGraphics::FUN_004bdd30(DDEnumDeviceBufferEntry *pEnumDevice,IDirectDraw7 *
     DDCAPS driverCaps, helCaps;
     DWORD totalLocalVidMem;
 
-    if (pEnumDevice->pGUID == NULL) {
+    if (pEnumDevice->device.pGUID == NULL) {
         hdc = GetDC(NULL);
         hRes = GetDeviceCaps(hdc, HORZRES);
         vRes = GetDeviceCaps(hdc, VERTRES);
@@ -436,8 +443,8 @@ BOOL CGraphics::FUN_004bdd30(DDEnumDeviceBufferEntry *pEnumDevice,IDirectDraw7 *
     pEnumDevice->capFlag200 = driverCaps.dwCaps & 0x200;
     pEnumDevice->capFlag80000 = driverCaps.dwCaps2 & 0x80000;
 
-    ((DDSCAPS2*)&m_displayDevicePool.entries[0])->dwCaps = DDSCAPS_LOCALVIDMEM;
-    pDevice->GetAvailableVidMem((LPDDSCAPS2)&m_displayDevicePool.entries[0].pGUID, &totalLocalVidMem, NULL);
+    m_displayDevicePool.entries[0].caps.caps.dwCaps = DDSCAPS_LOCALVIDMEM;
+    pDevice->GetAvailableVidMem((LPDDSCAPS2)&m_displayDevicePool.entries[0].device.pGUID, &totalLocalVidMem, NULL);
 
     if (totalLocalVidMem < 0x1c2000)
         pEnumDevice->capFlag1 = 0;
@@ -523,4 +530,53 @@ BOOL CGraphics::FUN_004a8b30_DDEnumCallback(GUID* lpGUID, LPSTR lpDriverDescript
     m_unk0x00663b18++;
 
     return TRUE;
+}
+
+// FUNCTION: CMR2 0x004a8da0
+HRESULT CGraphics::FUN_004a8da0(DDSURFACEDESC2* lpDDSurfaceDesc2, void* lpContext) {
+    int width  = lpDDSurfaceDesc2->dwWidth, height = lpDDSurfaceDesc2->dwHeight, bpp = lpDDSurfaceDesc2->ddpfPixelFormat.dwRGBBitCount;
+    DWORD canRender16Bit = 0, dwTextureMem = 0, dwVidMem = 0;
+
+    DDSURFACEDESC2 ddsd;
+    ddsd.dwSize = sizeof(DDSURFACEDESC2);
+    g_pGraphics->pDD7->GetDisplayMode(&ddsd);
+
+    canRender16Bit = FUN_004a8bc0();
+    canRender16Bit = DeviceCanRender16Bit(canRender16Bit);
+
+    if (((canRender16Bit != 0 || bpp != 0x20) &&  (g_pGraphics->isFullscreen != 0 || ddsd.ddpfPixelFormat.dwFlags == bpp)) && (width >= 0x280 && height >= 0x1e0) && (bpp == 0x10 || bpp == 0x20)) {
+        dwTextureMem = FUN_004bdd00(DDSCAPS_TEXTURE);
+        dwVidMem = FUN_004bdd00(DDSCAPS_LOCALVIDMEM);
+        if (dwTextureMem < dwVidMem) {
+            dwTextureMem = FUN_004bdd00(DDSCAPS_LOCALVIDMEM);            
+            dwVidMem = FUN_004bdd00(DDSCAPS_TEXTURE);
+            dwTextureMem = dwTextureMem + -dwVidMem;
+        } else {
+            dwTextureMem = FUN_004bdd00(DDSCAPS_LOCALVIDMEM);
+        }
+
+        if ((bpp / 8) * height * width * 3 < dwTextureMem) {
+            m_displays[m_displayCount].width = width;
+            m_displays[m_displayCount].height = height;
+            m_displays[m_displayCount].bpp = bpp;
+            m_displayCount++;
+        }
+    }
+
+    return DDENUMRET_OK;
+}
+
+// FUNCTION: CMR2 0x004a96f0
+int CGraphics::DeviceCanRender16Bit(int param1) {
+    return CGraphics::m_unk0x0065fd08.entries[param1].capRender16Bit;
+}
+
+// FUNCTION: CMR2 0x004bdd00
+DWORD CGraphics::FUN_004bdd00(DWORD caps) {
+  DDEnumDeviceBufferEntry* pDVar1 = &m_displayDevicePool.entries[0];
+  
+  pDVar1->caps.caps.dwCaps = caps;
+  g_pGraphics->pDD7->GetAvailableVidMem(&pDVar1->caps.caps, &caps, NULL);
+
+  return caps;
 }

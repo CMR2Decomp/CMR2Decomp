@@ -958,8 +958,20 @@ struct D3DTextureManager {
 
 struct DDEnumDeviceBufferEntry
 {
-    GUID* pGUID;                    // 0x00
-    GUID  guid;                     // 0x04
+    union
+    {
+        struct
+        {
+            GUID* pGUID;        // +0x00
+            GUID  guid;         // +0x04
+        } device;
+
+        struct
+        {
+            DDSCAPS2 caps;      // +0x00
+            DWORD    unknown18; // +0x10
+        } caps;
+    };
 
     DWORD capFlag80000;             // 0x14
     DWORD capRender16Bit;           // 0x18
@@ -985,6 +997,13 @@ struct DDDeviceEnumBuffer {
 struct Entry {
     char unk_0x00[0x50];           // untraced — candidate: GUID, driver name, or other DDDEVICEIDENTIFIER fields
     char name[0x50];               // confirmed: device description, written via wsprintfA("%s", ...)
+};
+
+struct DisplayMode
+{
+    DWORD width;
+    DWORD height;
+    DWORD bpp;
 };
 
 extern Graphics *g_pGraphics;
@@ -1017,6 +1036,9 @@ public:
     static INT32 FUN_004a8bc0(void);
     static DWORD FUN_004a96e0(int param_1);
     static BOOL FUN_004a8b30_DDEnumCallback(GUID* lpGUID, LPSTR lpDriverDescription, LPSTR lpDriverName,  LPVOID lpContext, HMONITOR hMonitor);
+    static HRESULT FUN_004a8da0(DDSURFACEDESC2* lpDDSurfaceDesc2, void* lpContext);
+    static int DeviceCanRender16Bit(int param1);
+    static DWORD FUN_004bdd00(DWORD caps);
 
 private:
     // GLOBAL: CMR2 0x0051615c
@@ -1037,6 +1059,9 @@ private:
     // GLOBAL: CMR2 0x006dd890
     static int m_unk0x006dd890;
 
+    // GLOBAL: CMR2 0x006631f8
+    static DisplayMode m_displays[10];
+
     // GLOBAL: CMR2 0x006634d8
     static Entry m_unk0x006634d8[10];
 
@@ -1051,6 +1076,9 @@ private:
     
     // GLOBAL: CMR2 0x00663b24
     static int m_unk0x00663b24;
+
+    // GLOBAL: CMR2 0x00663b28
+    static DWORD m_displayCount; // maybe possibly
     
     // GLOBAL: CMR2 0x0081709c
     static BOOL m_unk0x0081709c;
