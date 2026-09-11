@@ -1026,7 +1026,7 @@ public:
     static void ReleaseSurfaces(void);
     static void FUN_004a8bd0(int param1);
     static void FUN_004a8d90(int param1);
-    static BOOL FUN_004a7910(void);
+    static BOOL FUN_004a7910(int screenWidth, int screenHeight, int colourDepth);
     static BOOL FUN_004bdb60(DDDeviceEnumBuffer* param1, HWND hWnd);
     static BOOL FUN_004bdb60_DDEnumCallback(GUID* lpGUID, LPSTR lpDriverDescription, LPSTR lpDriverName,  LPVOID lpContext, HMONITOR hMonitor);
     static BOOL FUN_004bdd30(DDEnumDeviceBufferEntry *device,IDirectDraw7 *pDD);
@@ -1039,6 +1039,7 @@ public:
     static HRESULT FUN_004a8da0(DDSURFACEDESC2* lpDDSurfaceDesc2, void* lpContext);
     static int DeviceCanRender16Bit(int param1);
     static DWORD FUN_004bdd00(DWORD caps);
+    static BOOL FUN_004a8f60(int width, int height, int bpp);
 
 private:
     // GLOBAL: CMR2 0x0051615c

@@ -124,7 +124,7 @@ void CGraphics::FUN_004a78a0(unsigned int screenWidth, unsigned int screenHeight
     FUN_004a8bd0(param4);
     FUN_004a8d90(param5);
 
-    BOOL b = FUN_004a7910();
+    BOOL b = FUN_004a7910(screenWidth, screenHeight, colourDepth);
 }
 
 // FUNCTION: CMR2 0x004a5be0
@@ -257,7 +257,7 @@ void CGraphics::FUN_004a8d90(int param1) {
 }
 
 // FUNCTION: CMR2 0x004a7910
-BOOL CGraphics::FUN_004a7910(void) {
+BOOL CGraphics::FUN_004a7910(int screenWidth, int screenHeight, int colourDepth) {
     DWORD capFlag1 = 0;
     HDC hdc = 0;
     int iHorzRes = 0, iVertRes = 0, iVar6 = 0, cx = 0, iSystemMetricsScreenY = 0, iSystemMetricsScreenX = 0;
@@ -287,9 +287,9 @@ BOOL CGraphics::FUN_004a7910(void) {
         g_pGraphics->pDD = NULL;
     }
 
-    g_pGraphics->resX = 0;
-    g_pGraphics->resY = 0;
-    g_pGraphics->depth = 0;
+    g_pGraphics->resX = screenWidth;
+    g_pGraphics->resY = screenHeight;
+    g_pGraphics->depth = colourDepth;
     hdc = GetDC(NULL);
     iHorzRes = GetDeviceCaps(hdc, HORZRES);
     g_pGraphics->screenResX = iHorzRes;
@@ -337,7 +337,9 @@ BOOL CGraphics::FUN_004a7910(void) {
     m_displayCount = 0;
 
     g_pGraphics->pDD7->EnumDisplayModes(0, NULL, NULL, FUN_004a8da0);
-    
+
+    FUN_004a8f60(screenWidth, screenHeight, colourDepth);
+
     return TRUE;
 }
 
@@ -579,4 +581,15 @@ DWORD CGraphics::FUN_004bdd00(DWORD caps) {
   g_pGraphics->pDD7->GetAvailableVidMem(&pDVar1->caps.caps, &caps, NULL);
 
   return caps;
+}
+
+// FUNCTION: CMR2 0x004a8f60
+BOOL CGraphics::FUN_004a8f60(int width, int height, int bpp)
+{
+    for (int i = 0; i < m_displayCount; i++) {
+        if (m_displays[i].width == width && m_displays[i].height == height && m_displays[i].bpp == bpp)
+            return TRUE;
+    }
+
+    return FALSE;
 }
