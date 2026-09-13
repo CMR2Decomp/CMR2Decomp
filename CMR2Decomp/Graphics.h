@@ -1003,7 +1003,15 @@ struct DisplayMode
 {
     DWORD width;
     DWORD height;
-    DWORD bpp;
+    DWORD colourDepth;
+};
+
+struct Unk0x0065ff90 {
+    LPGUID pGUID;
+    DWORD field_0x4;
+    DWORD field_0x8;
+    DWORD field_0xc;
+    BYTE padding[0xa4];
 };
 
 extern Graphics *g_pGraphics;
@@ -1039,7 +1047,8 @@ public:
     static HRESULT FUN_004a8da0(DDSURFACEDESC2* lpDDSurfaceDesc2, void* lpContext);
     static int DeviceCanRender16Bit(int param1);
     static DWORD FUN_004bdd00(DWORD caps);
-    static BOOL FUN_004a8f60(int width, int height, int bpp);
+    static BOOL FUN_004a8f60(int width, int height, int colourDepth);
+    static void FUN_004a8ec0(int width, int height, int colourDepth);
 
 private:
     // GLOBAL: CMR2 0x0051615c
@@ -1069,14 +1078,20 @@ private:
     // GLOBAL: CMR2 0x00663b18
     static int m_unk0x00663b18;
     
+    // GLOBAL: CMR2 0x00663b1c
+    static int m_unk0x00663b1c;
+
+    // GLOBAL: CMR2 0x0065ff90
+    static Unk0x0065ff90 m_unk0x0065ff90[10];
+    
     // GLOBAL: CMR2 0x00663b20
     static int m_unk0x00663b20;
     
-    // GLOBAL: CMR2 0x00663b1c
-    static int m_unk0x00663b1c;
-    
     // GLOBAL: CMR2 0x00663b24
     static int m_unk0x00663b24;
+
+    // GLOBAL: CMR2 0x00663b2c
+    static int m_selectedDisplayDeviceIx;
 
     // GLOBAL: CMR2 0x00663b28
     static DWORD m_displayCount; // maybe possibly

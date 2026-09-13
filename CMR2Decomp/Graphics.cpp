@@ -24,6 +24,7 @@ void* CGraphics::m_unk0x0065fa2c;
 int CGraphics::m_unk0x0065fa28;
 int CGraphics::m_unk0x006dd890;
 int CGraphics::m_unk0x00663b1c;
+Unk0x0065ff90 CGraphics::m_unk0x0065ff90[10];
 BOOL CGraphics::m_unk0x0081709c;
 DDDeviceEnumBuffer CGraphics::m_unk0x0065fd08;
 DDDeviceEnumBuffer CGraphics::m_displayDevicePool;
@@ -33,6 +34,7 @@ int CGraphics::m_unk0x00660040 = 0;
 int CGraphics::m_unk0x00663b18 = 0;
 int CGraphics::m_unk0x00663b20 = 0;
 int CGraphics::m_unk0x00663b24 = 0;
+int CGraphics::m_selectedDisplayDeviceIx = 0;
 DWORD CGraphics::m_displayCount = 0;
 Entry CGraphics::m_unk0x006634d8[10];
 DisplayMode CGraphics::m_displays[10];
@@ -263,6 +265,8 @@ BOOL CGraphics::FUN_004a7910(int screenWidth, int screenHeight, int colourDepth)
     int iHorzRes = 0, iVertRes = 0, iVar6 = 0, cx = 0, iSystemMetricsScreenY = 0, iSystemMetricsScreenX = 0;
     LPDIRECTDRAW7 pDD;
     tagRECT lpWindowRect, lpClientRect;
+    BOOL findMatchingDevice = FALSE;
+    DDSURFACEDESC2 ddsd;
 
     m_pTextureManager->textureInfo2 = NULL;
     m_pTextureManager->textureInfo5 = NULL;
@@ -338,7 +342,30 @@ BOOL CGraphics::FUN_004a7910(int screenWidth, int screenHeight, int colourDepth)
 
     g_pGraphics->pDD7->EnumDisplayModes(0, NULL, NULL, FUN_004a8da0);
 
-    FUN_004a8f60(screenWidth, screenHeight, colourDepth);
+    findMatchingDevice = FUN_004a8f60(screenWidth, screenHeight, colourDepth);
+    if (findMatchingDevice == FALSE) {
+        g_pGraphics->resX = 640;
+        g_pGraphics->resY = 480;
+        ddsd.dwSize = sizeof(DDSURFACEDESC2);
+        g_pGraphics->pDD7->GetDisplayMode(&ddsd);
+        g_pGraphics->depth = colourDepth;
+    } else {
+        g_pGraphics->resX = screenWidth;
+        g_pGraphics->resY = screenHeight;
+        g_pGraphics->depth = colourDepth;
+    }
+
+    m_pTextureManager->pDeviceGUID = m_unk0x0065ff90[m_unk0x00663b24].pGUID;
+    m_pTextureManager->field_0xc = m_unk0x0065ff90[m_unk0x00663b24].field_0x4;
+    m_pTextureManager->field_0x10 = m_unk0x0065ff90[m_unk0x00663b24].field_0x8;
+    m_pTextureManager->field_0x14 = m_unk0x0065ff90[m_unk0x00663b24].field_0xc;
+
+    if (g_pGraphics->isFullscreen != 0) {
+        g_pGraphics->pDD7->SetDisplayMode(g_pGraphics->resX, g_pGraphics->resY, g_pGraphics->depth, 0, 0);
+        if (g_pGraphics->isFullscreen != 0) {
+            
+        }   
+    }
 
     return TRUE;
 }
@@ -560,7 +587,7 @@ HRESULT CGraphics::FUN_004a8da0(DDSURFACEDESC2* lpDDSurfaceDesc2, void* lpContex
         if ((bpp / 8) * height * width * 3 < dwTextureMem) {
             m_displays[m_displayCount].width = width;
             m_displays[m_displayCount].height = height;
-            m_displays[m_displayCount].bpp = bpp;
+            m_displays[m_displayCount].colourDepth = bpp;
             m_displayCount++;
         }
     }
@@ -584,12 +611,21 @@ DWORD CGraphics::FUN_004bdd00(DWORD caps) {
 }
 
 // FUNCTION: CMR2 0x004a8f60
-BOOL CGraphics::FUN_004a8f60(int width, int height, int bpp)
+BOOL CGraphics::FUN_004a8f60(int width, int height, int colourDepth)
 {
     for (int i = 0; i < m_displayCount; i++) {
-        if (m_displays[i].width == width && m_displays[i].height == height && m_displays[i].bpp == bpp)
+        if (m_displays[i].width == width && m_displays[i].height == height && m_displays[i].colourDepth == colourDepth)
             return TRUE;
     }
 
     return FALSE;
+}
+
+// FUNCTION: CMR2 0x004a8ec0
+void CGraphics::FUN_004a8ec0(int width, int height, int colourDepth)
+{
+    for (int i = 0; i < m_displayCount; i++) {
+        if (m_displays[i].width == width && m_displays[i].height == height && m_displays[i].colourDepth == colourDepth)
+            m_selectedDisplayDeviceIx = i;
+    }
 }
