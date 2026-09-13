@@ -264,13 +264,13 @@ void CGraphics::FUN_004a8d90(int param1) {
 BOOL CGraphics::FUN_004a7910(int screenWidth, int screenHeight, int colourDepth) {
     DWORD tier = 0;
     HDC hdc = 0;
-    int iHorzRes = 0, iVertRes = 0, iVar6 = 0, cx = 0, iSystemMetricsScreenY = 0, iSystemMetricsScreenX = 0;
-    tagRECT lpWindowRect, lpClientRect;
+    UINT uFlags;
     BOOL findMatchingDevice = FALSE;
     LPDIRECTDRAW7 pDD7;
+    tagRECT lpWindowRect, lpClientRect;
     DDSURFACEDESC2 ddsdPrimary, ddsdBack;
     LPDIRECTDRAWCLIPPER pDDClipper;
-    UINT uFlags;
+    int iHorzRes = 0, iVertRes = 0, iVar6 = 0, cx = 0, iSystemMetricsScreenY = 0, iSystemMetricsScreenX = 0;
 
     m_pTextureManager->textureInfo2 = NULL;
     m_pTextureManager->textureInfo5 = NULL;
@@ -317,9 +317,10 @@ BOOL CGraphics::FUN_004a7910(int screenWidth, int screenHeight, int colourDepth)
     
     pDD7 = g_pGraphics->pDD7;
     if (g_pGraphics->isFullscreen == 0) {
-        pDD7->SetCooperativeLevel(CMain::m_hWndList[CMain::m_hWndIx], DDSCL_NORMAL);
-        GetWindowRect(CMain::m_hWndList[CMain::m_hWndIx], &lpWindowRect);
-        GetClientRect(CMain::m_hWndList[CMain::m_hWndIx], &lpClientRect);
+        HWND hwnd = CMain::m_hWndList[CMain::m_hWndIx];
+        pDD7->SetCooperativeLevel(hwnd, DDSCL_NORMAL);
+        GetWindowRect(hwnd, &lpWindowRect);
+        GetClientRect(hwnd, &lpClientRect);
         uFlags = SWP_NOZORDER;
 
         iVar6 = ((lpClientRect.top - lpClientRect.bottom) - lpWindowRect.top) + 0x1e0 + lpWindowRect.bottom;
@@ -349,17 +350,19 @@ BOOL CGraphics::FUN_004a7910(int screenWidth, int screenHeight, int colourDepth)
     g_pGraphics->pDD7->EnumDisplayModes(0, NULL, NULL, FUN_004a8da0);
 
     findMatchingDevice = FUN_004a8f60(screenWidth, screenHeight, colourDepth);
-    if (findMatchingDevice == FALSE) {
-        g_pGraphics->resX = 640;
-        g_pGraphics->resY = 480;
-        ddsdPrimary.dwSize = sizeof(DDSURFACEDESC2);
-        g_pGraphics->pDD7->GetDisplayMode(&ddsdPrimary);
-        g_pGraphics->depth = colourDepth;
-    } else {
+    if (findMatchingDevice != FALSE) {
         g_pGraphics->resX = screenWidth;
         g_pGraphics->resY = screenHeight;
         g_pGraphics->depth = colourDepth;
+    } else {
+        ddsdBack.dwSize = sizeof(DDSURFACEDESC2);
+        g_pGraphics->resX = 640;
+        g_pGraphics->resY = 480;
+        g_pGraphics->pDD7->GetDisplayMode(&ddsdBack);
+        g_pGraphics->depth = colourDepth;
     }
+
+    FUN_004a8ec0(g_pGraphics->resX, g_pGraphics->resY, g_pGraphics->depth);
 
     m_pTextureManager->pDeviceGUID = m_unk0x0065ff90[m_unk0x00663b24].pGUID;
     m_pTextureManager->field_0xc = m_unk0x0065ff90[m_unk0x00663b24].field_0x4;
