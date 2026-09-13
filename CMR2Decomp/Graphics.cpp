@@ -364,10 +364,11 @@ BOOL CGraphics::FUN_004a7910(int screenWidth, int screenHeight, int colourDepth)
 
     FUN_004a8ec0(g_pGraphics->resX, g_pGraphics->resY, g_pGraphics->depth);
 
-    m_pTextureManager->pDeviceGUID = m_unk0x0065ff90[m_unk0x00663b24].pGUID;
-    m_pTextureManager->field_0xc = m_unk0x0065ff90[m_unk0x00663b24].field_0x4;
-    m_pTextureManager->field_0x10 = m_unk0x0065ff90[m_unk0x00663b24].field_0x8;
-    m_pTextureManager->field_0x14 = m_unk0x0065ff90[m_unk0x00663b24].field_0xc;
+    Unk0x0065ff90* deviceEntry = &m_unk0x0065ff90[m_unk0x00663b24];
+    m_pTextureManager->pDeviceGUID = deviceEntry->pGUID;
+    m_pTextureManager->field_0xc = deviceEntry->field_0x4;
+    m_pTextureManager->field_0x10 = deviceEntry->field_0x8;
+    m_pTextureManager->field_0x14 = deviceEntry->field_0xc;
 
     if (g_pGraphics->isFullscreen != 0) {
         g_pGraphics->pDD7->SetDisplayMode(g_pGraphics->resX, g_pGraphics->resY, g_pGraphics->depth, 0, 0);
@@ -403,7 +404,7 @@ BOOL CGraphics::FUN_004a7910(int screenWidth, int screenHeight, int colourDepth)
             ddsdBack.dwSize = sizeof(DDSURFACEDESC2);
             ddsdBack.dwHeight = g_pGraphics->resY;
             ddsdBack.dwWidth = g_pGraphics->resX;
-            ddsdBack.dwFlags = DDSD_CAPS | DDSD_BACKBUFFERCOUNT;
+            ddsdBack.dwFlags = DDSD_CAPS | DDSD_HEIGHT | DDSD_WIDTH;
             ddsdBack.ddsCaps.dwCaps = DDSCAPS_3DDEVICE | DDSCAPS_OFFSCREENPLAIN;
 
             if (FUN_004a8d60() != 1) {
@@ -417,7 +418,7 @@ BOOL CGraphics::FUN_004a7910(int screenWidth, int screenHeight, int colourDepth)
         } else {
             memset(&ddsdPrimary, 0, sizeof(DDSURFACEDESC2));
             ddsdPrimary.dwSize = sizeof(DDSURFACEDESC2);
-            ddsdPrimary.dwFlags = 
+            ddsdPrimary.dwFlags = DDSD_CAPS | DDSD_BACKBUFFERCOUNT;
             ddsdPrimary.ddsCaps.dwCaps = DDSCAPS_COMPLEX | DDSCAPS_FLIP | DDSCAPS_PRIMARYSURFACE | DDSCAPS_3DDEVICE;
 
             if (FUN_004a8d60() != 2) {
