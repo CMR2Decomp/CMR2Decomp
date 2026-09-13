@@ -268,7 +268,7 @@ BOOL CGraphics::FUN_004a7910(int screenWidth, int screenHeight, int colourDepth)
     LPDIRECTDRAW7 pDD;
     tagRECT lpWindowRect, lpClientRect;
     BOOL findMatchingDevice = FALSE;
-    DDSURFACEDESC2 ddsd, ddsd2, ddsdNotFullscreen, ddsdNotFullscreen2;
+    DDSURFACEDESC2 ddsdPrimary, ddsdBack;
     LPDIRECTDRAWCLIPPER pDDClipper;
 
     m_pTextureManager->textureInfo2 = NULL;
@@ -349,8 +349,8 @@ BOOL CGraphics::FUN_004a7910(int screenWidth, int screenHeight, int colourDepth)
     if (findMatchingDevice == FALSE) {
         g_pGraphics->resX = 640;
         g_pGraphics->resY = 480;
-        ddsd.dwSize = sizeof(DDSURFACEDESC2);
-        g_pGraphics->pDD7->GetDisplayMode(&ddsd);
+        ddsdPrimary.dwSize = sizeof(DDSURFACEDESC2);
+        g_pGraphics->pDD7->GetDisplayMode(&ddsdPrimary);
         g_pGraphics->depth = colourDepth;
     } else {
         g_pGraphics->resX = screenWidth;
@@ -366,46 +366,46 @@ BOOL CGraphics::FUN_004a7910(int screenWidth, int screenHeight, int colourDepth)
     if (g_pGraphics->isFullscreen != 0) {
         g_pGraphics->pDD7->SetDisplayMode(g_pGraphics->resX, g_pGraphics->resY, g_pGraphics->depth, 0, 0);
         if (g_pGraphics->isFullscreen != 0) {
-            memset(&ddsd, 0, sizeof(DDSURFACEDESC2));
-            ddsd.dwSize = sizeof(DDSURFACEDESC2);
+            memset(&ddsdPrimary, 0, sizeof(DDSURFACEDESC2));
+            ddsdPrimary.dwSize = sizeof(DDSURFACEDESC2);
         
             tier = FUN_004a8d60();
-            ddsd.ddsCaps.dwCaps = DDSCAPS_COMPLEX | DDSCAPS_FLIP | DDSCAPS_PRIMARYSURFACE | DDSCAPS_3DDEVICE;
+            ddsdPrimary.ddsCaps.dwCaps = DDSCAPS_COMPLEX | DDSCAPS_FLIP | DDSCAPS_PRIMARYSURFACE | DDSCAPS_3DDEVICE;
             if (tier == 1 || tier == 2)
-                ddsd.ddsCaps.dwCaps |= 0x10004000;
+                ddsdPrimary.ddsCaps.dwCaps |= 0x10004000;
             else
-                ddsd.ddsCaps.dwCaps |= 0x800;
+                ddsdPrimary.ddsCaps.dwCaps |= 0x800;
 
-            if (g_pGraphics->pDD7->CreateSurface(&ddsd, &g_pGraphics->pPrimarySurface, 0) != 0)
+            if (g_pGraphics->pDD7->CreateSurface(&ddsdPrimary, &g_pGraphics->pPrimarySurface, 0) != 0)
                 return FALSE;
 
-            memset(&ddsd2, 0, sizeof(DDSURFACEDESC2));
-            ddsd2.dwSize = sizeof(DDSURFACEDESC2);
-            ddsd2.dwFlags = DDSD_CAPS;
-            ddsd2.ddsCaps.dwCaps = DDSCAPS_BACKBUFFER | DDSCAPS_COMPLEX | DDSCAPS_FLIP | DDSCAPS_3DDEVICE;
+            memset(&ddsdBack, 0, sizeof(DDSURFACEDESC2));
+            ddsdBack.dwSize = sizeof(DDSURFACEDESC2);
+            ddsdBack.dwFlags = DDSD_CAPS;
+            ddsdBack.ddsCaps.dwCaps = DDSCAPS_BACKBUFFER | DDSCAPS_COMPLEX | DDSCAPS_FLIP | DDSCAPS_3DDEVICE;
 
             tier = FUN_004a8d60();
             if (tier == 1 || tier == 2) {
-                ddsd2.ddsCaps.dwCaps |= 0x10004000;
+                ddsdBack.ddsCaps.dwCaps |= 0x10004000;
             } else {
-                ddsd2.ddsCaps.dwCaps |= 0x800;
+                ddsdBack.ddsCaps.dwCaps |= 0x800;
             }
 
-            if (g_pGraphics->pPrimarySurface->GetAttachedSurface(&ddsd2.ddsCaps, &g_pGraphics->pBackBufferSurface) != 0)
+            if (g_pGraphics->pPrimarySurface->GetAttachedSurface(&ddsdBack.ddsCaps, &g_pGraphics->pBackBufferSurface) != 0)
                 return FALSE;
         }
     } else {
-        memset(&ddsdNotFullscreen, 0, sizeof(DDSURFACEDESC2));
-        ddsdNotFullscreen.dwSize = sizeof(DDSURFACEDESC2);
-        ddsdNotFullscreen.ddsCaps.dwCaps = DDSCAPS_COMPLEX | DDSCAPS_FLIP | DDSCAPS_PRIMARYSURFACE | DDSCAPS_3DDEVICE;
+        memset(&ddsdPrimary, 0, sizeof(DDSURFACEDESC2));
+        ddsdPrimary.dwSize = sizeof(DDSURFACEDESC2);
+        ddsdPrimary.ddsCaps.dwCaps = DDSCAPS_COMPLEX | DDSCAPS_FLIP | DDSCAPS_PRIMARYSURFACE | DDSCAPS_3DDEVICE;
         tier = FUN_004a8d60();
         if (tier == 1 || tier == 2) {
-            ddsdNotFullscreen.ddsCaps.dwCaps |= 0x10004000;
+            ddsdPrimary.ddsCaps.dwCaps |= 0x10004000;
         } else {
-            ddsdNotFullscreen.ddsCaps.dwCaps |= 0x800;
+            ddsdPrimary.ddsCaps.dwCaps |= 0x800;
         }
 
-        if (g_pGraphics->pDD7->CreateSurface(&ddsdNotFullscreen, &g_pGraphics->pPrimarySurface, 0) != 0)
+        if (g_pGraphics->pDD7->CreateSurface(&ddsdPrimary, &g_pGraphics->pPrimarySurface, 0) != 0)
             return FALSE;
 
         pDDClipper = NULL;
@@ -418,18 +418,18 @@ BOOL CGraphics::FUN_004a7910(int screenWidth, int screenHeight, int colourDepth)
             pDDClipper->Release();
         }
 
-        memset(&ddsdNotFullscreen2, 0, sizeof(DDSURFACEDESC2));
-        ddsdNotFullscreen2.dwSize = sizeof(DDSURFACEDESC2);
-        ddsdNotFullscreen2.dwFlags = DDSD_CAPS | DDSD_HEIGHT | DDSD_WIDTH;
-        ddsdNotFullscreen2.dwHeight = g_pGraphics->resY;
-        ddsdNotFullscreen2.dwWidth = g_pGraphics->resX;
+        memset(&ddsdBack, 0, sizeof(DDSURFACEDESC2));
+        ddsdBack.dwSize = sizeof(DDSURFACEDESC2);
+        ddsdBack.dwFlags = DDSD_CAPS | DDSD_HEIGHT | DDSD_WIDTH;
+        ddsdBack.dwHeight = g_pGraphics->resY;
+        ddsdBack.dwWidth = g_pGraphics->resX;
 
         tier = FUN_004a8d60();
         if (tier != 1) {
             FUN_004a8d60(); // return value unused — vestigial?
         }
 
-        if (g_pGraphics->pDD7->CreateSurface(&ddsdNotFullscreen2, &g_pGraphics->pBackBufferSurface, 0) != 0)
+        if (g_pGraphics->pDD7->CreateSurface(&ddsdBack, &g_pGraphics->pBackBufferSurface, 0) != 0)
             return FALSE;
     }
 
