@@ -298,7 +298,7 @@ struct Graphics
     unsigned char field287_0x131;
     unsigned char field288_0x132;
     unsigned char field289_0x133;
-    IDirectDrawSurface7 *pSurface;
+    IDirectDrawSurface7 *pPrimarySurface;
     unsigned char field291_0x138;
     unsigned char field292_0x139;
     unsigned char field293_0x13a;
@@ -593,7 +593,7 @@ struct Graphics
     unsigned char field582_0x261;
     unsigned char field583_0x262;
     unsigned char field584_0x263;
-    IDirectDrawSurface7 *pSurface2;
+    IDirectDrawSurface7 *pBackBufferSurface;
     unsigned char field586_0x268;
     unsigned char field587_0x269;
     unsigned char field588_0x26a;
@@ -1014,6 +1014,11 @@ struct Unk0x0065ff90 {
     BYTE padding[0xa4];
 };
 
+struct Unk0x00660040 {
+    DWORD surfaceCap;
+    BYTE padding[0xb0];
+};
+
 extern Graphics *g_pGraphics;
 
 // GLOBAL: CMR2 0x005114a8
@@ -1049,6 +1054,7 @@ public:
     static DWORD FUN_004bdd00(DWORD caps);
     static BOOL FUN_004a8f60(int width, int height, int colourDepth);
     static void FUN_004a8ec0(int width, int height, int colourDepth);
+    static DWORD FUN_004a8d60(void);
 
 private:
     // GLOBAL: CMR2 0x0051615c
@@ -1095,6 +1101,9 @@ private:
 
     // GLOBAL: CMR2 0x00663b28
     static DWORD m_displayCount; // maybe possibly
+
+    // GLOBAL: CMR2 0x00663b30
+    static int m_releaseSurfaceCallbackID;
     
     // GLOBAL: CMR2 0x0081709c
     static BOOL m_unk0x0081709c;
@@ -1112,7 +1121,7 @@ private:
     static int m_totalPixelsForScreen;
 
     // GLOBAL: CMR2 0x00660040
-    static int m_unk0x00660040; // potentialy a flag for isFullscreen
+    static Unk0x00660040 m_unk0x00660040[10];
 };
 
 #endif
