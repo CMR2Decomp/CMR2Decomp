@@ -326,10 +326,9 @@ BOOL CGraphics::FUN_004a7910(int screenWidth, int screenHeight, int colourDepth)
     
     pDD7 = g_pGraphics->pDD7;
     if (g_pGraphics->isFullscreen == 0) {
-        HWND hwnd = CMain::m_hWndList[CMain::m_hWndIx];
-        pDD7->SetCooperativeLevel(hwnd, DDSCL_NORMAL);
-        GetWindowRect(hwnd, &s.lpWindowRect);
-        GetClientRect(hwnd, &s.lpClientRect);
+        pDD7->SetCooperativeLevel(CMain::m_hWndList[CMain::m_hWndIx], DDSCL_NORMAL);
+        GetWindowRect(CMain::m_hWndList[CMain::m_hWndIx], &s.lpWindowRect);
+        GetClientRect(CMain::m_hWndList[CMain::m_hWndIx], &s.lpClientRect);
         uFlags = SWP_NOZORDER;
 
         iVar6 = ((s.lpClientRect.top - s.lpClientRect.bottom) - s.lpWindowRect.top) + 0x1e0 + s.lpWindowRect.bottom;
@@ -344,7 +343,7 @@ BOOL CGraphics::FUN_004a7910(int screenWidth, int screenHeight, int colourDepth)
         UpdateWindow(CMain::m_hWndList[CMain::m_hWndIx]);
         ShowWindow(CMain::m_hWndList[CMain::m_hWndIx], SW_SHOWNORMAL);
     } else {
-        pDD7->SetCooperativeLevel(CMain::m_hWndList[CMain::m_hWndIx], DDSCL_FULLSCREEN | DDSCL_EXCLUSIVE | DDSCL_ALLOWREBOOT | DDSCL_MULTITHREADED);
+        pDD7->SetCooperativeLevel(CMain::m_hWndList[CMain::m_hWndIx], 0x851);
     }
 
     g_pGraphics->pDD7->QueryInterface(IID_IDirect3D7, (LPVOID*)&m_pTextureManager);
@@ -355,9 +354,7 @@ BOOL CGraphics::FUN_004a7910(int screenWidth, int screenHeight, int colourDepth)
 
     m_pTextureManager->pDD->EnumDevices(FUN_004a8c30_DDEnumCallback, NULL);
 
-    g_pGraphics->pDD7->Compact();
     m_displayCount = 0;
-
     g_pGraphics->pDD7->EnumDisplayModes(0, NULL, NULL, FUN_004a8da0);
 
     findMatchingDevice = FUN_004a8f60(screenWidth, screenHeight, colourDepth);
@@ -366,11 +363,11 @@ BOOL CGraphics::FUN_004a7910(int screenWidth, int screenHeight, int colourDepth)
         g_pGraphics->resY = screenHeight;
         g_pGraphics->depth = colourDepth;
     } else {
-        s.ddsd.dwSize = sizeof(DDSURFACEDESC2);
         g_pGraphics->resX = 640;
         g_pGraphics->resY = 480;
+        s.ddsdDisplayMode.dwSize = sizeof(DDSURFACEDESC2);
         g_pGraphics->pDD7->GetDisplayMode(&s.ddsdDisplayMode);
-        g_pGraphics->depth = colourDepth;
+        g_pGraphics->depth = s.ddsdDisplayMode.ddpfPixelFormat.dwRGBBitCount;
     }
 
     FUN_004a8ec0(g_pGraphics->resX, g_pGraphics->resY, g_pGraphics->depth);
@@ -430,6 +427,7 @@ BOOL CGraphics::FUN_004a7910(int screenWidth, int screenHeight, int colourDepth)
             memset(&s.ddsd, 0, sizeof(DDSURFACEDESC2));
             s.ddsd.dwSize = sizeof(DDSURFACEDESC2);
             s.ddsd.dwFlags = DDSD_CAPS | DDSD_BACKBUFFERCOUNT;
+            s.ddsd.dwBackBufferCount = 1;
             s.ddsd.ddsCaps.dwCaps = DDSCAPS_COMPLEX | DDSCAPS_FLIP | DDSCAPS_PRIMARYSURFACE | DDSCAPS_3DDEVICE;
 
             if (FUN_004a8d60() != 2) {
