@@ -328,10 +328,12 @@ BOOL CGraphics::FUN_004a7910(int screenWidth, int screenHeight, int colourDepth)
         GetWindowRect(CMain::m_hWndList[CMain::m_hWndIx], &s.lpWindowRect);
         GetClientRect(CMain::m_hWndList[CMain::m_hWndIx], &s.lpClientRect);
 
-        iVar6 = s.lpWindowRect.bottom + 0x1e0 - s.lpWindowRect.top + s.lpClientRect.top - s.lpClientRect.bottom;
-        cx = s.lpWindowRect.right + 0x280 - s.lpWindowRect.left + s.lpClientRect.left - s.lpClientRect.right;
-
-        SetWindowPos(CMain::m_hWndList[CMain::m_hWndIx], NULL, GetSystemMetrics(SM_CXSCREEN) / 2 - 0x140, GetSystemMetrics(SM_CYSCREEN) / 2 - 0xf0, cx, iVar6, 4);
+        SetWindowPos(CMain::m_hWndList[CMain::m_hWndIx], NULL,
+            GetSystemMetrics(SM_CXSCREEN) / 2 - 0x140,
+            GetSystemMetrics(SM_CYSCREEN) / 2 - 0xf0,
+            s.lpWindowRect.right + 0x280 - s.lpWindowRect.left + s.lpClientRect.left - s.lpClientRect.right,
+            s.lpWindowRect.bottom + 0x1e0 - s.lpWindowRect.top + s.lpClientRect.top - s.lpClientRect.bottom,
+            4);
         UpdateWindow(CMain::m_hWndList[CMain::m_hWndIx]);
         ShowWindow(CMain::m_hWndList[CMain::m_hWndIx], SW_SHOWNORMAL);
     } else {
@@ -381,10 +383,10 @@ BOOL CGraphics::FUN_004a7910(int screenWidth, int screenHeight, int colourDepth)
             s.ddsd.dwFlags = DDSD_CAPS;
             s.ddsd.ddsCaps.dwCaps = DDSCAPS_PRIMARYSURFACE;
             
-            if (FUN_004a8d60() == 1 || FUN_004a8d60() == 2) {
-                s.ddsd.ddsCaps.dwCaps |= capFlag;
-            } else {
+            if (FUN_004a8d60() != 1 && FUN_004a8d60() != 2) {
                 s.ddsd.ddsCaps.dwCaps |= 0x800;
+            } else {
+                s.ddsd.ddsCaps.dwCaps |= capFlag;
             }
 
             if (g_pGraphics->pDD7->CreateSurface(&s.ddsd, &g_pGraphics->pPrimarySurface, 0) != 0)
