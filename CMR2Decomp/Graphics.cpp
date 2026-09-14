@@ -328,8 +328,8 @@ BOOL CGraphics::FUN_004a7910(int screenWidth, int screenHeight, int colourDepth)
         GetWindowRect(CMain::m_hWndList[CMain::m_hWndIx], &s.lpWindowRect);
         GetClientRect(CMain::m_hWndList[CMain::m_hWndIx], &s.lpClientRect);
 
-        iVar6 = ((s.lpClientRect.top - s.lpClientRect.bottom) - s.lpWindowRect.top) + 0x1e0 + s.lpWindowRect.bottom;
-        cx = ((s.lpClientRect.left - s.lpClientRect.right) - s.lpWindowRect.left) + 0x280 + s.lpWindowRect.right;
+        iVar6 = s.lpWindowRect.bottom + 0x1e0 - s.lpWindowRect.top + s.lpClientRect.top - s.lpClientRect.bottom;
+        cx = s.lpWindowRect.right + 0x280 - s.lpWindowRect.left + s.lpClientRect.left - s.lpClientRect.right;
 
         SetWindowPos(CMain::m_hWndList[CMain::m_hWndIx], NULL, GetSystemMetrics(SM_CXSCREEN) / 2 - 0x140, GetSystemMetrics(SM_CYSCREEN) / 2 - 0xf0, cx, iVar6, 4);
         UpdateWindow(CMain::m_hWndList[CMain::m_hWndIx]);
