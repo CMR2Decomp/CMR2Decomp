@@ -2,6 +2,7 @@
 #define _GRAPHICS_H
 
 #include <windows.h>
+#include <winnt.h>
 #include "../third_party/dx7sdk-7001/include/d3d.h"
 
 #include "Texture.h"
@@ -1055,6 +1056,7 @@ public:
     static BOOL FUN_004a8f60(int width, int height, int colourDepth);
     static void FUN_004a8ec0(int width, int height, int colourDepth);
     static DWORD FUN_004a8d60(void);
+    static HRESULT FUN_004a8c30_DDEnumCallback(LPSTR lpDeviceDescription, LPSTR lpDeviceName, LPD3DDEVICEDESC7 lpD3DDeviceDesc, LPVOID lpUserArg);
 
 private:
     // GLOBAL: CMR2 0x0051615c

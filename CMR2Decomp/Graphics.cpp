@@ -260,6 +260,15 @@ void CGraphics::FUN_004a8d90(int param1) {
     m_unk0x00663b24 = param1;
 }
 
+struct GraphicsStack
+{
+    LPDIRECTDRAWCLIPPER pDDClipper;
+    DDSURFACEDESC2 ddsd;
+    tagRECT lpWindowRect;
+    tagRECT lpClientRect;
+    DDSURFACEDESC2 ddsdDisplayMode;
+};
+
 // FUNCTION: CMR2 0x004a7910
 BOOL CGraphics::FUN_004a7910(int screenWidth, int screenHeight, int colourDepth) {
     DWORD tier = 0;
@@ -267,10 +276,10 @@ BOOL CGraphics::FUN_004a7910(int screenWidth, int screenHeight, int colourDepth)
     UINT uFlags;
     BOOL findMatchingDevice = FALSE;
     LPDIRECTDRAW7 pDD7;
-    tagRECT lpWindowRect, lpClientRect;
-    DDSURFACEDESC2 ddsdPrimary, ddsdBack;
-    LPDIRECTDRAWCLIPPER pDDClipper;
-    int iHorzRes = 0, iVertRes = 0, iVar6 = 0, cx = 0, iSystemMetricsScreenY = 0, iSystemMetricsScreenX = 0;
+    GraphicsStack s;
+
+    int iHorzRes = 0, iVertRes = 0, iVar6 = 0, cx = 0;
+    int iSystemMetricsScreenY = 0, iSystemMetricsScreenX = 0;
 
     m_pTextureManager->textureInfo2 = NULL;
     m_pTextureManager->textureInfo5 = NULL;
@@ -319,12 +328,12 @@ BOOL CGraphics::FUN_004a7910(int screenWidth, int screenHeight, int colourDepth)
     if (g_pGraphics->isFullscreen == 0) {
         HWND hwnd = CMain::m_hWndList[CMain::m_hWndIx];
         pDD7->SetCooperativeLevel(hwnd, DDSCL_NORMAL);
-        GetWindowRect(hwnd, &lpWindowRect);
-        GetClientRect(hwnd, &lpClientRect);
+        GetWindowRect(hwnd, &s.lpWindowRect);
+        GetClientRect(hwnd, &s.lpClientRect);
         uFlags = SWP_NOZORDER;
 
-        iVar6 = ((lpClientRect.top - lpClientRect.bottom) - lpWindowRect.top) + 0x1e0 + lpWindowRect.bottom;
-        cx = ((lpClientRect.left- lpClientRect.right) - lpWindowRect.left) + 0x280 + lpWindowRect.right;
+        iVar6 = ((s.lpClientRect.top - s.lpClientRect.bottom) - s.lpWindowRect.top) + 0x1e0 + s.lpWindowRect.bottom;
+        cx = ((s.lpClientRect.left - s.lpClientRect.right) - s.lpWindowRect.left) + 0x280 + s.lpWindowRect.right;
 
         iSystemMetricsScreenY = GetSystemMetrics(SM_CYSCREEN);
         iSystemMetricsScreenY = iSystemMetricsScreenY / 2 + -0xf0;
@@ -344,6 +353,8 @@ BOOL CGraphics::FUN_004a7910(int screenWidth, int screenHeight, int colourDepth)
 
     DirectDrawEnumerateExA(&FUN_004a8b30_DDEnumCallback, NULL, DDENUM_ATTACHEDSECONDARYDEVICES | DDENUM_DETACHEDSECONDARYDEVICES | DDENUM_NONDISPLAYDEVICES);
 
+    m_pTextureManager->pDD->EnumDevices(FUN_004a8c30_DDEnumCallback, NULL);
+
     g_pGraphics->pDD7->Compact();
     m_displayCount = 0;
 
@@ -355,10 +366,10 @@ BOOL CGraphics::FUN_004a7910(int screenWidth, int screenHeight, int colourDepth)
         g_pGraphics->resY = screenHeight;
         g_pGraphics->depth = colourDepth;
     } else {
-        ddsdBack.dwSize = sizeof(DDSURFACEDESC2);
+        s.ddsd.dwSize = sizeof(DDSURFACEDESC2);
         g_pGraphics->resX = 640;
         g_pGraphics->resY = 480;
-        g_pGraphics->pDD7->GetDisplayMode(&ddsdBack);
+        g_pGraphics->pDD7->GetDisplayMode(&s.ddsdDisplayMode);
         g_pGraphics->depth = colourDepth;
     }
 
@@ -374,74 +385,74 @@ BOOL CGraphics::FUN_004a7910(int screenWidth, int screenHeight, int colourDepth)
         g_pGraphics->pDD7->SetDisplayMode(g_pGraphics->resX, g_pGraphics->resY, g_pGraphics->depth, 0, 0);
         DWORD isFullScreen = g_pGraphics->isFullscreen;
         if (isFullScreen == 0) {
-            memset(&ddsdPrimary, 0, sizeof(DDSURFACEDESC2));
-            ddsdPrimary.dwSize = sizeof(DDSURFACEDESC2);
-            ddsdPrimary.dwFlags = DDSD_CAPS;
-            ddsdPrimary.ddsCaps.dwCaps = DDSCAPS_PRIMARYSURFACE;
+            memset(&s.ddsd, 0, sizeof(DDSURFACEDESC2));
+            s.ddsd.dwSize = sizeof(DDSURFACEDESC2);
+            s.ddsd.dwFlags = DDSD_CAPS;
+            s.ddsd.ddsCaps.dwCaps = DDSCAPS_PRIMARYSURFACE;
             
             if (FUN_004a8d60() == 1 || FUN_004a8d60() == 2) {
-                ddsdPrimary.ddsCaps.dwCaps |= 0x10004000;
+                s.ddsd.ddsCaps.dwCaps |= 0x10004000;
             } else {
-                ddsdPrimary.ddsCaps.dwCaps |= 0x800;
+                s.ddsd.ddsCaps.dwCaps |= 0x800;
             }
 
-            if (g_pGraphics->pDD7->CreateSurface(&ddsdPrimary, &g_pGraphics->pPrimarySurface, 0) != 0)
+            if (g_pGraphics->pDD7->CreateSurface(&s.ddsd, &g_pGraphics->pPrimarySurface, 0) != 0)
                 return FALSE;
 
-            pDDClipper = NULL;
-            if (g_pGraphics->pDD7->CreateClipper(0, &pDDClipper, 0) != 0)
+            s.pDDClipper = NULL;
+            if (g_pGraphics->pDD7->CreateClipper(0, &s.pDDClipper, 0) != 0)
                 return FALSE;
 
-            pDDClipper->SetHWnd(0, CMain::m_hWndList[CMain::m_hWndIx]);
-            g_pGraphics->pPrimarySurface->SetClipper(pDDClipper);
-            if (pDDClipper != NULL) {
-                if (pDDClipper->Release() == 0) {
-                    pDDClipper = NULL;
+            s.pDDClipper->SetHWnd(0, CMain::m_hWndList[CMain::m_hWndIx]);
+            g_pGraphics->pPrimarySurface->SetClipper(s.pDDClipper);
+            if (s.pDDClipper != NULL) {
+                if (s.pDDClipper->Release() == 0) {
+                    s.pDDClipper = NULL;
                 }
             }
 
-            memset(&ddsdBack, 0, sizeof(DDSURFACEDESC2));
-            ddsdBack.dwSize = sizeof(DDSURFACEDESC2);
-            ddsdBack.dwHeight = g_pGraphics->resY;
-            ddsdBack.dwWidth = g_pGraphics->resX;
-            ddsdBack.dwFlags = DDSD_CAPS | DDSD_HEIGHT | DDSD_WIDTH;
-            ddsdBack.ddsCaps.dwCaps = DDSCAPS_3DDEVICE | DDSCAPS_OFFSCREENPLAIN;
+            memset(&s.ddsd, 0, sizeof(DDSURFACEDESC2));
+            s.ddsd.dwSize = sizeof(DDSURFACEDESC2);
+            s.ddsd.dwHeight = g_pGraphics->resY;
+            s.ddsd.dwWidth = g_pGraphics->resX;
+            s.ddsd.dwFlags = DDSD_CAPS | DDSD_HEIGHT | DDSD_WIDTH;
+            s.ddsd.ddsCaps.dwCaps = DDSCAPS_3DDEVICE | DDSCAPS_OFFSCREENPLAIN;
 
             if (FUN_004a8d60() != 1) {
                 if (FUN_004a8d60() != 2) {
-                    ddsdBack.ddsCaps.dwCaps |= 0x800;
+                    s.ddsd.ddsCaps.dwCaps |= 0x800;
                 }
             }
 
-            if (g_pGraphics->pDD7->CreateSurface(&ddsdBack, &g_pGraphics->pBackBufferSurface, 0) != 0)
+            if (g_pGraphics->pDD7->CreateSurface(&s.ddsd, &g_pGraphics->pBackBufferSurface, 0) != 0)
                 return FALSE;            
         } else {
-            memset(&ddsdPrimary, 0, sizeof(DDSURFACEDESC2));
-            ddsdPrimary.dwSize = sizeof(DDSURFACEDESC2);
-            ddsdPrimary.dwFlags = DDSD_CAPS | DDSD_BACKBUFFERCOUNT;
-            ddsdPrimary.ddsCaps.dwCaps = DDSCAPS_COMPLEX | DDSCAPS_FLIP | DDSCAPS_PRIMARYSURFACE | DDSCAPS_3DDEVICE;
+            memset(&s.ddsd, 0, sizeof(DDSURFACEDESC2));
+            s.ddsd.dwSize = sizeof(DDSURFACEDESC2);
+            s.ddsd.dwFlags = DDSD_CAPS | DDSD_BACKBUFFERCOUNT;
+            s.ddsd.ddsCaps.dwCaps = DDSCAPS_COMPLEX | DDSCAPS_FLIP | DDSCAPS_PRIMARYSURFACE | DDSCAPS_3DDEVICE;
 
             if (FUN_004a8d60() != 2) {
-                ddsdPrimary.ddsCaps.dwCaps |= 0x10004000;
+                s.ddsd.ddsCaps.dwCaps |= 0x10004000;
             } else {
-                ddsdPrimary.ddsCaps.dwCaps |= 0x800;
+                s.ddsd.ddsCaps.dwCaps |= 0x800;
             }
 
-            if (g_pGraphics->pDD7->CreateSurface(&ddsdPrimary, &g_pGraphics->pPrimarySurface, 0) != 0)
+            if (g_pGraphics->pDD7->CreateSurface(&s.ddsd, &g_pGraphics->pPrimarySurface, 0) != 0)
                 return FALSE;
 
-            memset(&ddsdBack, 0, sizeof(DDSURFACEDESC2));
-            ddsdBack.dwSize = sizeof(DDSURFACEDESC2);
-            ddsdBack.dwFlags = DDSD_CAPS;
-            ddsdBack.ddsCaps.dwCaps = DDSCAPS_BACKBUFFER | DDSCAPS_COMPLEX | DDSCAPS_FLIP | DDSCAPS_3DDEVICE;
+            memset(&s.ddsd, 0, sizeof(DDSURFACEDESC2));
+            s.ddsd.dwSize = sizeof(DDSURFACEDESC2);
+            s.ddsd.dwFlags = DDSD_CAPS;
+            s.ddsd.ddsCaps.dwCaps = DDSCAPS_BACKBUFFER | DDSCAPS_COMPLEX | DDSCAPS_FLIP | DDSCAPS_3DDEVICE;
 
             if (FUN_004a8d60() == 1 || FUN_004a8d60() == 2) {
-                ddsdBack.ddsCaps.dwCaps |= 0x10004000;
+                s.ddsd.ddsCaps.dwCaps |= 0x10004000;
             } else {
-                ddsdBack.ddsCaps.dwCaps |= 0x800;
+                s.ddsd.ddsCaps.dwCaps |= 0x800;
             }
 
-            if (g_pGraphics->pPrimarySurface->GetAttachedSurface(&ddsdBack.ddsCaps, &g_pGraphics->pBackBufferSurface) != 0)
+            if (g_pGraphics->pPrimarySurface->GetAttachedSurface(&s.ddsd.ddsCaps, &g_pGraphics->pBackBufferSurface) != 0)
                 return FALSE;
         }
     }
@@ -451,8 +462,9 @@ BOOL CGraphics::FUN_004a7910(int screenWidth, int screenHeight, int colourDepth)
     g_pGraphics->field592_0x270 = (WORD)g_pGraphics->resX;
     g_pGraphics->field593_0x272 = (WORD)g_pGraphics->resY;
 
-    g_pGraphics->field295_0x13c = *(LPDWORD)&g_pGraphics->field590_0x26c;
-    g_pGraphics->field296_0x140 = *(LPDWORD)&g_pGraphics->field592_0x270;
+    LPDWORD pField590AsDword = (LPDWORD)&g_pGraphics->field590_0x26c;
+    g_pGraphics->field295_0x13c = pField590AsDword[0];
+    g_pGraphics->field296_0x140 = pField590AsDword[1];
     
     if (m_unk0x00520b7c != 0) {
         m_releaseSurfaceCallbackID = CGame::RegisterCallback(ReleaseSurfaces,NULL);
@@ -724,4 +736,9 @@ void CGraphics::FUN_004a8ec0(int width, int height, int colourDepth)
 // FUNCTION: CMR2 0x004a8d60
 DWORD CGraphics::FUN_004a8d60(void) {
   return m_unk0x00660040[m_unk0x00663b24].surfaceCap;
+}
+
+// STUB: CMR2 0x004a8c30
+HRESULT CGraphics::FUN_004a8c30_DDEnumCallback(LPSTR lpDeviceDescription, LPSTR lpDeviceName, LPD3DDEVICEDESC7 lpD3DDeviceDesc, LPVOID lpUserArg) {
+    return TRUE;
 }
