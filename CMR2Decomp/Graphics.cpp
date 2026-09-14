@@ -271,9 +271,9 @@ struct GraphicsStack
 
 // FUNCTION: CMR2 0x004a7910
 BOOL CGraphics::FUN_004a7910(int screenWidth, int screenHeight, int colourDepth) {
+    BOOL findMatchingDevice = FALSE;
     DWORD tier = 0;
     HDC hdc = 0;
-    BOOL findMatchingDevice = FALSE;
     LPDIRECTDRAW7 pDD7;
     DWORD capFlag = 0x10004000;
     GraphicsStack s;
@@ -306,12 +306,9 @@ BOOL CGraphics::FUN_004a7910(int screenWidth, int screenHeight, int colourDepth)
     g_pGraphics->resX = screenWidth;
     g_pGraphics->resY = screenHeight;
     g_pGraphics->depth = colourDepth;
-    hdc = GetDC(NULL);
-    iHorzRes = GetDeviceCaps(hdc, HORZRES);
-    g_pGraphics->screenResX = iHorzRes;
-    iVertRes = GetDeviceCaps(hdc, VERTRES);
-    g_pGraphics->screenResY = iVertRes;
-    ReleaseDC(NULL, hdc);
+    g_pGraphics->screenResX = GetDeviceCaps(GetDC(NULL), HORZRES);
+    g_pGraphics->screenResY = GetDeviceCaps(GetDC(NULL), VERTRES);
+    ReleaseDC(NULL, GetDC(NULL));
 
     tier = FUN_004a8bc0();
     tier = FUN_004a96e0(tier);
@@ -352,6 +349,7 @@ BOOL CGraphics::FUN_004a7910(int screenWidth, int screenHeight, int colourDepth)
     g_pGraphics->pDD7->EnumDisplayModes(0, NULL, NULL, FUN_004a8da0);
 
     findMatchingDevice = FUN_004a8f60(screenWidth, screenHeight, colourDepth);
+    s.ddsdDisplayMode.dwSize = sizeof(DDSURFACEDESC2);
     if (findMatchingDevice != FALSE) {
         g_pGraphics->resX = screenWidth;
         g_pGraphics->resY = screenHeight;
@@ -359,7 +357,6 @@ BOOL CGraphics::FUN_004a7910(int screenWidth, int screenHeight, int colourDepth)
     } else {
         g_pGraphics->resX = 640;
         g_pGraphics->resY = 480;
-        s.ddsdDisplayMode.dwSize = sizeof(DDSURFACEDESC2);
         g_pGraphics->pDD7->GetDisplayMode(&s.ddsdDisplayMode);
         g_pGraphics->depth = s.ddsdDisplayMode.ddpfPixelFormat.dwRGBBitCount;
     }
