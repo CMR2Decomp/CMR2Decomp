@@ -273,9 +273,9 @@ struct GraphicsStack
 BOOL CGraphics::FUN_004a7910(int screenWidth, int screenHeight, int colourDepth) {
     DWORD tier = 0;
     HDC hdc = 0;
-    UINT uFlags;
     BOOL findMatchingDevice = FALSE;
     LPDIRECTDRAW7 pDD7;
+    DWORD capFlag = 0x10004000;
     GraphicsStack s;
 
     int iHorzRes = 0, iVertRes = 0, iVar6 = 0, cx = 0;
@@ -323,9 +323,8 @@ BOOL CGraphics::FUN_004a7910(int screenWidth, int screenHeight, int colourDepth)
 
     g_pGraphics->isFullscreen = 1;
     
-    pDD7 = g_pGraphics->pDD7;
     if (g_pGraphics->isFullscreen == 0) {
-        pDD7->SetCooperativeLevel(CMain::m_hWndList[CMain::m_hWndIx], DDSCL_NORMAL);
+        g_pGraphics->pDD7->SetCooperativeLevel(CMain::m_hWndList[CMain::m_hWndIx], DDSCL_NORMAL);
         GetWindowRect(CMain::m_hWndList[CMain::m_hWndIx], &s.lpWindowRect);
         GetClientRect(CMain::m_hWndList[CMain::m_hWndIx], &s.lpClientRect);
 
@@ -336,7 +335,7 @@ BOOL CGraphics::FUN_004a7910(int screenWidth, int screenHeight, int colourDepth)
         UpdateWindow(CMain::m_hWndList[CMain::m_hWndIx]);
         ShowWindow(CMain::m_hWndList[CMain::m_hWndIx], SW_SHOWNORMAL);
     } else {
-        pDD7->SetCooperativeLevel(CMain::m_hWndList[CMain::m_hWndIx], 0x851);
+        g_pGraphics->pDD7->SetCooperativeLevel(CMain::m_hWndList[CMain::m_hWndIx], 0x851);
     }
 
     g_pGraphics->pDD7->QueryInterface(IID_IDirect3D7, (LPVOID*)&m_pTextureManager);
@@ -381,7 +380,7 @@ BOOL CGraphics::FUN_004a7910(int screenWidth, int screenHeight, int colourDepth)
             s.ddsd.ddsCaps.dwCaps = DDSCAPS_PRIMARYSURFACE;
             
             if (FUN_004a8d60() == 1 || FUN_004a8d60() == 2) {
-                s.ddsd.ddsCaps.dwCaps |= 0x10004000;
+                s.ddsd.ddsCaps.dwCaps |= capFlag;
             } else {
                 s.ddsd.ddsCaps.dwCaps |= 0x800;
             }
@@ -423,8 +422,8 @@ BOOL CGraphics::FUN_004a7910(int screenWidth, int screenHeight, int colourDepth)
             s.ddsd.dwBackBufferCount = 1;
             s.ddsd.ddsCaps.dwCaps = DDSCAPS_COMPLEX | DDSCAPS_FLIP | DDSCAPS_PRIMARYSURFACE | DDSCAPS_3DDEVICE;
 
-            if (FUN_004a8d60() != 2) {
-                s.ddsd.ddsCaps.dwCaps |= 0x10004000;
+            if (FUN_004a8d60() == 1 || FUN_004a8d60() == 2) {
+                s.ddsd.ddsCaps.dwCaps |= capFlag;
             } else {
                 s.ddsd.ddsCaps.dwCaps |= 0x800;
             }
@@ -438,7 +437,7 @@ BOOL CGraphics::FUN_004a7910(int screenWidth, int screenHeight, int colourDepth)
             s.ddsd.ddsCaps.dwCaps = DDSCAPS_BACKBUFFER | DDSCAPS_COMPLEX | DDSCAPS_FLIP | DDSCAPS_3DDEVICE;
 
             if (FUN_004a8d60() == 1 || FUN_004a8d60() == 2) {
-                s.ddsd.ddsCaps.dwCaps |= 0x10004000;
+                s.ddsd.ddsCaps.dwCaps |= capFlag;
             } else {
                 s.ddsd.ddsCaps.dwCaps |= 0x800;
             }
