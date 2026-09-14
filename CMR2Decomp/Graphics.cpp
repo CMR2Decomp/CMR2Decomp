@@ -279,7 +279,6 @@ BOOL CGraphics::FUN_004a7910(int screenWidth, int screenHeight, int colourDepth)
     GraphicsStack s;
 
     int iHorzRes = 0, iVertRes = 0, iVar6 = 0, cx = 0;
-    int iSystemMetricsScreenY = 0, iSystemMetricsScreenX = 0;
 
     m_pTextureManager->textureInfo2 = NULL;
     m_pTextureManager->textureInfo5 = NULL;
@@ -329,17 +328,11 @@ BOOL CGraphics::FUN_004a7910(int screenWidth, int screenHeight, int colourDepth)
         pDD7->SetCooperativeLevel(CMain::m_hWndList[CMain::m_hWndIx], DDSCL_NORMAL);
         GetWindowRect(CMain::m_hWndList[CMain::m_hWndIx], &s.lpWindowRect);
         GetClientRect(CMain::m_hWndList[CMain::m_hWndIx], &s.lpClientRect);
-        uFlags = SWP_NOZORDER;
 
         iVar6 = ((s.lpClientRect.top - s.lpClientRect.bottom) - s.lpWindowRect.top) + 0x1e0 + s.lpWindowRect.bottom;
         cx = ((s.lpClientRect.left - s.lpClientRect.right) - s.lpWindowRect.left) + 0x280 + s.lpWindowRect.right;
 
-        iSystemMetricsScreenY = GetSystemMetrics(SM_CYSCREEN);
-        iSystemMetricsScreenY = iSystemMetricsScreenY / 2 + -0xf0;
-
-        iSystemMetricsScreenX = GetSystemMetrics(SM_CXSCREEN);
-
-        SetWindowPos(CMain::m_hWndList[CMain::m_hWndIx], NULL, iSystemMetricsScreenX / 2 + -0x140, iSystemMetricsScreenY, cx, iVar6, uFlags);
+        SetWindowPos(CMain::m_hWndList[CMain::m_hWndIx], NULL, GetSystemMetrics(SM_CXSCREEN) / 2 - 0x140, GetSystemMetrics(SM_CYSCREEN) / 2 - 0xf0, cx, iVar6, 4);
         UpdateWindow(CMain::m_hWndList[CMain::m_hWndIx]);
         ShowWindow(CMain::m_hWndList[CMain::m_hWndIx], SW_SHOWNORMAL);
     } else {
