@@ -365,10 +365,12 @@ BOOL CGraphics::FUN_004a7910(int screenWidth, int screenHeight, int colourDepth)
     FUN_004a8ec0(g_pGraphics->resX, g_pGraphics->resY, g_pGraphics->depth);
 
     Unk0x0065ff90* deviceEntry = &m_unk0x0065ff90[m_unk0x00663b24];
-    m_pTextureManager->pDeviceGUID = deviceEntry->pGUID;
-    m_pTextureManager->field_0xc = deviceEntry->field_0x4;
-    m_pTextureManager->field_0x10 = deviceEntry->field_0x8;
-    m_pTextureManager->field_0x14 = deviceEntry->field_0xc;
+    D3DTextureManager* textureManager = m_pTextureManager;
+
+    textureManager->pDeviceGUID = deviceEntry->pGUID;
+    textureManager->field_0xc = deviceEntry->field_0x4;
+    textureManager->field_0x10 = deviceEntry->field_0x8;
+    textureManager->field_0x14 = deviceEntry->field_0xc;
 
     if (g_pGraphics->isFullscreen != 0) {
         g_pGraphics->pDD7->SetDisplayMode(g_pGraphics->resX, g_pGraphics->resY, g_pGraphics->depth, 0, 0);
@@ -388,7 +390,6 @@ BOOL CGraphics::FUN_004a7910(int screenWidth, int screenHeight, int colourDepth)
             if (g_pGraphics->pDD7->CreateSurface(&s.ddsd, &g_pGraphics->pPrimarySurface, 0) != 0)
                 return FALSE;
 
-            s.pDDClipper = NULL;
             if (g_pGraphics->pDD7->CreateClipper(0, &s.pDDClipper, 0) != 0)
                 return FALSE;
 
