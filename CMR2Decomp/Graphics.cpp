@@ -808,6 +808,11 @@ BOOL CGraphics::FUN_004a8450(int screenWidth, int screenHeight, int colourDepth)
         ddsd.dwWidth = g_pGraphics->resX;
 
         memset(&ddpf, 0, sizeof(DDPIXELFORMAT));
+        ddpf = m_pTextureManager->ddpfZBuffer;
+
+        ddsd.ddsCaps.dwCaps = local90;
+        ddpf = m_pTextureManager->ddpfZBuffer;
+        ddsd.ddpfPixelFormat = ddpf;        
         
         if (FUN_004a8d60() == 1 || FUN_004a8d60() == 2) {
             local90 |= 0x10004000;
