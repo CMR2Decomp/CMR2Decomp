@@ -937,10 +937,7 @@ struct Graphics
 struct D3DTextureManager {
     IDirect3D7* pDD;                              // 0x0
     IDirect3DDevice7* pD3D;                       // 0x4
-    GUID* pDeviceGUID;                             // 0x8
-    DWORD field_0xc;                               // 0xc
-    DWORD field_0x10;                              // 0x10
-    DWORD field_0x14;                              // 0x14
+    GUID deviceGUID;                             // 0x8
     IDirect3DVertexBuffer7* pVertexBuffers[200];   // 0x18 - 0x337
     IDirect3DVertexBuffer7* pVertexBuffer1;        // 0x338
     IDirect3DVertexBuffer7* pVertexBuffer2;        // 0x33c
@@ -1008,11 +1005,10 @@ struct DisplayMode
 };
 
 struct Unk0x0065ff90 {
-    LPGUID pGUID;
-    DWORD field_0x4;
-    DWORD field_0x8;
-    DWORD field_0xc;
-    BYTE padding[0xa4];
+    GUID guid;
+    CHAR deviceDesc[0x50];
+    CHAR deviceName[0x50];
+    DWORD field_0xb0;
 };
 
 struct Unk0x00660040 {
@@ -1067,6 +1063,12 @@ private:
 
     // GLOBAL: CMR2 0x00520b7c
     static BOOL m_unk0x00520b7c;
+
+    // GLOBAL: CMR2 0x00520be0
+    static char m_direct3DHAL[13]; // "Direct3D HAL"
+
+    // GLOBAL: CMR2 0x00520bcc
+    static char m_direct3DTLHAL[18]; // "Direct3D T&L HAL"    
 
     // GLOBAL: CMR2 0x0065fa2c
     static void* m_unk0x0065fa2c;

@@ -40,6 +40,8 @@ DWORD CGraphics::m_displayCount = 0;
 Entry CGraphics::m_unk0x006634d8[10];
 DisplayMode CGraphics::m_displays[10];
 int CGraphics::m_releaseSurfaceCallbackID;
+char CGraphics::m_direct3DHAL[13] = "Direct3D HAL";
+char CGraphics::m_direct3DTLHAL[18] = "Direct3D T&L HAL";
 
 // FUNCTION: CMR2 0x00405830
 bool CGraphics::InitializeDirectX(void) {
@@ -366,10 +368,7 @@ BOOL CGraphics::FUN_004a7910(int screenWidth, int screenHeight, int colourDepth)
     Unk0x0065ff90* deviceEntry = &m_unk0x0065ff90[m_unk0x00663b24];
     D3DTextureManager* textureManager = m_pTextureManager;
 
-    textureManager->pDeviceGUID = deviceEntry->pGUID;
-    textureManager->field_0xc = deviceEntry->field_0x4;
-    textureManager->field_0x10 = deviceEntry->field_0x8;
-    textureManager->field_0x14 = deviceEntry->field_0xc;
+    textureManager->deviceGUID = deviceEntry->guid;
 
     if (g_pGraphics->isFullscreen != 0) {
         g_pGraphics->pDD7->SetDisplayMode(g_pGraphics->resX, g_pGraphics->resY, g_pGraphics->depth, 0, 0);
@@ -728,7 +727,20 @@ DWORD CGraphics::FUN_004a8d60(void) {
   return m_unk0x00660040[m_unk0x00663b24].surfaceCap;
 }
 
-// STUB: CMR2 0x004a8c30
+// FUNCTION: CMR2 0x004a8c30
 HRESULT CGraphics::FUN_004a8c30_DDEnumCallback(LPSTR lpDeviceDescription, LPSTR lpDeviceName, LPD3DDEVICEDESC7 lpD3DDeviceDesc, LPVOID lpUserArg) {
+    if (strcmp(lpDeviceName, m_direct3DHAL) == 0 && m_unk0x00660040[0].surfaceCap != 2) {
+        m_unk0x0065ff90[0].guid = lpD3DDeviceDesc->deviceGUID;
+        m_unk0x00660040[0].surfaceCap = 1;
+    } else if (strcmp(lpDeviceName, m_direct3DTLHAL) == 0) {
+        m_unk0x0065ff90[0].guid = lpD3DDeviceDesc->deviceGUID;
+        m_unk0x00660040[0].surfaceCap = 2;
+    }
+
+    wsprintfA(m_unk0x0065ff90[0].deviceDesc, CRegKey::m_regKeyPathFormatValue, lpDeviceDescription);
+    wsprintfA(m_unk0x0065ff90[0].deviceName, CRegKey::m_regKeyPathFormatValue, lpDeviceName);
+
+    m_unk0x00663b20 = 1;
+
     return TRUE;
 }
