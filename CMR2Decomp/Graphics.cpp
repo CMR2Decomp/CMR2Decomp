@@ -4,6 +4,7 @@
 #include "main.h"
 #include "Sound.h"
 #include "Game.h"
+#include "FileBuffer.h"
 #include <basetsd.h>
 #include <cstring>
 #include <windef.h>
@@ -21,8 +22,9 @@ D3DTextureManager *CGraphics::m_pTextureManager;
 char CGraphics::m_strSettingConfigurationToDefault[36] = "Setting configuration to defaults";
 
 BOOL CGraphics::m_unk0x00520b7c = TRUE;
+UINT CGraphics::m_unk0x0065fa20 = 0;
+UINT CGraphics::m_unk0x0065fa28 = 0;
 void* CGraphics::m_unk0x0065fa2c;
-int CGraphics::m_unk0x0065fa28;
 int CGraphics::m_unk0x006dd890;
 int CGraphics::m_unk0x00663b1c;
 Unk0x0065ff90 CGraphics::m_unk0x0065ff90[10];
@@ -42,6 +44,7 @@ DisplayMode CGraphics::m_displays[10];
 int CGraphics::m_releaseSurfaceCallbackID;
 char CGraphics::m_direct3DHAL[13] = "Direct3D HAL";
 char CGraphics::m_direct3DTLHAL[18] = "Direct3D T&L HAL";
+BOOL CGraphics::m_unk0x0072d56c = FALSE;
 
 // FUNCTION: CMR2 0x00405830
 bool CGraphics::InitializeDirectX(void) {
@@ -131,6 +134,12 @@ void CGraphics::FUN_004a78a0(unsigned int screenWidth, unsigned int screenHeight
     FUN_004a8d90(param5);
 
     BOOL b = FUN_004a7910(screenWidth, screenHeight, colourDepth);
+    if (b != FALSE) {
+        b = FUN_004a8450(screenWidth, screenHeight, colourDepth);
+        if (b != 0) {
+
+        }
+    }
 }
 
 // FUNCTION: CMR2 0x004a5be0
@@ -741,6 +750,47 @@ HRESULT CGraphics::FUN_004a8c30_DDEnumCallback(LPSTR lpDeviceDescription, LPSTR 
     wsprintfA(m_unk0x0065ff90[0].deviceName, CRegKey::m_regKeyPathFormatValue, lpDeviceName);
 
     m_unk0x00663b20 = 1;
+
+    return TRUE;
+}
+
+// FUNCTION: CMR2 0x004a8450
+BOOL CGraphics::FUN_004a8450(int screenWidth, int screenHeight, int colourDepth) {
+    if (m_unk0x00520b7c != FALSE) {
+        m_unk0x0072d56c = 0;
+        CGame::RegisterCallback(ReleaseDirect3D, NULL);
+        CGame::RegisterCallback(ReleaseTextureBuffers, NULL);
+        CGame::RegisterCallback(FUN_004a5be0, NULL);
+    }
+    return TRUE;
+}
+
+// NOTE: both of these loops feel like they're accessing
+// the wrong property to send to freegenericfilebuffer
+// but it does match the offset...
+// FUNCTION: CMR2 0x004a5d10
+BOOL CGraphics::ReleaseTextureBuffers(void) {
+    void* buffer = NULL;
+    int i = 0;
+    for (i = 0; i < 2048; i++) {
+        buffer = m_pTextureManager->textureBuffer[i];
+        if (buffer != NULL) {
+            CFileBuffer::FreeGenericFileBuffer(buffer);
+            m_pTextureManager->textureBuffer[i] = NULL;
+            if (m_unk0x0065fa20 > 0)
+                m_unk0x0065fa20--;
+        }
+    }
+
+    for (i = 0; i < 20; i++) {
+        buffer = m_pTextureManager->textureBuffer2[i];
+        if (buffer != NULL) {
+            CFileBuffer::FreeGenericFileBuffer(buffer);
+            m_pTextureManager->textureBuffer2[i] = NULL;
+            if (m_unk0x0065fa28 > 0)
+                m_unk0x0065fa28--;
+        }
+    }
 
     return TRUE;
 }

@@ -1053,6 +1053,8 @@ public:
     static void FUN_004a8ec0(int width, int height, int colourDepth);
     static DWORD FUN_004a8d60(void);
     static HRESULT FUN_004a8c30_DDEnumCallback(LPSTR lpDeviceDescription, LPSTR lpDeviceName, LPD3DDEVICEDESC7 lpD3DDeviceDesc, LPVOID lpUserArg);
+    static BOOL FUN_004a8450(int screenWidth, int screenHeight, int colourDepth);
+    static BOOL ReleaseTextureBuffers(void);
 
 private:
     // GLOBAL: CMR2 0x0051615c
@@ -1068,13 +1070,16 @@ private:
     static char m_direct3DHAL[13]; // "Direct3D HAL"
 
     // GLOBAL: CMR2 0x00520bcc
-    static char m_direct3DTLHAL[18]; // "Direct3D T&L HAL"    
+    static char m_direct3DTLHAL[18]; // "Direct3D T&L HAL"
 
+    // GLOBAL: CMR2 0x0065fa20
+    static UINT m_unk0x0065fa20;
+    
+    // GLOBAL: CMR2 0x0065fa28
+    static UINT m_unk0x0065fa28;
+    
     // GLOBAL: CMR2 0x0065fa2c
     static void* m_unk0x0065fa2c;
-
-    // GLOBAL: CMR2 0x0065fa28
-    static int m_unk0x0065fa28;
 
     // GLOBAL: CMR2 0x006dd890
     static int m_unk0x006dd890;
@@ -1126,6 +1131,9 @@ private:
 
     // GLOBAL: CMR2 0x00660040
     static Unk0x00660040 m_unk0x00660040[10];
+
+    // GLOBAL: CMR2 0x0072d56c
+    static BOOL m_unk0x0072d56c;
 };
 
 #endif
