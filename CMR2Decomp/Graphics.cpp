@@ -1,4 +1,5 @@
 #include "Graphics.h"
+#include "Frontend.h"
 #include "GameInfo.h"
 #include "RegKey.h"
 #include "main.h"
@@ -42,6 +43,7 @@ DWORD CGraphics::m_displayCount = 0;
 Entry CGraphics::m_unk0x006634d8[10];
 DisplayMode CGraphics::m_displays[10];
 int CGraphics::m_releaseSurfaceCallbackID;
+char CGraphics::m_setWindowsDesktopTo16Bit[47] = "Set windows desktop to 16 bit for this 3D card";
 char CGraphics::m_direct3DHAL[13] = "Direct3D HAL";
 char CGraphics::m_direct3DTLHAL[18] = "Direct3D T&L HAL";
 BOOL CGraphics::m_unk0x0072d56c = FALSE;
@@ -757,6 +759,11 @@ HRESULT CGraphics::FUN_004a8c30_DDEnumCallback(LPSTR lpDeviceDescription, LPSTR 
 
 // FUNCTION: CMR2 0x004a8450
 BOOL CGraphics::FUN_004a8450(int screenWidth, int screenHeight, int colourDepth) {
+    BOOL b;
+    DDSURFACEDESC2 ddsd;
+    DDPIXELFORMAT ddpf;
+    int local90 = 0x20000;
+
     if (m_unk0x00520b7c != FALSE) {
         m_unk0x0072d56c = 0;
         CGame::RegisterCallback(ReleaseDirect3D, NULL);
@@ -770,16 +777,83 @@ BOOL CGraphics::FUN_004a8450(int screenWidth, int screenHeight, int colourDepth)
     if (g_pGraphics->depth == 0x20) {
         m_pTextureManager->ddpfZBuffer.dwRGBBitCount = 0x20;
         m_pTextureManager->pDD->EnumZBufferFormats(m_pTextureManager->deviceGUID, FUN_004a87c0, &m_pTextureManager->ddpfZBuffer);
-    } else if (g_pGraphics->depth == 0x10) {
 
+        if (m_pTextureManager->ddpfZBuffer.dwRGBBitCount != 0x20) {
+            m_pTextureManager->ddpfZBuffer.dwRGBBitCount = 0x18;
+            m_pTextureManager->pDD->EnumZBufferFormats(m_pTextureManager->deviceGUID, FUN_004a87c0, &m_pTextureManager->ddpfZBuffer);
+        }
+
+        if (m_pTextureManager->ddpfZBuffer.dwRGBBitCount != 0x18) {
+            m_pTextureManager->ddpfZBuffer.dwRGBBitCount = 0x10;
+            m_pTextureManager->pDD->EnumZBufferFormats(m_pTextureManager->deviceGUID, FUN_004a87c0, &m_pTextureManager->ddpfZBuffer);
+        }        
     }
+    
+    if (g_pGraphics->depth == 0x10) {
+        m_pTextureManager->ddpfZBuffer.dwRGBBitCount = 0x10;
+        m_pTextureManager->pDD->EnumZBufferFormats(m_pTextureManager->deviceGUID, FUN_004a87c0, &m_pTextureManager->ddpfZBuffer);
+    }
+
+    b = FUN_004b74b0();
+    if (b == FALSE) {
+        memset(&ddsd, 0, sizeof(DDSURFACEDESC2));
+        ddsd.dwSize = sizeof(DDSURFACEDESC2);
+        ddsd.dwFlags = DDSD_CAPS | DDSD_HEIGHT | DDSD_WIDTH | DDSD_PIXELFORMAT;
+
+        if ((g_pGraphics->field913_0x3bc & 0x20) != 0) {
+            local90 = 0x24000;
+        }
+
+        ddsd.dwHeight = g_pGraphics->resY;
+        ddsd.dwWidth = g_pGraphics->resX;
+
+        memset(&ddpf, 0, sizeof(DDPIXELFORMAT));
+        
+        if (FUN_004a8d60() == 1 || FUN_004a8d60() == 2) {
+            local90 |= 0x10004000;
+        } else {
+            local90 |= 0x800;
+        }
+
+        g_pGraphics->pDD7->CreateSurface(&ddsd, &g_pGraphics->pSurface3, NULL);
+        if (g_pGraphics->pBackBufferSurface->AddAttachedSurface(g_pGraphics->pSurface3) != 0)
+            return FALSE;
+    }
+
+    ddsd.dwSize = sizeof(DDSURFACEDESC2);
+    g_pGraphics->pDD7->GetDisplayMode(&ddsd);
+    if (g_pGraphics->isFullscreen == 0 && ddsd.dwAlphaBitDepth == 0x20) {
+        if (DeviceCanRender16Bit(FUN_004a8bc0()) == 0) {
+            MessageBoxA(CMain::m_hWndList[CMain::m_hWndIx], m_setWindowsDesktopTo16Bit, CMain::m_logFileBlankLine, MB_TASKMODAL | MB_TOPMOST);
+        }
+    }
+
+    if (FUN_004a8d60() == 0) {
+        m_pTextureManager->pDD->CreateDevice(IID_IDirect3DRGBDevice, g_pGraphics->pBackBufferSurface, &m_pTextureManager->pD3D);
+    }
+
+    if (FUN_004a8d60() == 1) {
+        m_pTextureManager->pDD->CreateDevice(IID_IDirect3DHALDevice, g_pGraphics->pBackBufferSurface, &m_pTextureManager->pD3D);
+    }
+
+    if (FUN_004a8d60() == 2) {
+        m_pTextureManager->pDD->CreateDevice(IID_IDirect3DTnLHalDevice, g_pGraphics->pBackBufferSurface, &m_pTextureManager->pD3D);
+    }
+
+    if (FUN_004a8d60() == 3) {
+        m_pTextureManager->pDD->CreateDevice(IID_IDirect3DRefDevice, g_pGraphics->pBackBufferSurface, &m_pTextureManager->pD3D);
+    }
+
+    FUN_004b7210();
+    FUN_004a8fb0();
+    FUN_0049df90();
+    FUN_004b1980();
+    
+    m_unk0x00520b7c = 0;    
 
     return TRUE;
 }
 
-// NOTE: both of these loops feel like they're accessing
-// the wrong property to send to freegenericfilebuffer
-// but it does match the offset...
 // FUNCTION: CMR2 0x004a5d10
 BOOL CGraphics::ReleaseTextureBuffers(void) {
     void* buffer = NULL;
@@ -821,4 +895,25 @@ HRESULT CGraphics::FUN_004a87c0(LPDDPIXELFORMAT lpDDPixFmt, LPVOID lpContext) {
 
 
     return DDENUMRET_CANCEL;
+}
+
+// FUNCTION: CMR2 0x004b74b0
+BOOL CGraphics::FUN_004b74b0(void) {
+  return CFrontend::m_unk0x006e0c34;
+}
+
+void CGraphics::FUN_004b7210(void) {
+
+}
+
+void CGraphics::FUN_004a8fb0(void) {
+
+}
+
+void CGraphics::FUN_0049df90(void) {
+
+}
+
+void CGraphics::FUN_004b1980(void) {
+
 }

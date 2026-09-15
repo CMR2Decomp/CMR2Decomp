@@ -38,6 +38,8 @@ public:
     // unknowns
     // GLOBAL: CMR2 0x00818260;
     static GenericFile m_unk0x00818260;
+    // GLOBAL: CMR2 0x006e0c34
+    static unsigned int m_unk0x006e0c34;
     // GLOBAL: CMR2 0x006e0c5c
     static unsigned int m_unk0x006e0c5c;
     // GLOBAL: CMR2 0x006e0c64

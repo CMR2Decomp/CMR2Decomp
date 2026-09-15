@@ -1024,6 +1024,18 @@ extern Graphics *g_pGraphics;
 // GLOBAL: CMR2 0x00511578
 // IID_IDirect3D7
 
+// GLOBAL: CMR2 0x00511598
+// IID_IDirect3DRGBDevice
+
+// GLOBAL: CMR2 0x005115a8
+// IID_IDirect3DHALDevice
+
+// GLOBAL: CMR2 0x005115c8
+// IID_IDirect3DRefDevice
+
+// GLOBAL: CMR2 0x005115e8
+// IID_IDirect3DTnLHalDevice
+
 class CGraphics {
 public:
     static bool InitializeDirectX(void);
@@ -1056,6 +1068,11 @@ public:
     static BOOL FUN_004a8450(int screenWidth, int screenHeight, int colourDepth);
     static BOOL ReleaseTextureBuffers(void);
     static HRESULT FUN_004a87c0(LPDDPIXELFORMAT lpDDPixFmt, LPVOID lpContext);
+    static BOOL FUN_004b74b0(void);
+    static void FUN_004b7210(void);
+    static void FUN_004a8fb0(void);
+    static void FUN_0049df90(void);
+    static void FUN_004b1980(void);
 
 private:
     // GLOBAL: CMR2 0x0051615c
@@ -1066,6 +1083,9 @@ private:
 
     // GLOBAL: CMR2 0x00520b7c
     static BOOL m_unk0x00520b7c;
+
+    // GLOBAL: CMR2 0x00520b9c
+    static char m_setWindowsDesktopTo16Bit[47]; // "Set windows desktop to 16 bit for this 3D card"
 
     // GLOBAL: CMR2 0x00520be0
     static char m_direct3DHAL[13]; // "Direct3D HAL"

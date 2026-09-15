@@ -93,6 +93,7 @@ char CFrontend::m_strFrontendTexturesCarsB01[36] = "%s\\frontend\\Textures\\cars
 char CFrontend::m_strFrontendTexturesCarsF01[36] = "%s\\frontend\\Textures\\cars\\%sF01.tga";
 
 GenericFile CFrontend::m_unk0x00818260;
+unsigned int CFrontend::m_unk0x006e0c34;
 unsigned int CFrontend::m_unk0x006e0c5c;
 unsigned int CFrontend::m_unk0x006e0c64;
 unsigned int CFrontend::m_unk0x006e0c60;
