@@ -2,6 +2,7 @@
 #define _GRAPHICS_H
 
 #include <windows.h>
+#include <winnt.h>
 #include "../third_party/dx7sdk-7001/include/d3d.h"
 
 #include "Texture.h"
@@ -298,7 +299,7 @@ struct Graphics
     unsigned char field287_0x131;
     unsigned char field288_0x132;
     unsigned char field289_0x133;
-    IDirectDrawSurface7 *pSurface;
+    IDirectDrawSurface7 *pPrimarySurface;
     unsigned char field291_0x138;
     unsigned char field292_0x139;
     unsigned char field293_0x13a;
@@ -593,7 +594,7 @@ struct Graphics
     unsigned char field582_0x261;
     unsigned char field583_0x262;
     unsigned char field584_0x263;
-    IDirectDrawSurface7 *pSurface2;
+    IDirectDrawSurface7 *pBackBufferSurface;
     unsigned char field586_0x268;
     unsigned char field587_0x269;
     unsigned char field588_0x26a;
@@ -936,10 +937,7 @@ struct Graphics
 struct D3DTextureManager {
     IDirect3D7* pDD;                              // 0x0
     IDirect3DDevice7* pD3D;                       // 0x4
-    GUID* pDeviceGUID;                             // 0x8
-    DWORD field_0xc;                               // 0xc
-    DWORD field_0x10;                              // 0x10
-    DWORD field_0x14;                              // 0x14
+    GUID deviceGUID;                             // 0x8
     IDirect3DVertexBuffer7* pVertexBuffers[200];   // 0x18 - 0x337
     IDirect3DVertexBuffer7* pVertexBuffer1;        // 0x338
     IDirect3DVertexBuffer7* pVertexBuffer2;        // 0x33c
@@ -956,10 +954,75 @@ struct D3DTextureManager {
     BYTE field_0x23d4[0x94];             // 0x23d4 - 0x2467 (padding)
 };
 
+struct DDEnumDeviceBufferEntry
+{
+    union
+    {
+        struct
+        {
+            GUID* pGUID;        // +0x00
+            GUID  guid;         // +0x04
+        } device;
+
+        struct
+        {
+            DDSCAPS2 caps;      // +0x00
+            DWORD    unknown18; // +0x10
+        } caps;
+    };
+
+    DWORD capFlag80000;             // 0x14
+    DWORD capRender16Bit;           // 0x18
+    DWORD capFlag1;                 // 0x1C
+    DWORD capFlag200;               // 0x20
+
+    DWORD capTextureFilter1;        // 0x24
+    DWORD capTextureFilter2;        // 0x28
+    DWORD hasZBuffer;               // 0x2C
+    DWORD zBufferBitDepth;          // 0x30
+    DWORD capTextureFilter3;        // 0x34
+    DWORD capHardwareRasterization; // 0x38
+
+    DWORD unknown3C;                // 0x3C
+};
+
+struct DDDeviceEnumBuffer {
+    DWORD count;
+    DWORD reserved;
+    DDEnumDeviceBufferEntry entries[10];
+};
+
+struct Entry {
+    char unk_0x00[0x50];           // untraced — candidate: GUID, driver name, or other DDDEVICEIDENTIFIER fields
+    char name[0x50];               // confirmed: device description, written via wsprintfA("%s", ...)
+};
+
+struct DisplayMode
+{
+    DWORD width;
+    DWORD height;
+    DWORD colourDepth;
+};
+
+struct Unk0x0065ff90 {
+    GUID guid;
+    CHAR deviceDesc[0x50];
+    CHAR deviceName[0x50];
+    DWORD field_0xb0;
+};
+
+struct Unk0x00660040 {
+    DWORD surfaceCap;
+    BYTE padding[0xb0];
+};
+
 extern Graphics *g_pGraphics;
 
 // GLOBAL: CMR2 0x005114a8
 // IID_IDirectDraw7
+
+// GLOBAL: CMR2 0x00511578
+// IID_IDirect3D7
 
 class CGraphics {
 public:
@@ -973,6 +1036,23 @@ public:
     static void ReleaseSurfaces(void);
     static void FUN_004a8bd0(int param1);
     static void FUN_004a8d90(int param1);
+    static BOOL FUN_004a7910(int screenWidth, int screenHeight, int colourDepth);
+    static BOOL FUN_004bdb60(DDDeviceEnumBuffer* param1, HWND hWnd);
+    static BOOL FUN_004bdb60_DDEnumCallback(GUID* lpGUID, LPSTR lpDriverDescription, LPSTR lpDriverName,  LPVOID lpContext, HMONITOR hMonitor);
+    static BOOL FUN_004bdd30(DDEnumDeviceBufferEntry *device,IDirectDraw7 *pDD);
+    static void FUN_004bde20(DDEnumDeviceBufferEntry *device,IDirectDraw7 *pDD);
+    static HRESULT FUN_004bde60(LPSTR lpDeviceDescription, LPSTR lpDeviceName, LPD3DDEVICEDESC7 lpD3DDeviceDesc, LPVOID lpUserArg);
+    static DWORD FUN_004a96c0(int param1);
+    static INT32 FUN_004a8bc0(void);
+    static DWORD FUN_004a96e0(int param_1);
+    static BOOL FUN_004a8b30_DDEnumCallback(GUID* lpGUID, LPSTR lpDriverDescription, LPSTR lpDriverName,  LPVOID lpContext, HMONITOR hMonitor);
+    static HRESULT FUN_004a8da0(DDSURFACEDESC2* lpDDSurfaceDesc2, void* lpContext);
+    static int DeviceCanRender16Bit(int param1);
+    static DWORD FUN_004bdd00(DWORD caps);
+    static BOOL FUN_004a8f60(int width, int height, int colourDepth);
+    static void FUN_004a8ec0(int width, int height, int colourDepth);
+    static DWORD FUN_004a8d60(void);
+    static HRESULT FUN_004a8c30_DDEnumCallback(LPSTR lpDeviceDescription, LPSTR lpDeviceName, LPD3DDEVICEDESC7 lpD3DDeviceDesc, LPVOID lpUserArg);
 
 private:
     // GLOBAL: CMR2 0x0051615c
@@ -984,6 +1064,12 @@ private:
     // GLOBAL: CMR2 0x00520b7c
     static BOOL m_unk0x00520b7c;
 
+    // GLOBAL: CMR2 0x00520be0
+    static char m_direct3DHAL[13]; // "Direct3D HAL"
+
+    // GLOBAL: CMR2 0x00520bcc
+    static char m_direct3DTLHAL[18]; // "Direct3D T&L HAL"    
+
     // GLOBAL: CMR2 0x0065fa2c
     static void* m_unk0x0065fa2c;
 
@@ -992,12 +1078,54 @@ private:
 
     // GLOBAL: CMR2 0x006dd890
     static int m_unk0x006dd890;
+
+    // GLOBAL: CMR2 0x006631f8
+    static DisplayMode m_displays[10];
+
+    // GLOBAL: CMR2 0x006634d8
+    static Entry m_unk0x006634d8[10];
+
+    // GLOBAL: CMR2 0x00663b18
+    static int m_unk0x00663b18;
     
     // GLOBAL: CMR2 0x00663b1c
     static int m_unk0x00663b1c;
+
+    // GLOBAL: CMR2 0x0065ff90
+    static Unk0x0065ff90 m_unk0x0065ff90[10];
+    
+    // GLOBAL: CMR2 0x00663b20
+    static int m_unk0x00663b20;
     
     // GLOBAL: CMR2 0x00663b24
-    static int m_unk0x00663b24;    
+    static int m_unk0x00663b24;
+
+    // GLOBAL: CMR2 0x00663b2c
+    static int m_selectedDisplayDeviceIx;
+
+    // GLOBAL: CMR2 0x00663b28
+    static DWORD m_displayCount; // maybe possibly
+
+    // GLOBAL: CMR2 0x00663b30
+    static int m_releaseSurfaceCallbackID;
+    
+    // GLOBAL: CMR2 0x0081709c
+    static BOOL m_unk0x0081709c;
+
+    // GLOBAL: CMR2 0x0065fd08
+    static DDDeviceEnumBuffer m_unk0x0065fd08;
+
+    // GLOBAL: CMR2 0x00816ce8
+    static DDDeviceEnumBuffer m_displayDevicePool;
+
+    // GLOBAL: CMR2 0x00817098
+    static int m_lifetimeDisplayDeviceCount;
+
+    // GLOBAL: CMR2 0x00817094
+    static int m_totalPixelsForScreen;
+
+    // GLOBAL: CMR2 0x00660040
+    static Unk0x00660040 m_unk0x00660040[10];
 };
 
 #endif
