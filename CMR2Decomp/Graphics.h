@@ -1055,6 +1055,7 @@ public:
     static HRESULT FUN_004a8c30_DDEnumCallback(LPSTR lpDeviceDescription, LPSTR lpDeviceName, LPD3DDEVICEDESC7 lpD3DDeviceDesc, LPVOID lpUserArg);
     static BOOL FUN_004a8450(int screenWidth, int screenHeight, int colourDepth);
     static BOOL ReleaseTextureBuffers(void);
+    static HRESULT FUN_004a87c0(LPDDPIXELFORMAT lpDDPixFmt, LPVOID lpContext);
 
 private:
     // GLOBAL: CMR2 0x0051615c
@@ -1083,6 +1084,9 @@ private:
 
     // GLOBAL: CMR2 0x006dd890
     static int m_unk0x006dd890;
+
+    // GLOBAL: CMR2 0x00660bfc
+    static BOOL m_unk0x00660bfc;
 
     // GLOBAL: CMR2 0x006631f8
     static DisplayMode m_displays[10];

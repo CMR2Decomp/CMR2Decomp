@@ -45,6 +45,7 @@ int CGraphics::m_releaseSurfaceCallbackID;
 char CGraphics::m_direct3DHAL[13] = "Direct3D HAL";
 char CGraphics::m_direct3DTLHAL[18] = "Direct3D T&L HAL";
 BOOL CGraphics::m_unk0x0072d56c = FALSE;
+BOOL CGraphics::m_unk0x00660bfc = FALSE;
 
 // FUNCTION: CMR2 0x00405830
 bool CGraphics::InitializeDirectX(void) {
@@ -762,6 +763,17 @@ BOOL CGraphics::FUN_004a8450(int screenWidth, int screenHeight, int colourDepth)
         CGame::RegisterCallback(ReleaseTextureBuffers, NULL);
         CGame::RegisterCallback(FUN_004a5be0, NULL);
     }
+
+    m_unk0x00660bfc = 1;
+    memset(&m_pTextureManager->ddpfZBuffer, 0, sizeof(DDPIXELFORMAT));
+
+    if (g_pGraphics->depth == 0x20) {
+        m_pTextureManager->ddpfZBuffer.dwRGBBitCount = 0x20;
+        m_pTextureManager->pDD->EnumZBufferFormats(m_pTextureManager->deviceGUID, FUN_004a87c0, &m_pTextureManager->ddpfZBuffer);
+    } else if (g_pGraphics->depth == 0x10) {
+
+    }
+
     return TRUE;
 }
 
@@ -793,4 +805,20 @@ BOOL CGraphics::ReleaseTextureBuffers(void) {
     }
 
     return TRUE;
+}
+
+// FUNCTION: CMR2 0x004a87c0
+HRESULT CGraphics::FUN_004a87c0(LPDDPIXELFORMAT lpDDPixFmt, LPVOID lpContext) {
+    LPDDPIXELFORMAT ddpf = (LPDDPIXELFORMAT)lpContext;
+    if (lpDDPixFmt != NULL && ddpf != NULL) {
+        if ((ddpf->dwRGBBitCount != lpDDPixFmt->dwRGBBitCount) || (lpDDPixFmt->dwFlags & 0x400) == 0) {
+            ddpf->dwRGBBitCount = 0;
+            return DDENUMRET_OK;
+        }
+        
+        memcpy(ddpf, lpDDPixFmt, sizeof(DDPIXELFORMAT));
+    }
+
+
+    return DDENUMRET_CANCEL;
 }
