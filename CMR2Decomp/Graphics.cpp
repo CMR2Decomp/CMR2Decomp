@@ -48,6 +48,7 @@ char CGraphics::m_direct3DHAL[13] = "Direct3D HAL";
 char CGraphics::m_direct3DTLHAL[18] = "Direct3D T&L HAL";
 BOOL CGraphics::m_unk0x0072d56c = FALSE;
 BOOL CGraphics::m_unk0x00660bfc = FALSE;
+Unk0x006e0bb0 CGraphics::m_unk0x006e0bb0;
 
 // FUNCTION: CMR2 0x00405830
 bool CGraphics::InitializeDirectX(void) {
@@ -897,21 +898,217 @@ HRESULT CGraphics::FUN_004a87c0(LPDDPIXELFORMAT lpDDPixFmt, LPVOID lpContext) {
 
 // FUNCTION: CMR2 0x004b74b0
 BOOL CGraphics::FUN_004b74b0(void) {
-  return CFrontend::m_unk0x006e0c34;
+  return m_unk0x006e0bb0.field0x80;
 }
 
+// FUNCTION: CMR2 0x004b7210
 void CGraphics::FUN_004b7210(void) {
+    D3DDEVICEDESC7 d3ddesc;
+    memset(&m_unk0x006e0bb0, 0, sizeof(Unk0x006e0bb0));
+    m_pTextureManager->pD3D->GetCaps(&d3ddesc);
 
+    if ((d3ddesc.dwDevCaps & 0x100) != 0) {
+        m_unk0x006e0bb0.flag100 = 1;
+    }
+
+    if ((d3ddesc.dwDevCaps & 0x200) != 0) {
+        m_unk0x006e0bb0.flag200 = 1;
+    }
+
+    if ((d3ddesc.dwDevCaps & 0x1000) != 0) {
+        m_unk0x006e0bb0.flag1000 = 1;
+    }
+
+    m_unk0x006e0bb0.field0x7c = d3ddesc.dpcTriCaps.dwStippleHeight;
+    if ((d3ddesc.dpcTriCaps.dwSize & 0x8000) != 0) {
+        m_unk0x006e0bb0.field0x80 = 1;
+    }
+
+    if (((BYTE)d3ddesc.dpcTriCaps.dwMiscCaps & 0x80) != 0) {
+        m_unk0x006e0bb0.field0x84 = 1;
+    }
+
+    if (((WORD)d3ddesc.dwFVFCaps > 1) && (d3ddesc.dwStencilCaps & 8) != 0) {
+        m_unk0x006e0bb0.field0x88 = 1;
+    }
+
+    if ((d3ddesc.dpcTriCaps.dwTextureFilterCaps & 4) != 0) {
+        m_unk0x006e0bb0.field0x18 = 1;
+    }
+
+    if ((d3ddesc.dpcTriCaps.dwShadeCaps & 1) != 0) {
+        m_unk0x006e0bb0.field0x1c = 1;
+    }
+
+    if ((d3ddesc.dpcTriCaps.dwShadeCaps & 2) != 0) {
+        m_unk0x006e0bb0.field0x28 = 1;
+    }
+
+    if ((d3ddesc.dpcTriCaps.dwShadeCaps & 0x20) != 0) {
+        m_unk0x006e0bb0.field0x2c = 1;
+    }
+
+    if ((d3ddesc.dpcTriCaps.dwAlphaCmpCaps & 1) != 0) {
+        m_unk0x006e0bb0.field0x20 = 1;
+    }
+
+    if ((d3ddesc.dpcTriCaps.dwAlphaCmpCaps & 0x20) != 0) {
+        m_unk0x006e0bb0.field0x24 = 1;
+    }
+
+    if ((d3ddesc.dpcTriCaps.dwAlphaCmpCaps & 8) != 0) {
+        m_unk0x006e0bb0.field0x30 = 1;
+    }
+
+    if ((d3ddesc.dpcTriCaps.dwTextureCaps & 0x80) != 0) {
+        m_unk0x006e0bb0.field0x44 = 1;
+    }
+
+    if ((d3ddesc.dpcTriCaps.dwTextureCaps & 0x40) != 0) {
+        m_unk0x006e0bb0.field0x48 = 1;
+    }
+
+    if ((d3ddesc.dpcTriCaps.dwTextureCaps & 1) != 0) {
+        m_unk0x006e0bb0.field0x4c = 1;
+    }
+
+    if ((d3ddesc.dpcTriCaps.dwTextureCaps & 4) != 0) {
+        m_unk0x006e0bb0.field0x50 = 1;
+    }
+
+    if ((d3ddesc.dpcTriCaps.dwTextureCaps & 2) != 0) {
+        m_unk0x006e0bb0.field0x54 = 1;
+    }
+
+    if ((d3ddesc.dpcTriCaps.dwTextureCaps & 8) != 0) {
+        m_unk0x006e0bb0.field0x58 = 1;
+    }
+
+    if ((d3ddesc.dpcTriCaps.dwTextureCaps & 0x20) != 0) {
+        m_unk0x006e0bb0.field0x5c = 1;
+    }
+
+    if ((d3ddesc.dpcTriCaps.dwSrcBlendCaps & 0x40) != 0) {
+        m_unk0x006e0bb0.field0x60 = 1;
+    }
+
+    if ((d3ddesc.dpcTriCaps.dwAlphaCmpCaps & 4) != 0) {
+        m_unk0x006e0bb0.field0x64 = 1;
+    }
+
+    if ((d3ddesc.dpcTriCaps.dwSize & 0x200) != 0) {
+        m_unk0x006e0bb0.field0x68 = 1;
+    }
+
+    if ((d3ddesc.dpcTriCaps.dwDestBlendCaps & 0x1000) != 0) {
+        m_unk0x006e0bb0.field0x6c = 1;
+    }
+
+    if ((d3ddesc.dpcTriCaps.dwDestBlendCaps & 0x2000) != 0) {
+        m_unk0x006e0bb0.field0x70 = 1;
+    }
+
+    if ((d3ddesc.dpcTriCaps.dwDestBlendCaps & 0x4000) != 0) {
+        m_unk0x006e0bb0.field0x74 = 1;
+    }
+
+    if ((d3ddesc.dpcTriCaps.dwDestBlendCaps & 0x8000) != 0) {
+        m_unk0x006e0bb0.field0x78 = 1;
+    }
+
+    if ((d3ddesc.dpcTriCaps.dwRasterCaps & 0x10) != 0 &&
+        (d3ddesc.dpcTriCaps.dwZCmpCaps & 0x20) != 0) {
+        m_unk0x006e0bb0.field0x34 = 1;
+    }
+
+    if ((d3ddesc.dpcTriCaps.dwRasterCaps & 2) != 0 &&
+        (d3ddesc.dpcTriCaps.dwZCmpCaps & 2) != 0) {
+        m_unk0x006e0bb0.field0x38 = 1;
+    }
+
+    if ((d3ddesc.dpcTriCaps.dwRasterCaps & 4) != 0 &&
+        (d3ddesc.dpcTriCaps.dwZCmpCaps & 2) != 0) {
+        m_unk0x006e0bb0.field0x3c = 1;
+    }
+
+    if ((d3ddesc.dpcTriCaps.dwRasterCaps & 2) != 0 &&
+        (d3ddesc.dpcTriCaps.dwZCmpCaps & 8) != 0) {
+        m_unk0x006e0bb0.field0x40 = 1;
+    }
+
+    if ((d3ddesc.dpcLineCaps.dwStippleHeight & 0x40) != 0) {
+        m_unk0x006e0bb0.field0xc = 1;
+    }
+
+    if ((d3ddesc.dpcLineCaps.dwStippleHeight & 0x20) != 0) {
+        m_unk0x006e0bb0.field0x8 = 1;
+    }
+
+    if ((d3ddesc.dpcLineCaps.dwStippleHeight & 0x10) != 0) {
+        m_unk0x006e0bb0.field0x4 = 1;
+    }
+
+    if ((d3ddesc.dpcTriCaps.dwMiscCaps & 0x80) != 0) {
+        m_unk0x006e0bb0.field0x8c = 1;
+    }
+
+    if ((d3ddesc.dpcTriCaps.dwMiscCaps & 0x100) != 0) {
+        m_unk0x006e0bb0.field0x90 = 1;
+    }
+
+    if ((WORD)d3ddesc.dwFVFCaps > 1) {
+        m_unk0x006e0bb0.field0x94 = 1;
+    }
+
+    m_unk0x006e0bb0.field0xa4 = 1;
+
+    if ((d3ddesc.dwStencilCaps & 0x400000) != 0) {
+        m_unk0x006e0bb0.field0x98 = 1;
+    }
+
+    if (((*(DWORD*)&d3ddesc.dvGuardBandBottom & 0x40) != 0) &&
+        ((*(DWORD*)&d3ddesc.dvGuardBandBottom & 0x80) != 0) &&
+        ((*(DWORD*)&d3ddesc.dvGuardBandBottom & 1) != 0) &&
+        ((*(DWORD*)&d3ddesc.dvGuardBandBottom & 4) != 0)) {
+        m_unk0x006e0bb0.field0x9c = 1;
+    }
+
+    if ((d3ddesc.dpcTriCaps.dwAlphaCmpCaps & 0x800) != 0) {
+        m_unk0x006e0bb0.field0xa0 = 1;
+    }
+
+    m_unk0x006e0bb0.field0xa8 = d3ddesc.dwDeviceRenderBitDepth;
+    m_unk0x006e0bb0.field0xac = d3ddesc.dwDeviceZBufferBitDepth;
+    m_unk0x006e0bb0.field0xb0 = d3ddesc.dwMinTextureWidth;
+    m_unk0x006e0bb0.field0xb4 = d3ddesc.dwMinTextureHeight;
 }
 
 void CGraphics::FUN_004a8fb0(void) {
 
 }
 
-void CGraphics::FUN_0049df90(void) {
+void CGraphics::FUN_0049df90(BOOL param1, BOOL param2) {
 
 }
 
 void CGraphics::FUN_004b1980(void) {
 
+}
+
+// FUNCTION: CMR2 0x004b7560
+BOOL CGraphics::FUN_004b7560(unsigned int param_1)
+{
+    if (m_unk0x006e0bb0.field0xa8 <= param_1 && param_1 <= m_unk0x006e0bb0.field0xb0)
+        return TRUE;
+
+    return FALSE;
+}
+
+// FUNCTION: CMR2 0x004b7590
+BOOL CGraphics::FUN_004b7590(unsigned int param_1)
+{
+    if (m_unk0x006e0bb0.field0xac <= param_1 && param_1 <= m_unk0x006e0bb0.field0xb4)
+        return TRUE;
+
+    return FALSE;
 }

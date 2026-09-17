@@ -1016,6 +1016,56 @@ struct Unk0x00660040 {
     BYTE padding[0xb0];
 };
 
+struct Unk0x006e0bb0 {
+    DWORD field0x0;
+    DWORD field0x4;
+    DWORD field0x8;
+    DWORD field0xc;
+    DWORD flag200;
+    DWORD flag100;
+    DWORD flag1000;
+    DWORD field0x18;
+    DWORD field0x1c;
+    DWORD field0x20;
+    DWORD field0x24;
+    DWORD field0x28;
+    DWORD field0x2c;
+    DWORD field0x30;
+    DWORD field0x34;
+    DWORD field0x38;
+    DWORD field0x3c;
+    DWORD field0x40;
+    DWORD field0x44;
+    DWORD field0x48;
+    DWORD field0x4c;
+    DWORD field0x50;
+    DWORD field0x54;
+    DWORD field0x58;
+    DWORD field0x5c;
+    DWORD field0x60;
+    DWORD field0x64;
+    DWORD field0x68;
+    DWORD field0x6c;
+    DWORD field0x70;
+    DWORD field0x74;
+    DWORD field0x78;
+    DWORD field0x7c;
+    DWORD field0x80;
+    DWORD field0x84;
+    DWORD field0x88;
+    DWORD field0x8c;
+    DWORD field0x90;
+    DWORD field0x94;
+    DWORD field0x98;
+    DWORD field0x9c;
+    DWORD field0xa0;
+    DWORD field0xa4;
+    DWORD field0xa8;
+    DWORD field0xac;
+    DWORD field0xb0;
+    DWORD field0xb4;
+};
+
 extern Graphics *g_pGraphics;
 
 // GLOBAL: CMR2 0x005114a8
@@ -1073,6 +1123,8 @@ public:
     static void FUN_004a8fb0(void);
     static void FUN_0049df90(BOOL param1, BOOL param2);
     static void FUN_004b1980(void);
+    static BOOL FUN_004b7560(unsigned int param_1);
+    static BOOL FUN_004b7590(unsigned int param_1);    
 
 private:
     // GLOBAL: CMR2 0x0051615c
@@ -1155,6 +1207,9 @@ private:
 
     // GLOBAL: CMR2 0x00660040
     static Unk0x00660040 m_unk0x00660040[10];
+
+    // GLOBAL: CMR2 0x006e0bb0
+    static Unk0x006e0bb0 m_unk0x006e0bb0;
 
     // GLOBAL: CMR2 0x0072d56c
     static BOOL m_unk0x0072d56c;

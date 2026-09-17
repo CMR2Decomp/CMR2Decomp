@@ -9,8 +9,6 @@ class CFrontend
 {
 public:
     static void FUN_004d21e0(void);
-    static BOOL FUN_004b7560(unsigned int param_1);
-    static BOOL FUN_004b7590(unsigned int param_1);
     static BOOL FUN_004a9700(void);
     static void FUN_004d2590(void);
     static bool LoadSplashScreens(bool param1);
@@ -38,16 +36,6 @@ public:
     // unknowns
     // GLOBAL: CMR2 0x00818260;
     static GenericFile m_unk0x00818260;
-    // GLOBAL: CMR2 0x006e0c34
-    static unsigned int m_unk0x006e0c34;
-    // GLOBAL: CMR2 0x006e0c5c
-    static unsigned int m_unk0x006e0c5c;
-    // GLOBAL: CMR2 0x006e0c64
-    static unsigned int m_unk0x006e0c64;
-    // GLOBAL: CMR2 0x006e0c60
-    static unsigned int m_unk0x006e0c60;
-    // GLOBAL: CMR2 0x006e0c68
-    static unsigned int m_unk0x006e0c68;
     // GLOBAL: CMR2 0x00663b38
     static unsigned int m_unk0x00663b38;
     // GLOBAL: CMR2 0x00663b48

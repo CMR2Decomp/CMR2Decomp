@@ -93,11 +93,6 @@ char CFrontend::m_strFrontendTexturesCarsB01[36] = "%s\\frontend\\Textures\\cars
 char CFrontend::m_strFrontendTexturesCarsF01[36] = "%s\\frontend\\Textures\\cars\\%sF01.tga";
 
 GenericFile CFrontend::m_unk0x00818260;
-unsigned int CFrontend::m_unk0x006e0c34;
-unsigned int CFrontend::m_unk0x006e0c5c;
-unsigned int CFrontend::m_unk0x006e0c64;
-unsigned int CFrontend::m_unk0x006e0c60;
-unsigned int CFrontend::m_unk0x006e0c68;
 unsigned int CFrontend::m_unk0x00663b38;
 unsigned int CFrontend::m_unk0x00663b48;
 
@@ -123,9 +118,9 @@ void CFrontend::FUN_004d21e0(void)
 
     if (CGameInfo::GetScreenWidth() >= 1024U)
     {
-        if (FUN_004b7560(1024) != 0)
+        if (CGraphics::FUN_004b7560(1024) != 0)
         {
-            if (FUN_004b7590(1024) != 0)
+            if (CGraphics::FUN_004b7590(1024) != 0)
             {
                 if (FUN_004a9700() != FALSE)
                     sprintf(m_stringDest, m_feRes1024C, CInstallInfo::GetFrontendDir());
@@ -163,9 +158,9 @@ void CFrontend::FUN_004d21e0(void)
 
     if (CGameInfo::GetScreenWidth() >= 1024U)
     {
-        if (FUN_004b7560(1024) != FALSE)
+        if (CGraphics::FUN_004b7560(1024) != FALSE)
         {
-            if (FUN_004b7590(1024) != FALSE)
+            if (CGraphics::FUN_004b7590(1024) != FALSE)
             {
                 if (FUN_004a9700())
                     sprintf(m_stringDest, m_feRes1024CCountrySpecific, CInstallInfo::GetCountrySpecificDir(), CGameInfo::GetGameRegionDirectory(), regionKey);
@@ -183,24 +178,6 @@ void CFrontend::FUN_004d21e0(void)
     }
 
     CGenericFileLoader::FUN_004a9d70(&m_unk0x00818260, m_stringDest);
-}
-
-// FUNCTION: CMR2 0x004b7560
-BOOL CFrontend::FUN_004b7560(unsigned int param_1)
-{
-    if (m_unk0x006e0c5c <= param_1 && param_1 <= m_unk0x006e0c64)
-        return TRUE;
-
-    return FALSE;
-}
-
-// FUNCTION: CMR2 0x004b7590
-BOOL CFrontend::FUN_004b7590(unsigned int param_1)
-{
-    if (m_unk0x006e0c60 <= param_1 && param_1 <= m_unk0x006e0c68)
-        return TRUE;
-
-    return FALSE;
 }
 
 // FUNCTION: CMR2 0x004a9700
