@@ -761,8 +761,6 @@ HRESULT CGraphics::FUN_004a8c30_DDEnumCallback(LPSTR lpDeviceDescription, LPSTR 
 BOOL CGraphics::FUN_004a8450(int screenWidth, int screenHeight, int colourDepth) {
     BOOL b;
     DDSURFACEDESC2 ddsd;
-    DDPIXELFORMAT ddpf;
-    int local90 = 0x20000;
 
     if (m_unk0x00520b7c != FALSE) {
         m_unk0x0072d56c = 0;
@@ -799,25 +797,20 @@ BOOL CGraphics::FUN_004a8450(int screenWidth, int screenHeight, int colourDepth)
         memset(&ddsd, 0, sizeof(DDSURFACEDESC2));
         ddsd.dwSize = sizeof(DDSURFACEDESC2);
         ddsd.dwFlags = DDSD_CAPS | DDSD_HEIGHT | DDSD_WIDTH | DDSD_PIXELFORMAT;
+        ddsd.ddsCaps.dwCaps = 0x20000;
 
         if ((g_pGraphics->field913_0x3bc & 0x20) != 0) {
-            local90 = 0x24000;
+            ddsd.ddsCaps.dwCaps = 0x24000;
         }
 
         ddsd.dwHeight = g_pGraphics->resY;
         ddsd.dwWidth = g_pGraphics->resX;
-
-        memset(&ddpf, 0, sizeof(DDPIXELFORMAT));
-        ddpf = m_pTextureManager->ddpfZBuffer;
-
-        ddsd.ddsCaps.dwCaps = local90;
-        ddpf = m_pTextureManager->ddpfZBuffer;
-        ddsd.ddpfPixelFormat = ddpf;        
+        ddsd.ddpfPixelFormat = m_pTextureManager->ddpfZBuffer;
         
         if (FUN_004a8d60() == 1 || FUN_004a8d60() == 2) {
-            local90 |= 0x10004000;
+            ddsd.ddsCaps.dwCaps |= 0x10004000;
         } else {
-            local90 |= 0x800;
+            ddsd.ddsCaps.dwCaps |= 0x800;
         }
 
         g_pGraphics->pDD7->CreateSurface(&ddsd, &g_pGraphics->pSurface3, NULL);
@@ -851,10 +844,10 @@ BOOL CGraphics::FUN_004a8450(int screenWidth, int screenHeight, int colourDepth)
 
     FUN_004b7210();
     FUN_004a8fb0();
-    FUN_0049df90();
+    FUN_0049df90(m_unk0x00520b7c, 1);
     FUN_004b1980();
     
-    m_unk0x00520b7c = 0;    
+    m_unk0x00520b7c = 0;
 
     return TRUE;
 }

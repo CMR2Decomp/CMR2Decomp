@@ -1071,7 +1071,7 @@ public:
     static BOOL FUN_004b74b0(void);
     static void FUN_004b7210(void);
     static void FUN_004a8fb0(void);
-    static void FUN_0049df90(void);
+    static void FUN_0049df90(BOOL param1, BOOL param2);
     static void FUN_004b1980(void);
 
 private:
