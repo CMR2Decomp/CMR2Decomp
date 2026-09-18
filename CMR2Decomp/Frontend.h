@@ -9,7 +9,6 @@ class CFrontend
 {
 public:
     static void FUN_004d21e0(void);
-    static BOOL FUN_004a9700(void);
     static void FUN_004d2590(void);
     static bool LoadSplashScreens(bool param1);
 
@@ -36,10 +35,6 @@ public:
     // unknowns
     // GLOBAL: CMR2 0x00818260;
     static GenericFile m_unk0x00818260;
-    // GLOBAL: CMR2 0x00663b38
-    static unsigned int m_unk0x00663b38;
-    // GLOBAL: CMR2 0x00663b48
-    static unsigned int m_unk0x00663b48;
 
     // GLOBAL: CMR2 0x00525034
     static char m_strFrontendTexturesAr640ATGA[36];

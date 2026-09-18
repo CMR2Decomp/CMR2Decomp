@@ -93,8 +93,6 @@ char CFrontend::m_strFrontendTexturesCarsB01[36] = "%s\\frontend\\Textures\\cars
 char CFrontend::m_strFrontendTexturesCarsF01[36] = "%s\\frontend\\Textures\\cars\\%sF01.tga";
 
 GenericFile CFrontend::m_unk0x00818260;
-unsigned int CFrontend::m_unk0x00663b38;
-unsigned int CFrontend::m_unk0x00663b48;
 
 Texture* CFrontend::m_unk0x00818530[3];
 char* CFrontend::m_unk0x0081853c;
@@ -122,7 +120,7 @@ void CFrontend::FUN_004d21e0(void)
         {
             if (CGraphics::FUN_004b7590(1024) != 0)
             {
-                if (FUN_004a9700() != FALSE)
+                if (CGraphics::FUN_004a9700() != FALSE)
                     sprintf(m_stringDest, m_feRes1024C, CInstallInfo::GetFrontendDir());
 
                 else
@@ -133,7 +131,7 @@ void CFrontend::FUN_004d21e0(void)
     else
     {
 
-        if (FUN_004a9700() != FALSE)
+        if (CGraphics::FUN_004a9700() != FALSE)
             sprintf(m_stringDest, m_feRes640C, CInstallInfo::GetFrontendDir());
         else
             sprintf(m_stringDest, m_feRes640, CInstallInfo::GetFrontendDir());
@@ -162,7 +160,7 @@ void CFrontend::FUN_004d21e0(void)
         {
             if (CGraphics::FUN_004b7590(1024) != FALSE)
             {
-                if (FUN_004a9700())
+                if (CGraphics::FUN_004a9700())
                     sprintf(m_stringDest, m_feRes1024CCountrySpecific, CInstallInfo::GetCountrySpecificDir(), CGameInfo::GetGameRegionDirectory(), regionKey);
                 else
                     sprintf(m_stringDest, m_feRes1024CountrySpecific, CInstallInfo::GetCountrySpecificDir(), CGameInfo::GetGameRegionDirectory(), regionKey);
@@ -171,22 +169,13 @@ void CFrontend::FUN_004d21e0(void)
     }
     else
     {
-        if (FUN_004a9700())
+        if (CGraphics::FUN_004a9700())
             sprintf(m_stringDest, m_feRes640CCountrySpecific, CInstallInfo::GetCountrySpecificDir(), CGameInfo::GetGameRegionDirectory(), regionKey);
         else
             sprintf(m_stringDest, m_feRes640CountrySpecific, CInstallInfo::GetCountrySpecificDir(), CGameInfo::GetGameRegionDirectory(), regionKey);
     }
 
     CGenericFileLoader::FUN_004a9d70(&m_unk0x00818260, m_stringDest);
-}
-
-// FUNCTION: CMR2 0x004a9700
-BOOL CFrontend::FUN_004a9700(void)
-{
-    if (!m_unk0x00663b38 && !m_unk0x00663b48)
-        return FALSE;
-
-    return TRUE;
 }
 
 // FUNCTION: CMR2 0x004d2590

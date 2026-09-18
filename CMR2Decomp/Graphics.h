@@ -943,11 +943,11 @@ struct D3DTextureManager {
     IDirect3DVertexBuffer7* pVertexBuffer2;        // 0x33c
     IDirect3DVertexBuffer7* pVertexBuffer3;        // 0x340
     BYTE field_0x344[0xc];                          // 0x344 - 0x34f
-    void* textureInfo1;                  // 0x350 (TextureInfo*)
-    void* textureInfo2;                  // 0x354 (TextureInfo*)
-    void* textureInfo3;                  // 0x358 (TextureInfo*)
-    void* textureInfo4;                  // 0x35c (TextureInfo*)
-    void* textureInfo5;                  // 0x360 (TextureInfo*)
+    TextureInfo* textureInfo1;                  // 0x350 (TextureInfo*)
+    TextureInfo* textureInfo2;                  // 0x354 (TextureInfo*)
+    TextureInfo* textureInfo3;                  // 0x358 (TextureInfo*)
+    TextureInfo* textureInfo4;                  // 0x35c (TextureInfo*)
+    TextureInfo* textureInfo5;                  // 0x360 (TextureInfo*)
     DDPIXELFORMAT ddpfZBuffer;           // 0x364
     Texture* textureBuffer[2048];        // 0x384
     Texture* textureBuffer2[20];            // 0x2384
@@ -1107,6 +1107,7 @@ public:
     static DWORD FUN_004a96c0(int param1);
     static INT32 FUN_004a8bc0(void);
     static DWORD FUN_004a96e0(int param_1);
+    static BOOL FUN_004a9700(void);
     static BOOL FUN_004a8b30_DDEnumCallback(GUID* lpGUID, LPSTR lpDriverDescription, LPSTR lpDriverName,  LPVOID lpContext, HMONITOR hMonitor);
     static HRESULT FUN_004a8da0(DDSURFACEDESC2* lpDDSurfaceDesc2, void* lpContext);
     static int DeviceCanRender16Bit(int param1);
@@ -1124,7 +1125,8 @@ public:
     static void FUN_0049df90(BOOL param1, BOOL param2);
     static void FUN_004b1980(void);
     static BOOL FUN_004b7560(unsigned int param_1);
-    static BOOL FUN_004b7590(unsigned int param_1);    
+    static BOOL FUN_004b7590(unsigned int param_1);
+    static HRESULT FUN_004a91b0(LPDDPIXELFORMAT lpDDPixFmt, LPVOID lpContext);
 
 private:
     // GLOBAL: CMR2 0x0051615c
@@ -1156,6 +1158,36 @@ private:
 
     // GLOBAL: CMR2 0x006dd890
     static int m_unk0x006dd890;
+
+    // GLOBAL: CMR2 0x00660c08
+    static TextureInfo m_textureInfo00660c08;
+    
+    // GLOBAL: CMR2 0x00663450
+    static TextureInfo m_textureInfo00663450;
+
+    // GLOBAL: CMR2 0x0065fa58
+    static TextureInfo m_textureInfo0065fa58;
+
+    // GLOBAL: CMR2 0x0065fb70
+    static TextureInfo m_textureInfo0065fb70;
+    
+    // GLOBAL: CMR2 0x0065fae0
+    static TextureInfo m_textureInfo0065fae0;
+    
+    // GLOBAL: CMR2 0x0065fbf8
+    static TextureInfo m_textureInfo0065fbf8;
+    
+    // GLOBAL: CMR2 0x0065fc80
+    static TextureInfo m_textureInfo0065fc80;
+
+    // GLOBAL: CMR2 0x00660698
+    static TextureInfo m_textureInfo00660698;
+
+    // GLOBAL: CMR2 0x00660720
+    static TextureInfo m_textureInfo00660720;
+
+    // GLOBAL: CMR2 0x006607a8
+    static TextureInfo m_textureInfo006607a8;
 
     // GLOBAL: CMR2 0x00660bfc
     static BOOL m_unk0x00660bfc;
@@ -1189,6 +1221,39 @@ private:
 
     // GLOBAL: CMR2 0x00663b30
     static int m_releaseSurfaceCallbackID;
+
+
+    // POTENTIAL STRUCT V
+    // GLOBAL: CMR2 0x00663b34
+    static BOOL m_unk0x00663b34;
+
+    // GLOBAL: CMR2 0x00663b38
+    static BOOL m_unk0x00663b38;
+
+    // GLOBAL: CMR2 0x00663b3c
+    static BOOL m_unk0x00663b3c;
+
+    // GLOBAL: CMR2 0x00663b40
+    static BOOL m_unk0x00663b40;
+
+    // GLOBAL: CMR2 0x00663b44
+    static BOOL m_unk0x00663b44;
+    
+    // GLOBAL: CMR2 0x00663b48
+    static BOOL m_unk0x00663b48;
+
+    // GLOBAL: CMR2 0x00663b4c
+    static BOOL m_unk0x00663b4c;
+
+    // GLOBAL: CMR2 0x00663b50
+    static BOOL m_unk0x00663b50;
+
+    // GLOBAL: CMR2 0x00663b54
+    static BOOL m_bSupports16BitColourDepth;
+    
+    // GLOBAL: CMR2 0x00663b58
+    static BOOL m_bSupports32BitColourDepth;
+    // END POTENTAL STRUCT ^
     
     // GLOBAL: CMR2 0x0081709c
     static BOOL m_unk0x0081709c;
@@ -1209,7 +1274,7 @@ private:
     static Unk0x00660040 m_unk0x00660040[10];
 
     // GLOBAL: CMR2 0x006e0bb0
-    static Unk0x006e0bb0 m_unk0x006e0bb0;
+    static Unk0x006e0bb0 m_d3dDeviceDesc7;
 
     // GLOBAL: CMR2 0x0072d56c
     static BOOL m_unk0x0072d56c;
