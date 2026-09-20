@@ -1202,302 +1202,311 @@ BOOL CGraphics::FUN_004a9700(void)
 // FUNCTION: CMR2 0x004a91b0
 HRESULT CGraphics::FUN_004a91b0(LPDDPIXELFORMAT lpDDPixFmt, LPVOID lpContext) {
     DWORD pixelFormatFlags;
-    DWORD rgbBitCount;
-    DWORD redBits;
-    DWORD greenBits;
-    DWORD blueBits;
-    DWORD alphaBitCount;
+    DWORD redBits = 0;
+    DWORD greenBits = 0;
+    DWORD blueBits = 0;
+    DWORD alphaBitCount = 0;
     DWORD currentMask;
-    DWORD totalChannelBits;
     DWORD alphaMask;
     int redShift;
     int greenShift;
     int blueShift;
     int alphaShift;
-    DWORD bitCount;
-    TextureInfo *pTextureInfo;
+    UINT totalChannelBits;
+    int bitCount;
+    TextureInfo* pTextureInfo;
+    DWORD rgbBitCount;
 
     pixelFormatFlags = lpDDPixFmt->dwFlags;
 
     if ((pixelFormatFlags & 0x20) == 0) {
-        if ((pixelFormatFlags & 0x40) != 0) {
-            currentMask = lpDDPixFmt->dwRBitMask;
-            alphaMask = ~(currentMask |
-                        lpDDPixFmt->dwGBitMask |
-                        lpDDPixFmt->dwBBitMask) &
-                        lpDDPixFmt->dwRGBAlphaBitMask;
+        if ((pixelFormatFlags & 0x40) == 0) {
+            return DDENUMRET_OK;
+        }
 
-            redBits = 0;
-            for (bitCount = 0x20; bitCount > 0; bitCount--) {
-                if ((currentMask & 1) != 0) {
-                    redBits++;
-                }
+        currentMask = lpDDPixFmt->dwRBitMask;
+        alphaMask = ~(currentMask |
+                      lpDDPixFmt->dwGBitMask |
+                      lpDDPixFmt->dwBBitMask) &
+                      lpDDPixFmt->dwRGBAlphaBitMask;
 
-                currentMask >>= 1;
+        redBits = 0;
+        for (bitCount = 0x20; bitCount > 0; bitCount--) {
+            if ((currentMask & 1) != 0) {
+                redBits++;
             }
 
-            redBits &= 0xff;
+            currentMask >>= 1;
+        }
 
-            currentMask = lpDDPixFmt->dwGBitMask;
-            greenBits = 0;
-            for (bitCount = 0x20; bitCount > 0; bitCount--) {
-                if ((currentMask & 1) != 0) {
-                    greenBits++;
-                }
+        redBits &= 0xff;
 
-                currentMask >>= 1;
+        currentMask = lpDDPixFmt->dwGBitMask;
+        greenBits = 0;
+        for (bitCount = 0x20; bitCount > 0; bitCount--) {
+            if ((currentMask & 1) != 0) {
+                greenBits++;
             }
 
-            greenBits &= 0xff;
+            currentMask >>= 1;
+        }
 
-            currentMask = lpDDPixFmt->dwBBitMask;
-            blueBits = 0;
-            for (bitCount = 0x20; bitCount > 0; bitCount--) {
-                if ((currentMask & 1) != 0) {
-                    blueBits++;
-                }
+        greenBits &= 0xff;
 
-                currentMask >>= 1;
+        currentMask = lpDDPixFmt->dwBBitMask;
+        blueBits = 0;
+        for (bitCount = 0x20; bitCount > 0; bitCount--) {
+            if ((currentMask & 1) != 0) {
+                blueBits++;
             }
 
-            blueBits &= 0xff;
+            currentMask >>= 1;
+        }
 
-            currentMask = alphaMask;
-            alphaBitCount = 0;
-            for (bitCount = 0x20; bitCount > 0; bitCount--) {
-                if ((currentMask & 1) != 0) {
-                    alphaBitCount++;
-                }
+        blueBits &= 0xff;
 
-                currentMask >>= 1;
+        currentMask = alphaMask;
+        alphaBitCount = 0;
+        for (bitCount = 0x20; bitCount > 0; bitCount--) {
+            if ((currentMask & 1) != 0) {
+                alphaBitCount++;
             }
 
-            alphaBitCount &= 0xff;
+            currentMask >>= 1;
+        }
 
-            redShift = 0;
-            currentMask = lpDDPixFmt->dwRBitMask;
+        alphaBitCount &= 0xff;
 
-            for (; redShift < 0x20; redShift++) {
-                if ((currentMask & 1) != 0) {
-                    break;
-                }
+        if (redBits == 0 || greenBits == 0 || blueBits == 0) {
+            return DDENUMRET_OK;
+        }
 
-                currentMask >>= 1;
+        redShift = 0;
+        currentMask = lpDDPixFmt->dwRBitMask;
+
+        for (; redShift < 0x20; redShift++) {
+            if ((currentMask & 1) != 0) {
+                break;
             }
 
-            greenShift = 0;
-            currentMask = lpDDPixFmt->dwGBitMask;
+            currentMask >>= 1;
+        }
 
-            for (; greenShift < 0x20; greenShift++) {
-                if ((currentMask & 1) != 0) {
-                    break;
-                }
+        greenShift = 0;
+        currentMask = lpDDPixFmt->dwGBitMask;
 
-                currentMask >>= 1;
+        for (; greenShift < 0x20; greenShift++) {
+            if ((currentMask & 1) != 0) {
+                break;
             }
 
-            blueShift = 0;
-            currentMask = lpDDPixFmt->dwBBitMask;
+            currentMask >>= 1;
+        }
 
-            for (; blueShift < 0x20; blueShift++) {
-                if ((currentMask & 1) != 0) {
-                    break;
-                }
+        blueShift = 0;
+        currentMask = lpDDPixFmt->dwBBitMask;
 
-                currentMask >>= 1;
+        for (; blueShift < 0x20; blueShift++) {
+            if ((currentMask & 1) != 0) {
+                break;
             }
 
-            alphaShift = 0;
-            currentMask = alphaMask;
+            currentMask >>= 1;
+        }
 
-            for (; alphaShift < 0x20; alphaShift++) {
-                if ((currentMask & 1) != 0) {
-                    break;
-                }
+        alphaShift = 0;
+        currentMask = alphaMask;
 
-                currentMask >>= 1;
+        for (; alphaShift < 0x20; alphaShift++) {
+            if ((currentMask & 1) != 0) {
+                break;
             }
 
-            totalChannelBits = blueBits + alphaBitCount + greenBits + redBits;
+            currentMask >>= 1;
+        }
 
-            if (redBits == 0 || greenBits == 0 || blueBits == 0) {
-                return DDENUMRET_OK;
-            }
+        totalChannelBits = blueBits + alphaBitCount + greenBits + redBits;
 
-            if (totalChannelBits <= 0x10) {
-                if (alphaBitCount == 0) {
-                    if (redBits == 5 &&
-                        (greenBits == 5 || greenBits == 6) &&
-                        blueBits == 5 &&
-                        m_textureInfo00660698.field_0x7e != 6) {
-
-                        m_textureInfo00660698.ddsd.ddpfPixelFormat = *lpDDPixFmt;
-                        m_textureInfo00660698.field_0x7e = greenBits;
-                        m_textureInfo00660698.field_0x7d = blueBits;
-                        m_textureInfo00660698.field_0x82 = (BYTE)greenShift;
-                        m_textureInfo00660698.field_0x81 = (BYTE)blueShift;
-                        m_textureInfo00660698.field_0x7c = 5;
-                        m_textureInfo00660698.field_0x7f = 0;
-                        m_textureInfo00660698.field_0x80 = redShift;
-                        m_textureInfo00660698.field_0x83 = (BYTE)alphaShift;
-                        m_unk0x00663b34 = TRUE;
-
-                        return DDENUMRET_OK;
+        if (totalChannelBits <= 0x10) {
+            if (alphaBitCount != 0) {
+                if (redBits == 5) {
+                    if (greenBits != 5 || blueBits != 5 || alphaBitCount != 1) {
+                        return 1;
                     }
                 } else {
-                    if (redBits == 5) {
-                        if (greenBits != 5) {
-                            return 1;
-                        }
-
-                        if (blueBits != 5) {
-                            return 1;
-                        }
-
-                        if (alphaBitCount != 1) {
-                            return 1;
-                        }
-                    } else {
-                        if (redBits != 4) {
-                            return 1;
-                        }
-
-                        if (greenBits != 4) {
-                            return 1;
-                        }
-
-                        if (blueBits != 4) {
-                            return 1;
-                        }
-
-                        if (alphaBitCount != 4) {
-                            return 1;
-                        }
+                    if (redBits != 4 || greenBits != 4 || blueBits != 4 || alphaBitCount != 4) {
+                        return 1;
                     }
+                }
 
-                    if (m_textureInfo0065fae0.field_0x7c != 4) {
-                        m_textureInfo0065fae0.ddsd.ddpfPixelFormat = *lpDDPixFmt;
-                        m_textureInfo0065fae0.field_0x7e = greenBits;
-                        m_textureInfo0065fae0.field_0x7c = redBits;
-                        m_textureInfo0065fae0.field_0x7d = blueBits;
-                        m_textureInfo0065fae0.field_0x7f = alphaBitCount;
-                        m_textureInfo0065fae0.field_0x80 = redShift;
-                        m_textureInfo0065fae0.field_0x81 = (BYTE)greenShift;
-                        m_textureInfo0065fae0.field_0x82 = (BYTE)blueShift;
-                        m_textureInfo0065fae0.field_0x83 = (BYTE)alphaShift;
-                        m_unk0x00663b3c = 1;
-
-                        return DDENUMRET_OK;
-                    }
+                if (m_textureInfo0065fae0.field_0x7c != 4) {
+                    m_textureInfo0065fae0.ddsd.ddpfPixelFormat = *lpDDPixFmt;
+                    m_textureInfo0065fae0.field_0x7e = greenBits;
+                    m_textureInfo0065fae0.field_0x7c = redBits;
+                    m_textureInfo0065fae0.field_0x7d = blueBits;
+                    m_textureInfo0065fae0.field_0x7f = alphaBitCount;
+                    m_textureInfo0065fae0.field_0x80 = redShift;
+                    m_textureInfo0065fae0.field_0x81 = greenShift;
+                    m_textureInfo0065fae0.field_0x82 = blueShift;
+                    m_textureInfo0065fae0.field_0x83 = alphaShift;
+                    m_unk0x00663b3c = 1;
                 }
             } else {
-                if (totalChannelBits == 0x18) {
-                    m_textureInfo00660720.ddsd.ddpfPixelFormat = *lpDDPixFmt;
-                    m_textureInfo00660720.field_0x7e = blueBits;
-                    m_textureInfo00660720.field_0x7c = redBits;
-                    m_textureInfo00660720.field_0x7d = greenBits;
-                    m_textureInfo00660720.field_0x7f = alphaBitCount;
-                    m_textureInfo00660720.field_0x80 = redShift;
-                    m_textureInfo00660720.field_0x81 = (BYTE)greenShift;
-                    m_textureInfo00660720.field_0x82 = (BYTE)blueShift;
-                    m_textureInfo00660720.field_0x83 = (BYTE)alphaShift;
-                    m_unk0x00663b44 = 1;
+                if (redBits == 5 &&
+                    (greenBits == 5 || greenBits == 6) &&
+                    blueBits == 5 &&
+                    m_textureInfo00660698.field_0x7e != 6) {
 
-                    return 1;
-                }
-
-                if (totalChannelBits == 0x20) {
-                    m_textureInfo0065fa58.ddsd.ddpfPixelFormat = *lpDDPixFmt;
-                    m_textureInfo0065fa58.field_0x7e = blueBits;
-                    m_textureInfo0065fa58.field_0x7c = redBits;
-                    m_textureInfo0065fa58.field_0x7d = greenBits;
-                    m_textureInfo0065fa58.field_0x7f = alphaBitCount;
-                    m_textureInfo0065fa58.field_0x80 = redShift;
-                    m_textureInfo0065fa58.field_0x81 = (BYTE)greenShift;
-                    m_textureInfo0065fa58.field_0x82 = (BYTE)blueShift;
-                    m_textureInfo0065fa58.field_0x83 = (BYTE)alphaShift;
-                    m_unk0x00663b4c = 1;
-
-                    return 1;
+                    m_textureInfo00660698.ddsd.ddpfPixelFormat = *lpDDPixFmt;
+                    m_textureInfo00660698.field_0x7e = greenBits;
+                    m_textureInfo00660698.field_0x7d = blueBits;
+                    m_textureInfo00660698.field_0x82 = greenShift;
+                    m_textureInfo00660698.field_0x81 = blueShift;
+                    m_textureInfo00660698.field_0x7c = 0x5;
+                    m_textureInfo00660698.field_0x7f = 0;
+                    m_textureInfo00660698.field_0x80 = redShift;
+                    m_textureInfo00660698.field_0x83 = alphaShift;
+                    m_unk0x00663b34 = TRUE;
                 }
             }
-        }
-    } else {
-        if ((pixelFormatFlags & 0x40000) != 0) {
-            rgbBitCount = lpDDPixFmt->dwRGBBitCount;
-
-            if (rgbBitCount == 0x10) {
-                pTextureInfo = &m_textureInfo0065fb70;
-                m_bSupports16BitColourDepth = TRUE;
-            } else if (rgbBitCount == 0x18 || rgbBitCount == 0x20) {
-                pTextureInfo = &m_textureInfo00660c08;
-                m_bSupports32BitColourDepth = TRUE;
-            } else {
-                pTextureInfo = NULL;
+        } else {
+            if (totalChannelBits == 0x18) {
+                m_textureInfo00660720.ddsd.ddpfPixelFormat = *lpDDPixFmt;
+                m_textureInfo00660720.field_0x7e = blueBits;
+                m_textureInfo00660720.field_0x7c = redBits;
+                m_textureInfo00660720.field_0x7d = greenBits;
+                m_textureInfo00660720.field_0x7f = alphaBitCount;
+                m_textureInfo00660720.field_0x80 = redShift;
+                m_textureInfo00660720.field_0x81 = greenShift;
+                m_textureInfo00660720.field_0x82 = blueShift;
+                m_textureInfo00660720.field_0x83 = alphaShift;
+                m_unk0x00663b44 = 1;
             }
 
-            if (pTextureInfo != NULL) {
-                pTextureInfo->ddsd.ddpfPixelFormat = *lpDDPixFmt;
-
-                currentMask = lpDDPixFmt->dwRBitMask;
-                redBits = 0;
-
-                for (bitCount = 0x20; bitCount > 0; bitCount--) {
-                    if ((currentMask & 1) != 0) {
-                        redBits++;
-                    }
-
-                    currentMask >>= 1;
-                }
-
-                pTextureInfo->field_0x7c = redBits;
-
-                currentMask = lpDDPixFmt->dwGBitMask;
-                greenBits = 0;
-
-                for (bitCount = 0x20; bitCount > 0; bitCount--) {
-                    if ((currentMask & 1) != 0) {
-                        greenBits++;
-                    }
-
-                    currentMask >>= 1;
-                }
-
-                pTextureInfo->field_0x7d = greenBits;
-
-                currentMask = lpDDPixFmt->dwBBitMask;
-                blueBits = 0;
-
-                for (bitCount = 0x20; bitCount > 0; bitCount--) {
-                    if ((currentMask & 1) != 0) {
-                        blueBits++;
-                    }
-
-                    currentMask >>= 1;
-                }
-
-                pTextureInfo->field_0x7e = blueBits;
-
-                return DDENUMRET_OK;
+            if (totalChannelBits == 0x20) {
+                m_textureInfo0065fa58.ddsd.ddpfPixelFormat = *lpDDPixFmt;
+                m_textureInfo0065fa58.field_0x7e = blueBits;
+                m_textureInfo0065fa58.field_0x7c = redBits;
+                m_textureInfo0065fa58.field_0x7d = greenBits;
+                m_textureInfo0065fa58.field_0x7f = alphaBitCount;
+                m_textureInfo0065fa58.field_0x80 = redShift;
+                m_textureInfo0065fa58.field_0x81 = greenShift;
+                m_textureInfo0065fa58.field_0x82 = blueShift;
+                m_textureInfo0065fa58.field_0x83 = alphaShift;
+                m_unk0x00663b4c = 1;
             }
         }
 
-        if ((pixelFormatFlags & 4) != 0) {
-            if (lpDDPixFmt->dwFourCC == 0x31545844) {
-                m_textureInfo0065fc80.ddsd.ddpfPixelFormat = *lpDDPixFmt;
-                m_unk0x00663b38 = TRUE;
+        return DDENUMRET_OK;
+    }
+    
+    if ((pixelFormatFlags & 0x40000) != 0) {
+        rgbBitCount = lpDDPixFmt->dwRGBBitCount;
+        pTextureInfo = NULL;
 
-                m_textureInfo006607a8.ddsd.ddpfPixelFormat = *lpDDPixFmt;
-                m_unk0x00663b48 = TRUE;
-            } else if (lpDDPixFmt->dwFourCC == 0x35545844) {
+        if (rgbBitCount == 0x10) {
+            pTextureInfo = &m_textureInfo0065fb70;
+            m_bSupports16BitColourDepth = TRUE;
+        } else if (rgbBitCount == 0x18 || rgbBitCount == 0x20) {
+            pTextureInfo = &m_textureInfo00660c08;
+            m_bSupports32BitColourDepth = TRUE;
+        }
+
+        pTextureInfo->ddsd.ddpfPixelFormat = *lpDDPixFmt;
+
+        currentMask = lpDDPixFmt->dwRBitMask;
+        redBits = 0;
+        for (bitCount = 0x20; bitCount > 0; bitCount--) {
+            if ((currentMask & 1) != 0) {
+                redBits++;
+            }
+
+            currentMask >>= 1;
+        }
+
+        pTextureInfo->field_0x7c = redBits;
+
+        currentMask = lpDDPixFmt->dwGBitMask;
+        greenBits = 0;
+        for (bitCount = 0x20; bitCount > 0; bitCount--) {
+            if ((currentMask & 1) != 0) {
+                greenBits++;
+            }
+
+            currentMask >>= 1;
+        }
+
+        pTextureInfo->field_0x7d = greenBits;
+
+        currentMask = lpDDPixFmt->dwBBitMask;
+        blueBits = 0;
+        for (bitCount = 0x20; bitCount > 0; bitCount--) {
+            if ((currentMask & 1) != 0) {
+                blueBits++;
+            }
+
+            currentMask >>= 1;
+        }
+
+        pTextureInfo->field_0x7e = blueBits;
+
+        redShift = 0;
+        currentMask = lpDDPixFmt->dwRBitMask;
+
+        for (; redShift < 0x20; redShift++) {
+            if ((currentMask & 1) != 0) {
+                break;
+            }
+
+            currentMask >>= 1;
+        }
+
+        pTextureInfo->field_0x80 = redShift;
+
+        greenShift = 0;
+        currentMask = lpDDPixFmt->dwGBitMask;
+
+        for (; greenShift < 0x20; greenShift++) {
+            if ((currentMask & 1) != 0) {
+                break;
+            }
+
+            currentMask >>= 1;
+        }
+
+        pTextureInfo->field_0x81 = greenShift;
+
+        blueShift = 0;
+        currentMask = lpDDPixFmt->dwBBitMask;
+
+        for (; blueShift < 0x20; blueShift++) {
+            if ((currentMask & 1) != 0) {
+                break;
+            }
+
+            currentMask >>= 1;
+        }
+
+        pTextureInfo->field_0x82 = blueShift;
+        
+        return DDENUMRET_OK;
+    }
+
+    if ((pixelFormatFlags & 4) != 0) {
+        if (lpDDPixFmt->dwFourCC != 0x31545844) {
+            if (lpDDPixFmt->dwFourCC == 0x35545844) {
                 m_textureInfo0065fbf8.ddsd.ddpfPixelFormat = *lpDDPixFmt;
                 m_unk0x00663b40 = TRUE;
 
                 m_textureInfo00663450.ddsd.ddpfPixelFormat = *lpDDPixFmt;
                 m_unk0x00663b50 = TRUE;
-
-                return DDENUMRET_OK;
             }
+        } else {
+            m_textureInfo0065fc80.ddsd.ddpfPixelFormat = *lpDDPixFmt;
+            m_unk0x00663b38 = TRUE;
+
+            m_textureInfo006607a8.ddsd.ddpfPixelFormat = *lpDDPixFmt;
+            m_unk0x00663b48 = TRUE;
         }
     }
 
