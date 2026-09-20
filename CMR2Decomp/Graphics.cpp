@@ -1220,9 +1220,7 @@ HRESULT CGraphics::FUN_004a91b0(LPDDPIXELFORMAT lpDDPixFmt, LPVOID lpContext) {
     pixelFormatFlags = lpDDPixFmt->dwFlags;
 
     if ((pixelFormatFlags & 0x20) == 0) {
-        if ((pixelFormatFlags & 0x40) == 0) {
-            return DDENUMRET_OK;
-        }
+        if ((pixelFormatFlags & 0x40) != 0) {
 
         currentMask = lpDDPixFmt->dwRBitMask;
         alphaMask = ~(currentMask |
@@ -1277,7 +1275,7 @@ HRESULT CGraphics::FUN_004a91b0(LPDDPIXELFORMAT lpDDPixFmt, LPVOID lpContext) {
 
         alphaBitCount &= 0xff;
 
-        if (redBits == 0 || greenBits == 0 || blueBits == 0) {
+        if (redBits < 1 || greenBits < 1 || blueBits < 1) {
             return DDENUMRET_OK;
         }
 
@@ -1285,6 +1283,17 @@ HRESULT CGraphics::FUN_004a91b0(LPDDPIXELFORMAT lpDDPixFmt, LPVOID lpContext) {
         currentMask = lpDDPixFmt->dwRBitMask;
 
         for (; redShift < 0x20; redShift++) {
+            if ((currentMask & 1) != 0) {
+                break;
+            }
+
+            currentMask >>= 1;
+        }
+
+        alphaShift = 0;
+        currentMask = alphaMask;
+
+        for (; alphaShift < 0x20; alphaShift++) {
             if ((currentMask & 1) != 0) {
                 break;
             }
@@ -1314,42 +1323,31 @@ HRESULT CGraphics::FUN_004a91b0(LPDDPIXELFORMAT lpDDPixFmt, LPVOID lpContext) {
             currentMask >>= 1;
         }
 
-        alphaShift = 0;
-        currentMask = alphaMask;
-
-        for (; alphaShift < 0x20; alphaShift++) {
-            if ((currentMask & 1) != 0) {
-                break;
-            }
-
-            currentMask >>= 1;
-        }
-
         totalChannelBits = blueBits + alphaBitCount + greenBits + redBits;
 
         if (totalChannelBits <= 0x10) {
             if (alphaBitCount != 0) {
                 if (redBits == 5) {
                     if (greenBits != 5 || blueBits != 5 || alphaBitCount != 1) {
-                        return 1;
+                        return DDENUMRET_OK;
                     }
                 } else {
                     if (redBits != 4 || greenBits != 4 || blueBits != 4 || alphaBitCount != 4) {
-                        return 1;
+                        return DDENUMRET_OK;
                     }
                 }
 
                 if (m_textureInfo0065fae0.field_0x7c != 4) {
                     m_textureInfo0065fae0.ddsd.ddpfPixelFormat = *lpDDPixFmt;
-                    m_textureInfo0065fae0.field_0x7e = greenBits;
+                    m_textureInfo0065fae0.field_0x7d = greenBits;
                     m_textureInfo0065fae0.field_0x7c = redBits;
-                    m_textureInfo0065fae0.field_0x7d = blueBits;
-                    m_textureInfo0065fae0.field_0x7f = alphaBitCount;
+                    m_textureInfo0065fae0.field_0x7e = blueBits;
                     m_textureInfo0065fae0.field_0x80 = redShift;
+                    m_textureInfo0065fae0.field_0x7f = alphaBitCount;
                     m_textureInfo0065fae0.field_0x81 = greenShift;
                     m_textureInfo0065fae0.field_0x82 = blueShift;
                     m_textureInfo0065fae0.field_0x83 = alphaShift;
-                    m_unk0x00663b3c = 1;
+                    m_unk0x00663b3c = TRUE;
                 }
             } else {
                 if (redBits == 5 &&
@@ -1358,13 +1356,13 @@ HRESULT CGraphics::FUN_004a91b0(LPDDPIXELFORMAT lpDDPixFmt, LPVOID lpContext) {
                     m_textureInfo00660698.field_0x7e != 6) {
 
                     m_textureInfo00660698.ddsd.ddpfPixelFormat = *lpDDPixFmt;
-                    m_textureInfo00660698.field_0x7e = greenBits;
                     m_textureInfo00660698.field_0x7d = blueBits;
-                    m_textureInfo00660698.field_0x82 = greenShift;
-                    m_textureInfo00660698.field_0x81 = blueShift;
                     m_textureInfo00660698.field_0x7c = 0x5;
-                    m_textureInfo00660698.field_0x7f = 0;
+                    m_textureInfo00660698.field_0x7e = greenBits;
                     m_textureInfo00660698.field_0x80 = redShift;
+                    m_textureInfo00660698.field_0x7f = 0;
+                    m_textureInfo00660698.field_0x81 = blueShift;
+                    m_textureInfo00660698.field_0x82 = greenShift;
                     m_textureInfo00660698.field_0x83 = alphaShift;
                     m_unk0x00663b34 = TRUE;
                 }
@@ -1372,29 +1370,32 @@ HRESULT CGraphics::FUN_004a91b0(LPDDPIXELFORMAT lpDDPixFmt, LPVOID lpContext) {
         } else {
             if (totalChannelBits == 0x18) {
                 m_textureInfo00660720.ddsd.ddpfPixelFormat = *lpDDPixFmt;
-                m_textureInfo00660720.field_0x7e = blueBits;
-                m_textureInfo00660720.field_0x7c = redBits;
+                m_textureInfo00660720.field_0x7e = redBits;
+                m_textureInfo00660720.field_0x7c = blueBits;
                 m_textureInfo00660720.field_0x7d = greenBits;
                 m_textureInfo00660720.field_0x7f = alphaBitCount;
                 m_textureInfo00660720.field_0x80 = redShift;
                 m_textureInfo00660720.field_0x81 = greenShift;
                 m_textureInfo00660720.field_0x82 = blueShift;
                 m_textureInfo00660720.field_0x83 = alphaShift;
-                m_unk0x00663b44 = 1;
+                
+                m_unk0x00663b44 = TRUE;
             }
 
             if (totalChannelBits == 0x20) {
                 m_textureInfo0065fa58.ddsd.ddpfPixelFormat = *lpDDPixFmt;
-                m_textureInfo0065fa58.field_0x7e = blueBits;
-                m_textureInfo0065fa58.field_0x7c = redBits;
+                m_textureInfo0065fa58.field_0x7e = redBits;
+                m_textureInfo0065fa58.field_0x7c = blueBits;
                 m_textureInfo0065fa58.field_0x7d = greenBits;
                 m_textureInfo0065fa58.field_0x7f = alphaBitCount;
                 m_textureInfo0065fa58.field_0x80 = redShift;
                 m_textureInfo0065fa58.field_0x81 = greenShift;
                 m_textureInfo0065fa58.field_0x82 = blueShift;
                 m_textureInfo0065fa58.field_0x83 = alphaShift;
-                m_unk0x00663b4c = 1;
+                
+                m_unk0x00663b4c = TRUE;
             }
+        }
         }
 
         return DDENUMRET_OK;
@@ -1415,7 +1416,6 @@ HRESULT CGraphics::FUN_004a91b0(LPDDPIXELFORMAT lpDDPixFmt, LPVOID lpContext) {
         pTextureInfo->ddsd.ddpfPixelFormat = *lpDDPixFmt;
 
         currentMask = lpDDPixFmt->dwRBitMask;
-        redBits = 0;
         for (bitCount = 0x20; bitCount > 0; bitCount--) {
             if ((currentMask & 1) != 0) {
                 redBits++;
@@ -1501,13 +1501,15 @@ HRESULT CGraphics::FUN_004a91b0(LPDDPIXELFORMAT lpDDPixFmt, LPVOID lpContext) {
                 m_textureInfo00663450.ddsd.ddpfPixelFormat = *lpDDPixFmt;
                 m_unk0x00663b50 = TRUE;
             }
-        } else {
-            m_textureInfo0065fc80.ddsd.ddpfPixelFormat = *lpDDPixFmt;
-            m_unk0x00663b38 = TRUE;
 
-            m_textureInfo006607a8.ddsd.ddpfPixelFormat = *lpDDPixFmt;
-            m_unk0x00663b48 = TRUE;
+            return DDENUMRET_OK;
         }
+        
+        m_textureInfo0065fc80.ddsd.ddpfPixelFormat = *lpDDPixFmt;
+        m_unk0x00663b38 = TRUE;
+
+        m_textureInfo006607a8.ddsd.ddpfPixelFormat = *lpDDPixFmt;
+        m_unk0x00663b48 = TRUE;
     }
 
     return DDENUMRET_OK;
